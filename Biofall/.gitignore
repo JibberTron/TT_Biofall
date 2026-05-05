@@ -37,6 +37,8 @@
 
 # Visual Studio cache directory
 .vs/
+CMakeLists.txt
+CMakeFiles/
 
 # Gradle cache directory
 .gradle/

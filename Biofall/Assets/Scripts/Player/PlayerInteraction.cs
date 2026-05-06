@@ -23,7 +23,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             Debug.Log("Ray hit: " + hit.collider.name);
 
-            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
+            IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
 
             if(interactable != null )
             {

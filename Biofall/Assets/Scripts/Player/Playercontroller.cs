@@ -13,14 +13,12 @@ public class PlayerController : MonoBehaviour
     [Header("Crouch")]
     [SerializeField] float crouchSpeed = 2f;
     [SerializeField] float crouchHeight = 1f;
-    
+
 
     [Header("Gravity")]
     [SerializeField] float gravity = 25f;
 
-    [Header("Stats")]
-    public int HP = 100;
-    public int HPOrig = 100;
+    
 
     Vector3 moveDir;
     Vector3 playerVel;
@@ -28,6 +26,8 @@ public class PlayerController : MonoBehaviour
     Vector3 originalCenter;
     float originalHeight;
     float crouchBlendTime;
+
+    public bool IsCrouching =>isCrouching;
 
     void Start()
     {
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        
+
 
         float v = Input.GetAxis("Vertical");
 
@@ -99,18 +99,5 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat("Speed", Mathf.Abs(v));
         animator.SetBool("Sprint", Input.GetKey(KeyCode.LeftShift) && Mathf.Abs(v) > 0.1f && !isCrouching);
-    }
-
-    public void TakeDamage(int amount)
-    {
-        HP -= amount;
-        HP = Mathf.Max(HP, 0);
-        if (HP <= 0)
-            Die();
-    }
-
-    void Die()
-    {
-        Debug.Log("Player died.");
     }
 }

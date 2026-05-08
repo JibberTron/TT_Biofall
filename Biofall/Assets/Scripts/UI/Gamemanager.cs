@@ -63,4 +63,11 @@ public class Gamemanager : MonoBehaviour
         menuActive.SetActive(false);
         menuActive = null;
     }
+
+    public void GameOver()
+    {
+        StatePause();
+        menuActive = menuGameOver;
+        menuActive.SetActive(true);
+    }
 }

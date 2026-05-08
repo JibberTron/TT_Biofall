@@ -1,0 +1,39 @@
+#
+# rhino.mtl
+#
+
+newmtl ph34_png_Base_Color_png
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.200000 0.200000 0.200000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 1.500000
+map_Kd ph341_png_Base_Color.png
+
+newmtl sa_vtf_Base_Color_png
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.200000 0.200000 0.200000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 1.500000
+map_Kd sa1_vtf_Base_Color.png
+
+newmtl shell_vtf_Base_Color_png
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.200000 0.200000 0.200000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 1.500000
+map_Kd shell1_vtf_Base_Color.png
+
+newmtl bullet_vtf_Base_Color_png
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 0.200000 0.200000 0.200000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 1.500000
+map_Kd bullet1_vtf_Base_Color.png

@@ -246,6 +246,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &226199010 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5058930563062612382, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+  m_PrefabInstance: {fileID: 818102694}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &818102694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -254,6 +259,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1510492274118259377, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1838022625}
+    - target: {fileID: 3200416753518265007, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: recoilRecovery
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 3861786650346691327, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.62906
@@ -294,15 +307,76 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5257706783530596644, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: m_Data.m_SourceObjects.m_Item0.transform
+      value: 
+      objectReference: {fileID: 1101613682}
+    - target: {fileID: 7361468050465005217, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: m_Data.m_UpAxis
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361468050465005217, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: m_Data.m_AimAxis
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361468050465005217, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: m_Data.m_MaxLimit
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361468050465005217, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: m_Data.m_MinLimit
+      value: -40
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361468050465005217, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: m_Data.m_WorldUpType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361468050465005217, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: m_Data.m_SourceObjects.m_Item0.transform
+      value: 
+      objectReference: {fileID: 1101613682}
+    - target: {fileID: 7756606161862089630, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 1838022625}
+    - target: {fileID: 7756606161862089630, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: gunModel
+      value: 
+      objectReference: {fileID: 1797507468}
+    - target: {fileID: 7756606161862089630, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: gunRecoilUp
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7756606161862089630, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: recoilAmount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7756606161862089630, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: wobbleAmount
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7756606161862089630, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      propertyPath: gunRecoilRecovery
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8490025096354038525, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7433475216274449496, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8490025096354038525, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1838022634}
   m_SourcePrefab: {fileID: 100100000, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+--- !u!4 &865310008 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6021219236079104501, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+  m_PrefabInstance: {fileID: 818102694}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &866550428 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3200416753518265007, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
@@ -314,6 +388,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fc65c40f0cd16a41a1caea00983c2ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraOrbit
+--- !u!224 &1101613682 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1764559316993587902, guid: b55e9f1d7161f3c49a92e28a43caea63, type: 3}
+  m_PrefabInstance: {fileID: 4498747178789543124}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1744465665
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -371,6 +450,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97f3457d9ca629147b1a3de9d97531b8, type: 3}
+--- !u!4 &1797507468 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4012556170215194148, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+  m_PrefabInstance: {fileID: 818102694}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1838022621 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8490025096354038525, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+  m_PrefabInstance: {fileID: 818102694}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1838022625 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1464396738270886436, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+  m_PrefabInstance: {fileID: 818102694}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1838022634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838022621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97f32bef3a24274fb856f7b8c454cd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TempCrosshair
+  cameraOrbit: {fileID: 866550428}
+  size: 5
+  gap: 10
+  color: {r: 0.9811321, g: 0.06016379, b: 0.06016379, a: 1}
 --- !u!1 &2104360296
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,6 +814,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2408791361178958015, guid: b55e9f1d7161f3c49a92e28a43caea63, type: 3}
+      propertyPath: spine1
+      value: 
+      objectReference: {fileID: 865310008}
+    - target: {fileID: 2408791361178958015, guid: b55e9f1d7161f3c49a92e28a43caea63, type: 3}
+      propertyPath: spine2
+      value: 
+      objectReference: {fileID: 226199010}
     - target: {fileID: 2408791361178958015, guid: b55e9f1d7161f3c49a92e28a43caea63, type: 3}
       propertyPath: cameraOrbit
       value: 

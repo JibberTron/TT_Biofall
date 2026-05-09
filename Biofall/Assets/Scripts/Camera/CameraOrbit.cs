@@ -26,12 +26,16 @@ public class CameraOrbit : MonoBehaviour
     [SerializeField] float sprintDistance = 5f;
     [SerializeField] float distanceSmoothing = 5f;
 
+    [Header("Recoil")]
+    [SerializeField] float recoilRecovery = 5f;
+
     float yaw;
     float pitch;
     float currentPan;
     float currentDistance;
     float currentOffsetX;
     float currentOffsetY;
+    float recoilPitch;
 
     [HideInInspector] public bool isAiming;
 
@@ -47,6 +51,11 @@ public class CameraOrbit : MonoBehaviour
         currentOffsetY = normalOffsetY;
     }
 
+    public void AddRecoil(float amount)
+    {
+        recoilPitch -= amount;
+    }
+
     void LateUpdate()
     {
         if (target == null) return;
@@ -58,7 +67,8 @@ public class CameraOrbit : MonoBehaviour
 
         yaw += mouseX * mouseSensitivity;
         pitch -= mouseY * mouseSensitivity;
-        pitch = Mathf.Clamp(pitch, minVerticalAngle, maxVerticalAngle);
+        recoilPitch = Mathf.Lerp(recoilPitch, 0f, Time.deltaTime * recoilRecovery);
+        pitch = Mathf.Clamp(pitch + recoilPitch, minVerticalAngle, maxVerticalAngle);
 
         float targetDistance;
         float targetOffsetX;

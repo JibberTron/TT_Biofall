@@ -74,6 +74,8 @@ public class HealthSystem : MonoBehaviour, iDamage
 
     void Die()
     {
+        //cece when you have your stuff ready this can be uncommented
+        // Gamemanager.instance.GameOver();
         Debug.Log("Player died.");
     }
 }

@@ -235,6 +235,7 @@ MonoBehaviour:
   panSmoothing: 5
   sprintDistance: 1.5
   distanceSmoothing: 5
+  recoilRecovery: 50
   isAiming: 0
 --- !u!20 &2068883245127249906
 Camera:
@@ -348,6 +349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3861786650346691327}
+  - component: {fileID: 7870568859748509292}
   - component: {fileID: 7756606161862089630}
   - component: {fileID: 5788958315336630329}
   - component: {fileID: 8485487063210877488}
@@ -383,6 +385,22 @@ Transform:
   - {fileID: 4947975593668376090}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7870568859748509292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8490025096354038525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97f32bef3a24274fb856f7b8c454cd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TempCrosshair
+  cameraOrbit: {fileID: 3200416753518265007}
+  size: 5
+  gap: 10
+  color: {r: 0.9811321, g: 0.06016379, b: 0.06016379, a: 1}
 --- !u!114 &7756606161862089630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,9 +418,11 @@ MonoBehaviour:
   reloadTime: 2
   fireRate: 0.3
   shootDist: 100
-  wobbleAmount: 0.02
+  wobbleAmount: 0.05
+  recoilAmount: 2
   cameraOrbit: {fileID: 3200416753518265007}
   gunBarrel: {fileID: 6623143779122407383}
+  animator: {fileID: 1464396738270886436}
 --- !u!114 &5788958315336630329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,7 +472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   controller: {fileID: 6775125213807112613}
-  animator: {fileID: 7433475216274449496}
+  animator: {fileID: 1464396738270886436}
   speed: 3
   sprintMod: 2
   crouchSpeed: 2
@@ -769,11 +789,11 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -180
-    m_MaxLimit: 180
-    m_AimAxis: 4
-    m_UpAxis: 2
-    m_WorldUpType: 1
+    m_MinLimit: -40
+    m_MaxLimit: 40
+    m_AimAxis: 2
+    m_UpAxis: 0
+    m_WorldUpType: 0
     m_WorldUpObject: {fileID: 0}
     m_WorldUpAxis: 2
     m_MaintainOffset: 0
@@ -963,10 +983,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1852576806548013000, guid: b33359573fa4e9a47b31d3ea46d285c2, type: 3}
       insertIndex: 0
       addedObject: {fileID: 4012556170215194148}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b33359573fa4e9a47b31d3ea46d285c2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7433475216274449496}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b33359573fa4e9a47b31d3ea46d285c2, type: 3}
 --- !u!4 &199274141096219764 stripped
 Transform:
@@ -1188,33 +1205,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8333627713332763490, guid: b33359573fa4e9a47b31d3ea46d285c2, type: 3}
   m_PrefabInstance: {fileID: 4836871408222638577}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5756001898311691424 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b33359573fa4e9a47b31d3ea46d285c2, type: 3}
-  m_PrefabInstance: {fileID: 4836871408222638577}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &7433475216274449496
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5756001898311691424}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d2766e95a098cba4da0513166edbc925, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &5861381932914760221 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1330755669629619180, guid: b33359573fa4e9a47b31d3ea46d285c2, type: 3}

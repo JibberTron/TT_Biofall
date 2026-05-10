@@ -9,6 +9,8 @@ public class SearchBodies : MonoBehaviour, IInteractable
         Ammo,
         Flashlight,
         Gun,
+        BrokenFlashlight,
+        BloodyNotes,
         Nothing
     }
 

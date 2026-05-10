@@ -5,7 +5,7 @@ public class SearchBodies : MonoBehaviour, IInteractable
     public enum LootType
     {
         OralAntibody,
-        InjectionAntibody,
+        Syringe,
         Ammo,
         Flashlight,
         Gun,
@@ -13,20 +13,24 @@ public class SearchBodies : MonoBehaviour, IInteractable
     }
 
     [SerializeField] LootType[] possibleFinds;
+    [SerializeField] int searchesRemaining = 3;
 
     private bool hasBeenSearched = false;
 
     public void Interact()
     {
-        if(hasBeenSearched)
+        if(searchesRemaining <= 0)
         {
-            Debug.Log("This body has already been searched!");
+            Debug.Log("This body has already been fully searched!");
             return;
         }
 
-        hasBeenSearched = true;
+        searchesRemaining--;
+
         int randomIndex = Random.Range(0, possibleFinds.Length);
         LootType foundLoot = possibleFinds[randomIndex];
-        Debug.Log("Found: " +  foundLoot);
+
+        Debug.Log("Body searched and found: " + foundLoot);
+        Debug.Log("Searches remaining: " + searchesRemaining);
     }
 }

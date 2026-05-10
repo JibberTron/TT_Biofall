@@ -13,7 +13,7 @@ public class OralAntibodyPickup : MonoBehaviour, IInteractable
             if(inf != null)
             {
                 inf.UseOralAntibody();
-                Debug.Log("Oral antibody used!");
+                Debug.Log("Oral antibody picked up!");
                 Destroy(gameObject);
             }
         }

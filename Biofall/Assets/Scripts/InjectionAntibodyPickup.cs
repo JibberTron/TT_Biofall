@@ -14,7 +14,7 @@ public class InjectionAntibodyPickup : MonoBehaviour, IInteractable
             {
                 inf.UseInjectionAntibody();
 
-                Debug.Log("Infection Antibody used!");
+                Debug.Log("Infection Antibody picked up!");
 
                 Destroy(gameObject);
             }

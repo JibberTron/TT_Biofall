@@ -349,6 +349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3861786650346691327}
+  - component: {fileID: 1683797887275768770}
   - component: {fileID: 7870568859748509292}
   - component: {fileID: 7756606161862089630}
   - component: {fileID: 5788958315336630329}
@@ -385,6 +386,23 @@ Transform:
   - {fileID: 4947975593668376090}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1683797887275768770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8490025096354038525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afbbb6beb8d924440a73b1939d0abbc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GunManager
+  gunModel: {fileID: 4970425526753737411}
+  gun: {fileID: 7756606161862089630}
+  cameraOrbit: {fileID: 3200416753518265007}
+  animator: {fileID: 1464396738270886436}
+  hasGun: 0
 --- !u!114 &7870568859748509292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -439,6 +457,9 @@ MonoBehaviour:
   currentHealth: 100
   hitWindow: 3
   recoveryAmount: 5
+  hitAnimLength: 1
+  animator: {fileID: 1464396738270886436}
+  isHit: 0
 --- !u!114 &8485487063210877488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -473,12 +494,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   controller: {fileID: 6775125213807112613}
   animator: {fileID: 1464396738270886436}
+  healthSystem: {fileID: 5788958315336630329}
   speed: 3
   sprintMod: 2
   crouchSpeed: 2
   crouchHeight: 2
   standingHeight: 2
   gravity: 25
+  shootDist: 100
+  gunManager: {fileID: 1683797887275768770}
   cameraOrbit: {fileID: 3200416753518265007}
   bodyAimConstraint: {fileID: 5257706783530596644}
   handAimConstraint: {fileID: 7361468050465005217}
@@ -876,6 +900,11 @@ PrefabInstance:
 --- !u!4 &4012556170215194148 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: f87f2ef95b17eff4f890a399aa505b6b, type: 3}
+  m_PrefabInstance: {fileID: 3469407712025450959}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4970425526753737411 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -801728419439598836, guid: f87f2ef95b17eff4f890a399aa505b6b, type: 3}
   m_PrefabInstance: {fileID: 3469407712025450959}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4836871408222638577

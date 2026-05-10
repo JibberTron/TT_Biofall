@@ -246,6 +246,27 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &489873297 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5058930563062612382, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+  m_PrefabInstance: {fileID: 1590932098}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &554347059 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3200416753518265007, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+  m_PrefabInstance: {fileID: 1590932098}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fc65c40f0cd16a41a1caea00983c2ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraOrbit
+--- !u!4 &864472176 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6021219236079104501, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
+  m_PrefabInstance: {fileID: 1590932098}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1590932098
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -583,7 +604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ece4efa331c58a74db6f0f0105bc2394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Damage
-  type: 2
+  type: 1
   rb: {fileID: 0}
   damageAmount: 10
   damageRate: 2
@@ -696,15 +717,15 @@ PrefabInstance:
     - target: {fileID: 2408791361178958015, guid: b55e9f1d7161f3c49a92e28a43caea63, type: 3}
       propertyPath: spine1
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 864472176}
     - target: {fileID: 2408791361178958015, guid: b55e9f1d7161f3c49a92e28a43caea63, type: 3}
       propertyPath: spine2
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 489873297}
     - target: {fileID: 2408791361178958015, guid: b55e9f1d7161f3c49a92e28a43caea63, type: 3}
       propertyPath: cameraOrbit
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 554347059}
     - target: {fileID: 6363147863887680227, guid: b55e9f1d7161f3c49a92e28a43caea63, type: 3}
       propertyPath: m_Name
       value: AimTarget

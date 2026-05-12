@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3738316541132089518}
   - component: {fileID: 5651581890262958357}
   - component: {fileID: 1595582810592742446}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 186649550800148673}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.3735962, y: 0.3948, z: -0.60560036}
+  m_LocalPosition: {x: -0.279, y: 0.3948, z: -0.606}
   m_LocalScale: {x: 0.20815201, y: 0.02775, z: 0.170204}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -99,7 +99,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1088949200492953711}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hinge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 8402504397340536919}
   - component: {fileID: 6147693866572115249}
   - component: {fileID: 6438890173005982283}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DoorKnob(back)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ Transform:
   m_GameObject: {fileID: 738475181008379128}
   serializedVersion: 2
   m_LocalRotation: {x: -0.013590294, y: 0.73554415, z: -0.014761574, w: -0.67717963}
-  m_LocalPosition: {x: -1.2089996, y: -0.11100006, z: -0.3128004}
+  m_LocalPosition: {x: -1.227, y: -0.409, z: -0.318}
   m_LocalScale: {x: 0.07255711, y: 0.11173851, z: 0.073829174}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -224,10 +224,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1237086255324219900}
+  - component: {fileID: -6562354247136007705}
   - component: {fileID: 1200891929106440267}
   - component: {fileID: 1872618960936639087}
   - component: {fileID: 4451075760454487449}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,6 +252,19 @@ Transform:
   - {fileID: 6146297342408754853}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -272.60602, z: 0}
+--- !u!114 &-6562354247136007705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 955077658212096359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6bf90ac009116d41a3e55bf7ecb6a0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorInteract
+  hinge: {fileID: 1088949200492953711}
 --- !u!33 &1200891929106440267
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -341,7 +355,7 @@ GameObject:
   - component: {fileID: 750215914398639032}
   - component: {fileID: 6023106705095567368}
   - component: {fileID: 3583960665440903696}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: InsideFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +469,7 @@ GameObject:
   - component: {fileID: 5030623854718022525}
   - component: {fileID: 4229000455536621441}
   - component: {fileID: 6107767255197461771}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: KnobBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -546,7 +560,7 @@ GameObject:
   - component: {fileID: 3131363517207325612}
   - component: {fileID: 6166675365257914345}
   - component: {fileID: 8220343017713159246}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TopFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -658,7 +672,7 @@ GameObject:
   - component: {fileID: 444306495758002663}
   - component: {fileID: 2048755952881467508}
   - component: {fileID: 7456581144875992786}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -674,7 +688,7 @@ Transform:
   m_GameObject: {fileID: 7238267513102250070}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.3735962, y: -0.3946, z: -0.60560036}
+  m_LocalPosition: {x: -0.279, y: -0.3946, z: -0.60560036}
   m_LocalScale: {x: 0.20815201, y: 0.02775, z: 0.170204}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -748,7 +762,7 @@ GameObject:
   - component: {fileID: 8813903325479181012}
   - component: {fileID: 7998221059393720325}
   - component: {fileID: 2928535087579370591}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DoorKnob (front)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -764,7 +778,7 @@ Transform:
   m_GameObject: {fileID: 7578158416035590646}
   serializedVersion: 2
   m_LocalRotation: {x: -0.02087645, y: -0.6625961, z: 0.003913161, w: -0.7486757}
-  m_LocalPosition: {x: -1.2310009, y: -0.110000014, z: -0.016799927}
+  m_LocalPosition: {x: -1.2490016, y: -0.408, z: -0.02199947}
   m_LocalScale: {x: 0.06707809, y: 0.112867594, z: 0.08028275}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -839,7 +853,7 @@ GameObject:
   - component: {fileID: 2450484441069202351}
   - component: {fileID: 1336491969507164236}
   - component: {fileID: 6051373431703623056}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -855,7 +869,7 @@ Transform:
   m_GameObject: {fileID: 8149779125631126572}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.3735962, y: 0.061000016, z: -0.60560036}
+  m_LocalPosition: {x: -0.279, y: 0.061, z: -0.606}
   m_LocalScale: {x: 0.20815201, y: 0.02775, z: 0.170204}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -929,7 +943,7 @@ GameObject:
   - component: {fileID: 1410374422279494481}
   - component: {fileID: 4171823765707399291}
   - component: {fileID: 1319916237851416411}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: KnobBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1017,7 +1031,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6146297342408754853}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DoorRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1052,7 +1066,8 @@ GameObject:
   - component: {fileID: 8435891642199821276}
   - component: {fileID: 5570756289629653702}
   - component: {fileID: 7684603298605520991}
-  m_Layer: 0
+  - component: {fileID: 6207310533655401438}
+  m_Layer: 6
   m_Name: DoorFace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1152,3 +1167,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &6207310533655401438
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8645726512850367514}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

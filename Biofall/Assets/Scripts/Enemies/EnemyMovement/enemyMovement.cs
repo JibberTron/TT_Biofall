@@ -37,7 +37,7 @@ public class enemyMovement : MonoBehaviour, ISound
             pathRoutine = StartCoroutine(UpdatePath());
         }
     }
-    public void Roam()
+    public void StopChase()
     {
         if (pathRoutine != null)
         {
@@ -61,23 +61,8 @@ public class enemyMovement : MonoBehaviour, ISound
         {
             enemyRef.Agent.isStopped = false;
             enemyRef.Agent.SetDestination(enemyRef.Target.position);
-            //float dist = Vector3.Distance(transform.position, enemyRef.Target.position);
 
-            //if (dist <= 2f) // <---- ATTACKING
-            //{
-            //    enemyRef.Agent.isStopped = true;
-            //    if (!isAttacking)
-            //    {
-            //        //StartCoroutine(Attacking());
-            //    }
-            //}
-            //else // <--- CHASING
-            //{
-            //    enemyRef.Agent.isStopped = false;
-            //    enemyRef.Agent.SetDestination(enemyRef.Target.position);
-            //}
             yield return new WaitForSeconds(pathToDelay);
-
         }
     }
     public void MoveTo(Vector3 _loc)

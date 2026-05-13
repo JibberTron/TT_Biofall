@@ -16,13 +16,11 @@ public class enemyAnims : MonoBehaviour
     }
     public void Investigate(bool _isInvestigating)
     {
-        Debug.Log("INVESTIGATE");
         enemyRef.Agent.speed = 0;
         anims.SetBool("IsLooking", _isInvestigating);
     }
     public void SetSpeed(float _mag, float _speed)
     {
-        Debug.Log("WALK");
         enemyRef.Agent.speed = _speed;
         enemyRef.Animator.SetFloat("Speed", _mag);
     }

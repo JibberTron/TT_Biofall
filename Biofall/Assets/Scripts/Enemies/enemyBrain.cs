@@ -8,122 +8,141 @@ public class enemyBrain : MonoBehaviour
         IDLE,
         ROAMING,
         INVESTIGATING,
-        CHASING,
-        ATTACKING
+        CHASING
     }
 
     [SerializeField] enemyMovement movement;
-    [SerializeField] float detectionRange = 8f;
     [SerializeField] enemyAnims anims;
+    [SerializeField] float detectionRange = 8f;
+    [SerializeField] float investigateTime = 3f;
+    [SerializeField] float detectionAngle = 90f;
 
-    public EnemyState currentState = EnemyState.IDLE;
-    Vector3 playerDir;
+    public EnemyState currentState;
 
-    bool nextPoint = false;
-    bool isIdle = false;
     bool isInvestigating;
-    bool shouldGrab;
-    // save
-    float distance;
-    float angleToPlayer;
-    
-    void Awake()
-    {
-
-    }
 
     void Start()
     {
-        if (movement == null)
-        {
-            movement = GetComponent<enemyMovement>();
-        }
-        if (anims == null)
-        {
-            anims = GetComponent<enemyAnims>();
-        }
-        StartCoroutine(IdleDelay());
+        movement = GetComponent<enemyMovement>();
+        anims = GetComponent<enemyAnims>();
+
+        StartCoroutine(StartAfterIdle());
     }
+
     void Update()
     {
-        if (movement.EnemyRef.Target == null) return;
-        if (isIdle) return;
-        SetStates();
+        if (movement.EnemyRef.Target == null || isInvestigating) return;
+
+        float distance = Vector3.Distance(transform.position, movement.EnemyRef.Target.position);
+
+        if (currentState != EnemyState.CHASING && distance <= detectionRange && CanSeePlayer())
+        {
+            ChangeState(EnemyState.CHASING);
+            return;
+        }
+
+        switch (currentState)
+        {
+            case EnemyState.ROAMING:
+                HandleRoam();
+                break;
+
+            case EnemyState.INVESTIGATING:
+                HandleInvestigate();
+                break;
+
+            case EnemyState.CHASING:
+                HandleChase();
+                break;
+        }
     }
-    void SetStates()
+    void ChangeState(EnemyState newState)
     {
-        distance = Vector3.Distance(transform.position, movement.EnemyRef.Target.position);
+        if (currentState == newState) return;
 
-        if (distance <= detectionRange && CanSeePlayer() && !isInvestigating)
+        currentState = newState;
+
+        switch (newState)
         {
-            isInvestigating = false;
-            Debug.Log("Is Chasing now");
+            case EnemyState.ROAMING:
+                movement.StopChase();
+                movement.GoToNextPoint();
+                break;
 
-            currentState = EnemyState.CHASING;
-            movement.Chase();
-            anims.SetSpeed(movement.EnemyRef.Agent.velocity.magnitude, 2.5f);
-            nextPoint = false;
+            case EnemyState.CHASING:
+                movement.Chase();
+                break;
+
+            case EnemyState.INVESTIGATING:
+                StartCoroutine(Investigate());
+                break;
+        }
+    }
+    void HandleRoam()
+    {
+        if (ReachedDestination())
+        {
+            ChangeState(EnemyState.INVESTIGATING);
             return;
         }
-        if (currentState == EnemyState.INVESTIGATING && isInvestigating)
-        {
-            if (distance <= detectionRange && CanSeePlayer())
-            {
-                anims.Investigate(false);
-                isInvestigating = false;
-                return;
-            }
-            anims.Investigate(true);
-            Debug.Log("Investigating now");
 
-            return;
-        }
-        if (currentState == EnemyState.ROAMING)
-        {
-            anims.Investigate(false);
-           // anims.PlayRun(false);
-            anims.SetSpeed(movement.EnemyRef.Agent.velocity.magnitude, 2f);
-            movement.Roam();
-        }
-        if (!nextPoint)
-        {
-            Debug.Log("!nextPoint now");
-
-            currentState = EnemyState.ROAMING;
-            movement.GoToNextPoint();
-            nextPoint = true;
-        }
-
-        if (!isInvestigating && !movement.EnemyRef.Agent.pathPending && movement.EnemyRef.Agent.hasPath
-            && movement.EnemyRef.Agent.remainingDistance <= 0.5f && movement.EnemyRef.Agent.velocity.sqrMagnitude < 0.01f)
-        {
-            StartCoroutine(LookingAround());
-        }
+        anims.SetSpeed(movement.EnemyRef.Agent.velocity.magnitude, 2f);
     }
     void HandleChase()
     {
-        if(distance <= detectionRange && CanSeePlayer())
-        {
-
-        }
+        anims.SetSpeed(movement.EnemyRef.Agent.velocity.magnitude, 2.5f);
     }
-    void RotateToPlayer()
+    void HandleInvestigate()
     {
-        Vector3 lookPos = movement.EnemyRef.Target.position - transform.position;
-        lookPos.y = 0;
-        Quaternion rot = Quaternion.LookRotation(lookPos);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rot, 0.2f);
+        // animation handled in coroutine
     }
+    IEnumerator Investigate()
+    {
+        isInvestigating = true;
+
+        movement.Stop(true);
+        anims.Investigate(true);
+
+        yield return new WaitForSeconds(investigateTime);
+
+        anims.Investigate(false);
+        movement.EnemyRef.Agent.isStopped = false;
+
+        if (CanSeePlayer())
+        {
+            ChangeState(EnemyState.CHASING);
+        }
+        else
+        {
+            ChangeState(EnemyState.ROAMING);
+        }
+    
+        isInvestigating = false;
+    }
+    IEnumerator StartAfterIdle()
+    {
+        currentState = EnemyState.IDLE;
+        isInvestigating = true;
+
+        yield return new WaitForSeconds(3f);
+
+        isInvestigating = false;
+        ChangeState(EnemyState.ROAMING);
+    }
+    bool ReachedDestination()
+    {
+        return !isInvestigating && !movement.EnemyRef.Agent.pathPending && movement.EnemyRef.Agent.hasPath && 
+            movement.EnemyRef.Agent.remainingDistance <= 0.5f && movement.EnemyRef.Agent.velocity.sqrMagnitude < 0.01f;
+    }
+
     bool CanSeePlayer()
     {
-        playerDir = (movement.EnemyRef.Target.transform.position - transform.position).normalized;
-        angleToPlayer = Vector3.Angle(transform.forward, playerDir);
-        Debug.DrawRay(transform.position, playerDir * detectionRange, Color.red);
-        if (angleToPlayer <= 90)
-        {
-            RaycastHit hit;
+        Vector3 playerDir = (movement.EnemyRef.Target.transform.position - transform.position).normalized;
+        detectionAngle = Vector3.Angle(transform.forward, playerDir);
 
-            if (Physics.Raycast(transform.position, playerDir, out hit, detectionRange))
+        if (detectionAngle <= 90)
+        {
+            if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange))
             {
                 if (hit.collider.CompareTag("Player"))
                 {
@@ -134,36 +153,15 @@ public class enemyBrain : MonoBehaviour
         }
         return false;
     }
-    IEnumerator IdleDelay()
+    void RotateToPlayer()
     {
-        isIdle = true;
-        currentState = EnemyState.IDLE;
+        Vector3 look = movement.EnemyRef.Target.position - transform.position;
+        look.y = 0;
 
-        Debug.Log("Idle now");
-
-        yield return new WaitForSeconds(5f);
-
-        Debug.Log("Roam now");
-
-        isIdle = false;
+        transform.rotation = Quaternion.Slerp(
+            transform.rotation,
+            Quaternion.LookRotation(look),
+            0.2f
+        );
     }
-    IEnumerator LookingAround()
-    {
-        isInvestigating = true;
-        currentState = EnemyState.INVESTIGATING;
-        movement.EnemyRef.Agent.isStopped = true;
-
-        Debug.Log("Looking around now");
-
-        yield return new WaitForSeconds(5f);
-
-        Debug.Log("GoToNextPoint now");
-
-        movement.EnemyRef.Agent.isStopped = false;
-        currentState = EnemyState.ROAMING;
-        movement.GoToNextPoint();
-
-        isInvestigating = false;
-    }
-
 }

@@ -12,9 +12,13 @@ public class Gun : MonoBehaviour
     [Header("Wobble")]
     [SerializeField] float wobbleAmount = 0.02f;
 
+    [Header("Recoil")]
+    [SerializeField] float recoilAmount = 2f;
+
     [Header("References")]
     [SerializeField] CameraOrbit cameraOrbit;
     [SerializeField] Transform gunBarrel;
+    [SerializeField] Animator animator;
 
     int currentAmmo;
     bool isReloading;
@@ -47,12 +51,13 @@ public class Gun : MonoBehaviour
             return;
         }
 
+        animator.SetTrigger("Shoot");
         nextFireTime = Time.time + fireRate;
         currentAmmo--;
 
-       
+        if (cameraOrbit != null)
+            cameraOrbit.AddRecoil(recoilAmount);
 
-        
         Vector2 wobble = Random.insideUnitCircle * wobbleAmount;
         Vector3 shootDir = Camera.main.transform.forward
                          + Camera.main.transform.right * wobble.x
@@ -63,8 +68,6 @@ public class Gun : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, shootDist))
         {
-            
-
             iDamage dmg = hit.collider.GetComponent<iDamage>();
             if (dmg == null)
                 dmg = hit.collider.GetComponentInParent<iDamage>();
@@ -77,30 +80,21 @@ public class Gun : MonoBehaviour
     {
         if (totalAmmo <= 0)
         {
-           
             isReloading = false;
             yield break;
         }
 
         isReloading = true;
-       
         yield return new WaitForSeconds(reloadTime);
 
         int needed = maxAmmo - currentAmmo;
         int pulled = Mathf.Min(needed, totalAmmo);
         currentAmmo += pulled;
         totalAmmo -= pulled;
-
         isReloading = false;
-       
     }
 
-    public void AddAmmo(int amount)
-    {
-        totalAmmo += amount;
-        
-    }
-
+    public void AddAmmo(int amount) => totalAmmo += amount;
     public int GetCurrentAmmo() => currentAmmo;
     public int GetMaxAmmo() => maxAmmo;
     public int GetTotalAmmo() => totalAmmo;

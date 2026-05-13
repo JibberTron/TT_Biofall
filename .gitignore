@@ -5,14 +5,14 @@
 # Recommended: add any editor/OS/tool-specific ignore rules from the Global/ templates as needed.
 # See: https://github.com/github/gitignore/tree/main/Global
 #
-.utmp/
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
+Biofall/.utmp/
+Biofall/[Ll]ibrary/
+Biofall/[Tt]emp/
+Biofall/[Oo]bj/
+Biofall/[Bb]uild/
+Biofall/[Bb]uilds/
+Biofall/[Ll]ogs/
+Biofall/[Uu]ser[Ss]ettings/
 *.log
 
 

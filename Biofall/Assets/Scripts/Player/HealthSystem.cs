@@ -10,9 +10,17 @@ public class HealthSystem : MonoBehaviour, iDamage
     [SerializeField] float hitWindow = 3f;
     [SerializeField] int recoveryAmount = 10;
 
+    [Header("Hit Animation")]
+    [SerializeField] float hitAnimLength = 2f;
+
+    [Header("References")]
+    [SerializeField] Animator animator;
+
     int hitStack;
     float timeSinceLastHit;
     bool recentlyHit;
+    float hitAnimCooldown;
+    public bool isHit;
 
     InfectionSystem infectionSystem;
 
@@ -23,6 +31,13 @@ public class HealthSystem : MonoBehaviour, iDamage
 
     void Update()
     {
+        if (hitAnimCooldown > 0f)
+        {
+            hitAnimCooldown -= Time.deltaTime;
+            if (hitAnimCooldown <= 0f)
+                isHit = false;
+        }
+
         if (recentlyHit)
         {
             timeSinceLastHit += Time.deltaTime;
@@ -35,11 +50,14 @@ public class HealthSystem : MonoBehaviour, iDamage
                 timeSinceLastHit = 0f;
             }
         }
-
-        
     }
 
     public void TakeDamage(int amount)
+    {
+        TakeDamage(amount, transform.position);
+    }
+
+    public void TakeDamage(int amount, Vector3 hitFromPosition)
     {
         int scaledDamage = Mathf.RoundToInt(amount * Mathf.Pow(1.2f, hitStack));
 
@@ -53,23 +71,34 @@ public class HealthSystem : MonoBehaviour, iDamage
         if (infectionSystem != null)
             infectionSystem.AddInfection(scaledDamage * 0.2f);
 
-        
+        TriggerHitAnimation(hitFromPosition);
 
         if (currentHealth <= 0)
             Die();
     }
 
+    void TriggerHitAnimation(Vector3 hitFromPosition)
+    {
+        if (animator == null) return;
+        if (hitAnimCooldown > 0f) return;
+
+        Vector3 localHitDir = transform.InverseTransformPoint(hitFromPosition);
+
+        if (localHitDir.x >= 0)
+            animator.SetTrigger("HitRight");
+        else
+            animator.SetTrigger("HitLeft");
+
+        hitAnimCooldown = hitAnimLength;
+        isHit = true;
+    }
+
     void Recover()
     {
-        if (hitStack > 1)
-        {
-           
-            return;
-        }
+        if (hitStack > 1) return;
 
         currentHealth += recoveryAmount;
         currentHealth = Mathf.Min(currentHealth, maxHealth);
-       
     }
 
     void Die()

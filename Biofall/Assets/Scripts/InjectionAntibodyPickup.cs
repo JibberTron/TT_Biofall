@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class OralAntibodyPickup : MonoBehaviour, IInteractable
+public class InjectionAntibodyPickup : MonoBehaviour, IInteractable
 {
-    public void Interact()
+   public void Interact()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
@@ -12,8 +12,10 @@ public class OralAntibodyPickup : MonoBehaviour, IInteractable
 
             if(inf != null)
             {
-                inf.UseOralAntibody();
-                Debug.Log("Oral antibody picked up!");
+                inf.UseInjectionAntibody();
+
+                Debug.Log("Infection Antibody picked up!");
+
                 Destroy(gameObject);
             }
         }

@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     [SerializeField] CharacterController controller;
     [SerializeField] Animator animator;
+    [SerializeField] HealthSystem healthSystem;
 
     [Header("Movement")]
     [SerializeField] float speed = 5f;
@@ -19,9 +20,11 @@ public class PlayerController : MonoBehaviour
     [Header("Gravity")]
     [SerializeField] float gravity = 25f;
 
-   
+    [Header("Combat")]
+    [SerializeField] float shootDist = 100f;
 
     [Header("Aim")]
+    [SerializeField] GunManager gunManager;
     [SerializeField] CameraOrbit cameraOrbit;
     [SerializeField] MultiAimConstraint bodyAimConstraint;
     [SerializeField] MultiAimConstraint handAimConstraint;
@@ -54,8 +57,9 @@ public class PlayerController : MonoBehaviour
 
     void HandleAim()
     {
-        bool isAiming = cameraOrbit != null && cameraOrbit.isAiming;
-
+        bool canAim = gunManager != null && gunManager.HasGun();
+        bool isAiming = canAim && cameraOrbit != null && cameraOrbit.isAiming;
+        Debug.Log($"canAim: {canAim} | cameraAiming: {cameraOrbit.isAiming} | isAiming: {isAiming}");
         animator.SetBool("Aiming", isAiming);
 
         float targetWeight = isAiming ? 1f : 0f;
@@ -66,7 +70,7 @@ public class PlayerController : MonoBehaviour
         if (handAimConstraint != null)
             handAimConstraint.weight = Mathf.Lerp(handAimConstraint.weight, targetWeight, Time.deltaTime * 10f);
 
-        
+        // Rotate player to face camera direction while aiming
         if (isAiming)
         {
             Transform cam = Camera.main.transform;
@@ -106,7 +110,7 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
 
         shootTimer += Time.deltaTime;
 
@@ -117,6 +121,14 @@ public class PlayerController : MonoBehaviour
             playerVel.y = -2f;
 
         float v = Input.GetAxis("Vertical");
+
+        if (healthSystem != null && healthSystem.isHit)
+        {
+            animator.SetFloat("Speed", 0f);
+            playerVel.y -= gravity * Time.deltaTime;
+            controller.Move(playerVel * Time.deltaTime);
+            return;
+        }
 
         Transform cam = Camera.main.transform;
         Vector3 camForward = new Vector3(cam.forward.x, 0f, cam.forward.z).normalized;

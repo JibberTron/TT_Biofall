@@ -16,15 +16,17 @@ public class InfectionSystem : MonoBehaviour
     [SerializeField] float oralSlowDuration = 30f;
 
     [Header("Antibody - Injection")]
-    [SerializeField] float injectionRecovery = 100f;
     [SerializeField] float injectionStopDuration = 60f;
 
     float slowTimer;
     float stopTimer;
 
+    HealthSystem healthSystem;
+
     void Start()
     {
         currentTickRate = baseTickRate;
+        healthSystem = GetComponent<HealthSystem>();
     }
 
     void Update()
@@ -37,8 +39,6 @@ public class InfectionSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.I))
             UseInjectionAntibody();
-
-        
     }
 
     void HandleTimers()
@@ -68,15 +68,18 @@ public class InfectionSystem : MonoBehaviour
         currentInfection += currentTickRate * Time.deltaTime;
         currentInfection = Mathf.Min(currentInfection, maxInfection);
 
-        if (currentInfection >= maxInfection)
-            Die();
+        if (currentInfection <= 0)
+        {
+            currentInfection = 0;
+            if (healthSystem != null)
+                healthSystem.TakeDamage(healthSystem.currentHealth);
+        }
     }
 
     public void AddInfection(float amount)
     {
         currentInfection += amount;
         currentInfection = Mathf.Min(currentInfection, maxInfection);
-        
     }
 
     public void UseOralAntibody()
@@ -84,16 +87,12 @@ public class InfectionSystem : MonoBehaviour
         currentInfection -= oralRecovery;
         currentInfection = Mathf.Max(currentInfection, 0f);
         slowTimer = oralSlowDuration;
-
-       
     }
 
     public void UseInjectionAntibody()
     {
         currentInfection = 0f;
         stopTimer = injectionStopDuration;
-
-      
     }
 
     void Die()

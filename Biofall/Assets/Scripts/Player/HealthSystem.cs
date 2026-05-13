@@ -11,22 +11,26 @@ public class HealthSystem : MonoBehaviour, iDamage
     [SerializeField] int recoveryAmount = 10;
 
     [Header("Hit Animation")]
-    [SerializeField] float hitAnimLength = 2f;
+    [SerializeField] float hitAnimLength = 1.033f;
 
     [Header("References")]
     [SerializeField] Animator animator;
+    [SerializeField] PlayerController playerController;
 
     int hitStack;
     float timeSinceLastHit;
     bool recentlyHit;
     float hitAnimCooldown;
     public bool isHit;
+    bool isDead;
 
     InfectionSystem infectionSystem;
+    RagdollController ragdollController;
 
     void Start()
     {
         infectionSystem = GetComponent<InfectionSystem>();
+        ragdollController = GetComponentInChildren<RagdollController>();
     }
 
     void Update()
@@ -59,6 +63,8 @@ public class HealthSystem : MonoBehaviour, iDamage
 
     public void TakeDamage(int amount, Vector3 hitFromPosition)
     {
+        if (isDead) return;
+
         int scaledDamage = Mathf.RoundToInt(amount * Mathf.Pow(1.2f, hitStack));
 
         hitStack++;
@@ -103,6 +109,30 @@ public class HealthSystem : MonoBehaviour, iDamage
 
     void Die()
     {
-        Debug.Log("Player died.");
+        if (isDead) return;
+        isDead = true;
+
+        if (playerController != null)
+            playerController.enabled = false;
+
+       
+        CharacterController cc = GetComponent<CharacterController>();
+        if (cc != null)
+            cc.enabled = false;
+
+        if (ragdollController != null)
+            ragdollController.TriggerDeath();
+
+        
+        CameraOrbit cam = Camera.main.GetComponent<CameraOrbit>();
+        if (cam != null)
+            cam.TriggerDeathCam();
+
+        Invoke(nameof(GameOver), 3f);
+    }
+
+    void GameOver()
+    {
+        Debug.Log("Game Over");
     }
 }

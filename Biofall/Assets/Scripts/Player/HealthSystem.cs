@@ -31,6 +31,7 @@ public class HealthSystem : MonoBehaviour, iDamage
     {
         infectionSystem = GetComponent<InfectionSystem>();
         ragdollController = GetComponentInChildren<RagdollController>();
+        UpdatePlayerUI();
     }
 
     void Update()
@@ -74,6 +75,8 @@ public class HealthSystem : MonoBehaviour, iDamage
         currentHealth -= scaledDamage;
         currentHealth = Mathf.Max(currentHealth, 0);
 
+        UpdatePlayerUI();
+
         if (infectionSystem != null)
             infectionSystem.AddInfection(scaledDamage * 0.2f);
 
@@ -115,7 +118,7 @@ public class HealthSystem : MonoBehaviour, iDamage
         if (playerController != null)
             playerController.enabled = false;
 
-       
+        
         CharacterController cc = GetComponent<CharacterController>();
         if (cc != null)
             cc.enabled = false;
@@ -133,6 +136,13 @@ public class HealthSystem : MonoBehaviour, iDamage
 
     void GameOver()
     {
-        Debug.Log("Game Over");
+       
+        Gamemanager.instance.GameOver();
+    }
+
+    public void UpdatePlayerUI()
+    {
+        if (Gamemanager.instance != null)
+            Gamemanager.instance.playerHPBar.fillAmount = (float)currentHealth / maxHealth;
     }
 }

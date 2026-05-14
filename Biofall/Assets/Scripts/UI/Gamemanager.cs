@@ -10,7 +10,9 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuGameOver;
+    [SerializeField] GameObject menuWin;
 
+    public Image playerHPBar;
     public bool isPaused;
     public GameObject player;
     // public PlayerController playerScript;
@@ -71,3 +73,5 @@ public class Gamemanager : MonoBehaviour
         menuActive.SetActive(true);
     }
 }
+
+

@@ -16,6 +16,7 @@ public class HealthSystem : MonoBehaviour, iDamage
     [Header("References")]
     [SerializeField] Animator animator;
     [SerializeField] PlayerController playerController;
+    [SerializeField] InfectionHallucination hallucination;
 
     int hitStack;
     float timeSinceLastHit;
@@ -65,6 +66,12 @@ public class HealthSystem : MonoBehaviour, iDamage
     public void TakeDamage(int amount, Vector3 hitFromPosition)
     {
         if (isDead) return;
+
+        if (hallucination != null && hallucination.IsHallucinating())
+        {
+            Die();
+            return;
+        }
 
         int scaledDamage = Mathf.RoundToInt(amount * Mathf.Pow(1.2f, hitStack));
 
@@ -118,7 +125,7 @@ public class HealthSystem : MonoBehaviour, iDamage
         if (playerController != null)
             playerController.enabled = false;
 
-        
+        // Disable CharacterController so it doesn't fight ragdoll
         CharacterController cc = GetComponent<CharacterController>();
         if (cc != null)
             cc.enabled = false;
@@ -126,7 +133,7 @@ public class HealthSystem : MonoBehaviour, iDamage
         if (ragdollController != null)
             ragdollController.TriggerDeath();
 
-        
+        // Trigger death cam
         CameraOrbit cam = Camera.main.GetComponent<CameraOrbit>();
         if (cam != null)
             cam.TriggerDeathCam();
@@ -136,7 +143,7 @@ public class HealthSystem : MonoBehaviour, iDamage
 
     void GameOver()
     {
-       
+        Debug.Log("Game Over");
         Gamemanager.instance.GameOver();
     }
 

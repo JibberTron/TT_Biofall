@@ -84,6 +84,13 @@ public class RagdollController : MonoBehaviour
         StartCoroutine(RagdollSequence(hitDirection));
     }
 
+    public void TriggerDeath()
+    {
+        StopAllCoroutines();
+        isRagdolling = true;
+        EnableRagdoll();
+    }
+
     IEnumerator RagdollSequence(Vector3 hitDirection)
     {
         isRagdolling = true;
@@ -104,7 +111,7 @@ public class RagdollController : MonoBehaviour
         if (hips != null)
             hips.AddForce(hitDirection * hitForce, ForceMode.Impulse);
 
-        // Keep ragdoll anchored to player
+        
         float elapsed2 = 0f;
         while (elapsed2 < ragdollDuration)
         {

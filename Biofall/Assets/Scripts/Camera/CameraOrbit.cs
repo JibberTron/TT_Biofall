@@ -26,8 +26,16 @@ public class CameraOrbit : MonoBehaviour
     [SerializeField] float sprintDistance = 5f;
     [SerializeField] float distanceSmoothing = 5f;
 
+    [Header("Collision")]
+    [SerializeField] float collisionRadius = 0.2f;
+    [SerializeField] LayerMask collisionMask;
+
     [Header("Recoil")]
     [SerializeField] float recoilRecovery = 5f;
+
+    [Header("Death Cam")]
+    [SerializeField] float deathCamHeight = 5f;
+    [SerializeField] float deathCamSpeed = 2f;
 
     float yaw;
     float pitch;
@@ -36,6 +44,7 @@ public class CameraOrbit : MonoBehaviour
     float currentOffsetX;
     float currentOffsetY;
     float recoilPitch;
+    bool isDead;
 
     [HideInInspector] public bool isAiming;
 
@@ -56,9 +65,20 @@ public class CameraOrbit : MonoBehaviour
         recoilPitch -= amount;
     }
 
+    public void TriggerDeathCam()
+    {
+        isDead = true;
+    }
+
     void LateUpdate()
     {
         if (target == null) return;
+
+        if (isDead)
+        {
+            HandleDeathCam();
+            return;
+        }
 
         isAiming = Input.GetMouseButton(1);
 
@@ -105,7 +125,22 @@ public class CameraOrbit : MonoBehaviour
                                + rotation * Vector3.right * currentOffsetX
                                + Vector3.up * currentOffsetY;
 
-        transform.position = shoulderPos - rotation * Vector3.forward * currentDistance;
+        Vector3 desiredPos = shoulderPos - rotation * Vector3.forward * currentDistance;
+        Vector3 direction = desiredPos - shoulderPos;
+        float dist = direction.magnitude;
+
+        if (Physics.SphereCast(shoulderPos, collisionRadius, direction.normalized, out RaycastHit hit, dist, collisionMask))
+            transform.position = shoulderPos + direction.normalized * (hit.distance - collisionRadius);
+        else
+            transform.position = desiredPos;
+
         transform.rotation = rotation;
+    }
+
+    void HandleDeathCam()
+    {
+        Vector3 deathPos = target.position + Vector3.up * deathCamHeight;
+        transform.position = Vector3.Lerp(transform.position, deathPos, Time.deltaTime * deathCamSpeed);
+        transform.LookAt(target.position);
     }
 }

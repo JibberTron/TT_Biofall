@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LabNotePickup : MonoBehaviour, IInteractable
 {
@@ -10,6 +11,8 @@ public class LabNotePickup : MonoBehaviour, IInteractable
     [SerializeField] bool destroyAfterPickup = true;
 
     [SerializeField] GameObject notePanel;
+    [SerializeField] Image noteImage;
+    [SerializeField] Sprite noteSprite;
 
     private bool playerNearby;
   void Update()
@@ -30,6 +33,8 @@ public class LabNotePickup : MonoBehaviour, IInteractable
         Debug.Log("Lab Note Found: " + noteTitle);
 
         Debug.Log(noteText);
+
+        noteImage.sprite = noteSprite;
 
         notePanel.SetActive(true);
 

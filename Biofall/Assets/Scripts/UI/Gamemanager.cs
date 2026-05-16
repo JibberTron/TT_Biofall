@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using System.Collections;
 
 public class Gamemanager : MonoBehaviour
 {
@@ -16,8 +17,11 @@ public class Gamemanager : MonoBehaviour
     public Image playerHPBar;
     public bool isPaused;
     public GameObject player;
-    // public PlayerController playerScript;
+    public PlayerController playerScript;
+    public GameObject hallucinationFlashScreen;
 
+    private bool isFlashing;
+    private InfectionHallucination hallucination;
     private InfectionSystem infection;
 
     float timeScaleOrig;
@@ -28,18 +32,25 @@ public class Gamemanager : MonoBehaviour
         instance = this;
         timeScaleOrig = Time.timeScale;
 
-        // player = GameObject.FindWithTag("Player");
-        // playerScript = player.GetComponent<PlayerController>();
+        player = GameObject.FindWithTag("Player");
+        playerScript = player.GetComponent<PlayerController>();
 
         infection = player.GetComponent<InfectionSystem>();
+        hallucination = player.GetComponent<InfectionHallucination>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetButtonDown("Cancel"))
+        UpdateInfectionHUD();
+
+        if(hallucination.IsHallucinating() && isFlashing)
         {
-            UpdateInfectionHUD();
+            StartCoroutine(FlashHallucination());
+        }
+
+        if (Input.GetButtonDown("Cancel"))
+        {
 
             if(menuActive == null)
             {
@@ -83,5 +94,25 @@ public class Gamemanager : MonoBehaviour
     private void UpdateInfectionHUD()
     {
         infectionBar.fillAmount = infection.currentInfection / infection.maxInfection;
+    }
+
+    IEnumerator FlashHallucination()
+    {
+        isFlashing = true;
+
+        while(hallucination.IsHallucinating())
+        {
+            hallucinationFlashScreen.SetActive(true);
+
+            yield return new WaitForSeconds(0.1f);
+
+            hallucinationFlashScreen.SetActive(false);
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        hallucinationFlashScreen.SetActive(false);
+
+        isFlashing = false;
     }
 }

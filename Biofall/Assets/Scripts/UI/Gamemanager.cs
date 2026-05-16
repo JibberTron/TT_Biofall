@@ -12,10 +12,13 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] GameObject menuGameOver;
     [SerializeField] GameObject menuWin;
 
+    public Image infectionBar;
     public Image playerHPBar;
     public bool isPaused;
     public GameObject player;
     // public PlayerController playerScript;
+
+    private InfectionSystem infection;
 
     float timeScaleOrig;
 
@@ -27,6 +30,8 @@ public class Gamemanager : MonoBehaviour
 
         // player = GameObject.FindWithTag("Player");
         // playerScript = player.GetComponent<PlayerController>();
+
+        infection = player.GetComponent<InfectionSystem>();
     }
 
     // Update is called once per frame
@@ -34,6 +39,8 @@ public class Gamemanager : MonoBehaviour
     {
         if(Input.GetButtonDown("Cancel"))
         {
+            UpdateInfectionHUD();
+
             if(menuActive == null)
             {
                 StatePause();
@@ -71,5 +78,10 @@ public class Gamemanager : MonoBehaviour
         StatePause();
         menuActive = menuGameOver;
         menuActive.SetActive(true);
+    }
+
+    private void UpdateInfectionHUD()
+    {
+        infectionBar.fillAmount = infection.currentInfection / infection.maxInfection;
     }
 }

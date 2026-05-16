@@ -93,6 +93,10 @@ public class InfectionSystem : MonoBehaviour
     {
         currentInfection = 0f;
         stopTimer = injectionStopDuration;
+
+        InfectionHallucination hallucination = GetComponent<InfectionHallucination>();
+        if (hallucination != null)
+            hallucination.ForceStopHallucination();
     }
 
     void Die()

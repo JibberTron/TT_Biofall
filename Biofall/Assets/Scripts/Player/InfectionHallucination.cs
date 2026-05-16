@@ -200,4 +200,22 @@ public class InfectionHallucination : MonoBehaviour
     }
 
     public bool IsHallucinating() => isHallucinating;
+
+    public void ForceStopHallucination()
+    {
+        if (!isHallucinating) return;
+
+        StopAllCoroutines();
+        ResetEffects();
+
+        if (gunManager != null) gunManager.enabled = true;
+        if (animator != null)
+        {
+            animator.SetBool("Hallucinating", false);
+            animator.SetLayerWeight(animator.GetLayerIndex("Hallucination"), 0f);
+        }
+
+        isHallucinating = false;
+        cooldownTimer = Random.Range(minCooldown, maxCooldown);
+    }
 }

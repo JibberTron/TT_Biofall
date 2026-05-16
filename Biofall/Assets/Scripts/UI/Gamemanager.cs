@@ -12,6 +12,9 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuGameOver;
     [SerializeField] GameObject menuWin;
+    [SerializeField] GameObject mainMenu;
+    [SerializeField] GameObject controlPanel;
+    [SerializeField] GameObject HUD;
 
     public Image infectionBar;
     public Image playerHPBar;
@@ -31,6 +34,9 @@ public class Gamemanager : MonoBehaviour
     {
         instance = this;
         timeScaleOrig = Time.timeScale;
+
+        // Time.timeScale = 0f;
+        // mainMenu.SetActive(true);
 
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
@@ -71,6 +77,7 @@ public class Gamemanager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        HUD.SetActive(false);
     }
 
     public void StateUnpause()
@@ -82,6 +89,7 @@ public class Gamemanager : MonoBehaviour
         // turn what ever menu is active off
         menuActive.SetActive(false);
         menuActive = null;
+        HUD.SetActive(true);
     }
 
     public void GameOver()
@@ -89,6 +97,18 @@ public class Gamemanager : MonoBehaviour
         StatePause();
         menuActive = menuGameOver;
         menuActive.SetActive(true);
+    }
+
+    public void StateControlPanelOn()
+    {
+        mainMenu.SetActive(false);
+        controlPanel.SetActive(true);
+    }
+
+    public void StateControlPanelOff()
+    {
+        mainMenu.SetActive(true);
+        controlPanel.SetActive(false);
     }
 
     private void UpdateInfectionHUD()

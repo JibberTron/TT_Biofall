@@ -22,4 +22,21 @@ public class ButtonFunctions : MonoBehaviour
             Application.Quit();
         #endif
     }
+
+    public void Control()
+    {
+        Gamemanager.instance.StateControlPanelOn();
+    }
+
+    public void Back()
+    {
+        Gamemanager.instance.StateControlPanelOff();
+    }
+
+    public void Play()
+    {
+        Debug.Log("PLAY BUTTON WORKS");
+
+        Gamemanager.instance.StateUnpause();
+    }
 }

@@ -1,44 +1,9 @@
 fileFormatVersion: 2
-guid: 97f3457d9ca629147b1a3de9d97531b8
+guid: 3d1edda8b9735ad4fb137e2813dd4fee
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: skeletonZombie_Material
-    second: {fileID: 2100000, guid: 19e4237680e180749ba4b140ba65dc41, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: skeletonZombie_Material1
-    second: {fileID: 2100000, guid: bb1cb184af4a6b64e8bfe1ebfa8d162e, type: 2}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: skeletonZombie_body_diffuse
-    second: {fileID: 2800000, guid: 92b2a95f4641d744ab7b3a249a9bff08, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: skeletonZombie_diffuse
-    second: {fileID: 2800000, guid: 06cd6b938157b2b4bb2dda7667d037d7, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: skeletonZombie_glow
-    second: {fileID: 2800000, guid: 439b445eee73d654581a9b438fbba873, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: skeletonZombie_normal
-    second: {fileID: 2800000, guid: 93d8294edc9c575459d5635ad422268e, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: skeletonZombie_specular
-    second: {fileID: 2800000, guid: 5903364eb1c09f8448a13d69f027de12, type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -64,7 +29,36 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Get Up
+      takeName: mixamo.com
+      internalID: -203655887218126122
+      firstFrame: 0
+      lastFrame: 228
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -535,18 +529,18 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: MainEnemy(Clone)
+    - name: MainEnemy_MODEL(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: skeletonZombie
-      parentName: MainEnemy(Clone)
+      parentName: MainEnemy_MODEL(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Hips
-      parentName: MainEnemy(Clone)
+      parentName: MainEnemy_MODEL(Clone)
       position: {x: 0.000000082566594, y: 1.1672188, z: 0.009004628}
       rotation: {x: -1.589911e-13, y: -0.0000000050771254, z: -0.0000007130607, w: 1}
       scale: {x: 1, y: 1, z: 1}
@@ -922,11 +916,11 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 97f3457d9ca629147b1a3de9d97531b8, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0

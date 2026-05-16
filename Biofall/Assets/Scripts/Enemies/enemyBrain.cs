@@ -8,23 +8,35 @@ public class enemyBrain : MonoBehaviour
         IDLE,
         ROAMING,
         INVESTIGATING,
-        CHASING
+        CHASING,
+        INCAPACITATED,
+        DEAD
     }
 
-    [SerializeField] enemyMovement movement;
-    [SerializeField] enemyAnims anims;
-    [SerializeField] float detectionRange = 8f;
-    [SerializeField] float investigateTime = 3f;
-    [SerializeField] float detectionAngle = 90f;
+    enemyMovement movement;
+    enemyAnims anims;
+    enemyHealth health;
 
-    public EnemyState currentState;
+    [Header("-----AI Stats-----")]
+    [Range(5, 100)][SerializeField] float detectionRange = 8f;
+    [Range(3, 10)][SerializeField] float investigateTime = 3f;
+    [Range(0, 90)][SerializeField] float detectionAngle = 90f;
+    [Range(5, 500)][SerializeField] float incapacitatedTimer = 5f;
 
+    float distance;
+    float distanceTimer;
+
+    EnemyState currentState;
+    public EnemyState CurrentState => currentState;
+    
     bool isInvestigating;
+    bool isIncapacitated;
 
     void Start()
     {
         movement = GetComponent<enemyMovement>();
         anims = GetComponent<enemyAnims>();
+        health = GetComponent<enemyHealth>();
 
         StartCoroutine(StartAfterIdle());
     }
@@ -32,10 +44,14 @@ public class enemyBrain : MonoBehaviour
     void Update()
     {
         if (movement.EnemyRef.Target == null || isInvestigating) return;
+        if (currentState == EnemyState.INCAPACITATED) return;
+        if (health.isDead)
+        {
+            ChangeState(EnemyState.INCAPACITATED);
+            return;
+        }
 
-        float distance = Vector3.Distance(transform.position, movement.EnemyRef.Target.position);
-
-        if (currentState != EnemyState.CHASING && distance <= detectionRange && CanSeePlayer())
+        if (currentState != EnemyState.CHASING && PlayerFound())
         {
             ChangeState(EnemyState.CHASING);
             return;
@@ -76,6 +92,15 @@ public class enemyBrain : MonoBehaviour
             case EnemyState.INVESTIGATING:
                 StartCoroutine(Investigate());
                 break;
+
+            case EnemyState.DEAD:
+                HandleDead();
+                break;
+
+            case EnemyState.INCAPACITATED:
+                Debug.Log("HERER");
+                StartCoroutine(Incapacitated());
+                break;
         }
     }
     void HandleRoam()
@@ -86,61 +111,50 @@ public class enemyBrain : MonoBehaviour
             return;
         }
 
-        anims.SetSpeed(movement.EnemyRef.Agent.velocity.magnitude, 2f);
+        movement.SetSpeed(1.5f);
+        anims.SetMovement(movement.EnemyRef.Agent.velocity.magnitude);
     }
     void HandleChase()
     {
-        anims.SetSpeed(movement.EnemyRef.Agent.velocity.magnitude, 2.5f);
+        distanceTimer += Time.deltaTime;
+
+        if (distanceTimer >= 0.1f)
+        {
+            distanceTimer = 0f;
+
+            distance = Vector3.Distance(transform.position, movement.EnemyRef.Target.position);
+        }
+        movement.SetSpeed(2f);
+        anims.SetMovement(movement.EnemyRef.Agent.velocity.magnitude);
     }
     void HandleInvestigate()
     {
         // animation handled in coroutine
     }
-    IEnumerator Investigate()
+    void HandleDead()
     {
-        isInvestigating = true;
-
         movement.Stop(true);
-        anims.Investigate(true);
-
-        yield return new WaitForSeconds(investigateTime);
-
-        anims.Investigate(false);
-        movement.EnemyRef.Agent.isStopped = false;
-
-        if (CanSeePlayer())
-        {
-            ChangeState(EnemyState.CHASING);
-        }
-        else
-        {
-            ChangeState(EnemyState.ROAMING);
-        }
-    
-        isInvestigating = false;
-    }
-    IEnumerator StartAfterIdle()
-    {
-        currentState = EnemyState.IDLE;
-        isInvestigating = true;
-
-        yield return new WaitForSeconds(3f);
-
-        isInvestigating = false;
-        ChangeState(EnemyState.ROAMING);
+        movement.EnemyRef.Agent.ResetPath();
+        movement.EnableNav(false);
+        movement.SetSpeed(0);
+        movement.ShouldUpdatePath(false);
+        anims.Death(true);
     }
     bool ReachedDestination()
     {
         return !isInvestigating && !movement.EnemyRef.Agent.pathPending && movement.EnemyRef.Agent.hasPath && 
             movement.EnemyRef.Agent.remainingDistance <= 0.5f && movement.EnemyRef.Agent.velocity.sqrMagnitude < 0.01f;
     }
-
+    bool PlayerFound()
+    {
+        return (CanSeePlayer() && distance <= detectionRange);
+    }
     bool CanSeePlayer()
     {
         Vector3 playerDir = (movement.EnemyRef.Target.transform.position - transform.position).normalized;
-        detectionAngle = Vector3.Angle(transform.forward, playerDir);
+        float angleToPlayer = Vector3.Angle(transform.forward, playerDir);
 
-        if (detectionAngle <= 90)
+        if (angleToPlayer <= detectionAngle)
         {
             if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange))
             {
@@ -158,10 +172,75 @@ public class enemyBrain : MonoBehaviour
         Vector3 look = movement.EnemyRef.Target.position - transform.position;
         look.y = 0;
 
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            Quaternion.LookRotation(look),
-            0.2f
-        );
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(look), 0.2f);
+    }
+    IEnumerator Incapacitated()
+    {
+        if (currentState == EnemyState.INCAPACITATED)
+        {
+            HandleDead();
+            isIncapacitated = true;
+            yield return new WaitForSeconds(incapacitatedTimer);
+   
+            anims.Death(false);
+            health.isDead = false;
+            health.currentHP = 10;
+            
+            anims.StandUp(isIncapacitated);
+
+            yield return new WaitForSeconds(6f);
+
+            movement.EnableNav(true);
+            movement.EnemyRef.Agent.ResetPath();
+            movement.Stop(false);
+
+            isIncapacitated = false;
+            movement.ShouldUpdatePath(true);
+            anims.StandUp(isIncapacitated);
+            if(PlayerFound())
+            {
+                ChangeState(EnemyState.CHASING);
+            }
+            else
+            {
+                ChangeState(EnemyState.ROAMING);
+            }
+            
+        }
+    }
+    IEnumerator Investigate()
+    {
+        isInvestigating = true;
+
+        movement.Stop(true);
+        movement.SetSpeed(0);
+        anims.Investigate(true);
+  
+        yield return new WaitForSeconds(investigateTime);
+
+        anims.Investigate(false);
+        movement.SetSpeed(movement.OrigSpeed);
+        movement.Stop(false);
+
+        if (PlayerFound())
+        {
+            ChangeState(EnemyState.CHASING);
+        }
+        else
+        {
+            ChangeState(EnemyState.ROAMING);
+        }
+    
+        isInvestigating = false;
+    }
+    IEnumerator StartAfterIdle()
+    {
+        currentState = EnemyState.IDLE;
+        movement.ShouldUpdatePath(false);
+
+        yield return new WaitForSeconds(1f);
+
+        movement.ShouldUpdatePath(true);
+        ChangeState(EnemyState.ROAMING);
     }
 }

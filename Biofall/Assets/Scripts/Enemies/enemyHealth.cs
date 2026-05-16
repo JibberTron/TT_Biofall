@@ -3,8 +3,10 @@ using UnityEngine;
 public class enemyHealth : MonoBehaviour, iDamage
 {
     [Header("Health")]
-    [SerializeField] int currentHP = 100;
+    [SerializeField] public int currentHP = 100;
     [SerializeField] int maxHP = 10;
+
+    public bool isDead = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,11 +21,12 @@ public class enemyHealth : MonoBehaviour, iDamage
     }
     public void TakeDamage(int amount)
     {
+        if (isDead) return;
         currentHP -= amount;
-        Debug.Log(currentHP);
+
         if (currentHP <= 0)
         {
-            Debug.Log("DEAD");
+            isDead = true;
         }
     }
 }

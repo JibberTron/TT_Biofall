@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a56bbf9a67c1ee8489bb70eb0d7f2432
+guid: a1b5db95ca593ee4c99d58710d534709
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -31,26 +31,26 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Mutant Run
+      name: Death
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 20
+      lastFrame: 109
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
+      keepOriginalPositionY: 0
       keepOriginalPositionXZ: 0
-      heightFromFeet: 0
+      heightFromFeet: 1
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
@@ -529,18 +529,18 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: MainEnemy(Clone)
+    - name: MainEnemy_MODEL(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: skeletonZombie
-      parentName: MainEnemy(Clone)
+      parentName: MainEnemy_MODEL(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Hips
-      parentName: MainEnemy(Clone)
+      parentName: MainEnemy_MODEL(Clone)
       position: {x: 0.000000082566594, y: 1.1672188, z: 0.009004628}
       rotation: {x: -1.589911e-13, y: -0.0000000050771254, z: -0.0000007130607, w: 1}
       scale: {x: 1, y: 1, z: 1}

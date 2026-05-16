@@ -16,17 +16,22 @@ public class enemyAnims : MonoBehaviour
     }
     public void Investigate(bool _isInvestigating)
     {
-        enemyRef.Agent.speed = 0;
         anims.SetBool("IsLooking", _isInvestigating);
     }
-    public void SetSpeed(float _mag, float _speed)
+    public void SetMovement(float _mag)
     {
-        enemyRef.Agent.speed = _speed;
         enemyRef.Animator.SetFloat("Speed", _mag);
     }
     public void Grab()
     {
-        enemyRef.Agent.isStopped = true;
         enemyRef.Animator.SetTrigger("Attack");
+    }
+    public void Death(bool _should)
+    {
+        enemyRef.Animator.SetBool("Dead", _should);
+    }
+    public void StandUp(bool _should)
+    {
+        enemyRef.Animator.SetBool("StandUp", _should);
     }
 }

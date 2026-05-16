@@ -1,14 +1,21 @@
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.AI;
+using static Unity.VisualScripting.Member;
 
 public class DoorInteract : MonoBehaviour, IInteractable
 {
     [SerializeField] Transform hinge;
+    NavMeshObstacle obst;
 
     bool isOpen = false;
+    bool doorGuard;
 
+    void Start()
+    {
+        obst = GetComponentInChildren<NavMeshObstacle>();
+        obst.enabled = false;
+    }
     public void Interact()
     {
         if (isOpen)
@@ -23,34 +30,51 @@ public class DoorInteract : MonoBehaviour, IInteractable
     }
     IEnumerator OpenDoor()
     {
-        Quaternion beginRot = hinge.localRotation;
-        Quaternion endRot = Quaternion.Euler(0, 90, 0);
-        float dur = 1f;
-        float time = 0;
-        while (time < dur)
+        if (!doorGuard)
         {
-            time += Time.deltaTime;
-            isOpen = true;
+            Quaternion beginRot = hinge.localRotation;
+            Quaternion endRot = Quaternion.Euler(0, 90, 0);
+            float dur = 1f;
+            float time = 0;
 
-            Debug.Log("Door Opened");
-            hinge.localRotation = Quaternion.Slerp(beginRot, endRot, time);
-            yield return null;
+            isOpen = true;
+            obst.enabled = false;
+
+            while (time < dur)
+            {
+                time += Time.deltaTime;
+                float t = time / dur;
+
+                Debug.Log("Door Opened");
+                hinge.localRotation = Quaternion.Slerp(beginRot, endRot, time);
+
+                yield return null;
+            }
         }
+        doorGuard = true;
     }
     IEnumerator CloseDoor()
     {
-        Quaternion beginRot = hinge.localRotation;
-        Quaternion endRot = Quaternion.Euler(0, 0, 0);
-        float dur = 1f;
-        float time = 0;
-        while (time < dur)
+        if (doorGuard)
         {
-            time += Time.deltaTime;
+            Quaternion beginRot = hinge.localRotation;
+            Quaternion endRot = Quaternion.Euler(0, 0, 0);
+
+            float dur = 1f;
+            float time = 0;
             isOpen = false;
 
-            Debug.Log("Door Closed");
-            hinge.localRotation = Quaternion.Slerp(beginRot, endRot, time);
-            yield return null;
+            while (time < dur)
+            {
+                time += Time.deltaTime;
+                float t = time / dur;
+
+                Debug.Log("Door Closed");
+                hinge.localRotation = Quaternion.Slerp(beginRot, endRot, time);
+                yield return null;
+            }
+            obst.enabled = true;
         }
+        doorGuard = false;
     }
 }

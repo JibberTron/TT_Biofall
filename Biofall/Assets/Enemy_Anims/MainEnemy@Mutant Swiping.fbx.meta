@@ -529,18 +529,18 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: MainEnemy(Clone)
+    - name: MainEnemy_MODEL(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: skeletonZombie
-      parentName: MainEnemy(Clone)
+      parentName: MainEnemy_MODEL(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Hips
-      parentName: MainEnemy(Clone)
+      parentName: MainEnemy_MODEL(Clone)
       position: {x: 0.000000082566594, y: 1.1672188, z: 0.009004628}
       rotation: {x: -1.589911e-13, y: -0.0000000050771254, z: -0.0000007130607, w: 1}
       scale: {x: 1, y: 1, z: 1}

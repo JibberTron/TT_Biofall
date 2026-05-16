@@ -1478,13 +1478,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1706994371365381519}
   - component: {fileID: 7288536323334566893}
+  - component: {fileID: 1034314334332796607}
   - component: {fileID: 6986694776370304813}
   - component: {fileID: 2196573818278426630}
   - component: {fileID: 4368260174159564218}
   - component: {fileID: 4548209395569412916}
   - component: {fileID: 5634930958777443899}
   - component: {fileID: 6879156820333893535}
-  - component: {fileID: 1300670682745938780}
+  - component: {fileID: 2334369741302940337}
   m_Layer: 0
   m_Name: Main_Enemy
   m_TagString: Untagged
@@ -1501,7 +1502,7 @@ Transform:
   m_GameObject: {fileID: 6449652100969422556}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -1.79, y: 0.000000015674544, z: -6.01}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1532,6 +1533,90 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   target: {fileID: 0}
+--- !u!114 &1034314334332796607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6449652100969422556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Animation.Rigging::UnityEngine.Animations.Rigging.BoneRenderer
+  boneShape: 1
+  drawBones: 1
+  drawTripods: 0
+  boneSize: 1
+  tripodSize: 1
+  boneColor: {r: 0.028301895, g: 0.028301895, b: 0.028301895, a: 0.5}
+  m_Transforms:
+  - {fileID: 5147891974064569096}
+  - {fileID: 8926284257386386307}
+  - {fileID: 3356460430017623520}
+  - {fileID: 5575113163477442140}
+  - {fileID: 6369098492368748475}
+  - {fileID: 4608520115045433410}
+  - {fileID: 4941685391188650222}
+  - {fileID: 4439536823622219389}
+  - {fileID: 5520899768976907686}
+  - {fileID: 3988213714970790622}
+  - {fileID: 150167809219940469}
+  - {fileID: 4935436351506387636}
+  - {fileID: 1448704798974174803}
+  - {fileID: 1259331223341668241}
+  - {fileID: 8970592900684355766}
+  - {fileID: 8671887423619376959}
+  - {fileID: 5872112069735252127}
+  - {fileID: 868964428006590957}
+  - {fileID: 1778472921120150357}
+  - {fileID: 8913743114351104058}
+  - {fileID: 4264714249871467228}
+  - {fileID: 7136363464253247037}
+  - {fileID: 5510049861585132402}
+  - {fileID: 8708208243507864160}
+  - {fileID: 238576981771273131}
+  - {fileID: 9180277811321008347}
+  - {fileID: 7585904742183243632}
+  - {fileID: 8244715011642863276}
+  - {fileID: 5778170344078754612}
+  - {fileID: 148868906445380462}
+  - {fileID: 7881025320851438696}
+  - {fileID: 4555956825154715435}
+  - {fileID: 7172927387637011849}
+  - {fileID: 6106139362140758118}
+  - {fileID: 4139889889577708979}
+  - {fileID: 7719360558180297317}
+  - {fileID: 8473352928858150157}
+  - {fileID: 1636562540169850963}
+  - {fileID: 7643661035270165071}
+  - {fileID: 6993841478170635264}
+  - {fileID: 6943029449424427160}
+  - {fileID: 4403773669695133681}
+  - {fileID: 1798766034912892637}
+  - {fileID: 5696002027552003880}
+  - {fileID: 6468196709635205028}
+  - {fileID: 4858967391156412375}
+  - {fileID: 439124858844141960}
+  - {fileID: 3801317443686621082}
+  - {fileID: 6540182828201271916}
+  - {fileID: 5594390341557274426}
+  - {fileID: 6004247413449166450}
+  - {fileID: 8153412490157976766}
+  - {fileID: 3299717676140725797}
+  - {fileID: 9176992162609449760}
+  - {fileID: 8297127816518024390}
+  - {fileID: 7422728874775491391}
+  - {fileID: 4904373174369355807}
+  - {fileID: 7345391498051523447}
+  - {fileID: 6329560786623315673}
+  - {fileID: 1350210995007362887}
+  - {fileID: 549063705191285404}
+  - {fileID: 1070737567528422656}
+  - {fileID: 1150199749793583847}
+  - {fileID: 5689053893695344844}
+  - {fileID: 7719840614512249467}
 --- !u!114 &6986694776370304813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1572,6 +1657,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::enemyMovement
   pathToDelay: 0.2
   armCollider: {fileID: 0}
+  OrigSpeed: 0
+  shouldUpdatePath: 1
 --- !u!114 &4548209395569412916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1584,11 +1671,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ae10b54a7b4aea4f81be48c80be494a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyAI
-  movement: {fileID: 4368260174159564218}
-  anims: {fileID: 6986694776370304813}
   detectionRange: 8
   investigateTime: 3
   detectionAngle: 90
+  distance: 0
   currentState: 0
 --- !u!95 &5634930958777443899
 Animator:
@@ -1625,7 +1711,7 @@ NavMeshAgent:
   m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 350
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
@@ -1634,8 +1720,8 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!135 &1300670682745938780
-SphereCollider:
+--- !u!136 &2334369741302940337
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -1651,10 +1737,12 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Radius: 15
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 2.22
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &6552860465596552048
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,7 +1800,7 @@ Transform:
   m_GameObject: {fileID: 6640253035140454144}
   serializedVersion: 2
   m_LocalRotation: {x: -1.589911e-13, y: -0.0000000050771254, z: -0.0000007130607, w: 1}
-  m_LocalPosition: {x: 0.000000082566594, y: 1.1672188, z: 0.009004628}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -1,7 +1,9 @@
 using UnityEngine;
 using System.Collections;
-
-public class enemyMovement : MonoBehaviour, ISound
+//TODO: Make it to where the enemy will only go by the patrol points closest to the player
+//  by getting the distance from patrol point to player we can figure out which ones are closest and only patrol those areas
+// if there is only one patrol point in the area maybe make a random patrol in situations like that
+public class enemyMovement : MonoBehaviour
 {
     enemyReferences enemyRef;
     public enemyReferences EnemyRef => enemyRef;
@@ -12,8 +14,11 @@ public class enemyMovement : MonoBehaviour, ISound
     int currentPos;
 
     Coroutine pathRoutine;
- 
-    bool isAttacking;
+
+    float origSpeed;
+    public float OrigSpeed;
+
+    bool shouldUpdatePath = true;
 
     void Awake()
     {
@@ -22,7 +27,7 @@ public class enemyMovement : MonoBehaviour, ISound
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        origSpeed = enemyRef.Agent.speed;
     }
 
     // Update is called once per frame
@@ -30,53 +35,64 @@ public class enemyMovement : MonoBehaviour, ISound
     {
 
     }
-    public void Chase()
+    void chase()
     {
-        if (pathRoutine == null)
-        {
-            pathRoutine = StartCoroutine(UpdatePath());
-        }
+        EnableNav(true);
+        Stop(false);
+        ShouldUpdatePath(true);
+
+        if (pathRoutine != null) return;
+        pathRoutine = StartCoroutine(UpdatePath());
     }
-    public void StopChase()
+    void stopChase()
     {
-        if (pathRoutine != null)
-        {
-            StopCoroutine(pathRoutine);
-            pathRoutine = null;
-        }
+        if (pathRoutine == null) return;
+
+       StopCoroutine(pathRoutine);
+       pathRoutine = null;
     }
-    public void GoToNextPoint()
+    void goToNextPoint()
     {
         if (enemyRef.RoamPos.Length == 0) return;
         enemyRef.Agent.destination = enemyRef.RoamPos[Random.Range(0, enemyRef.RoamPos.Length)].position;
         currentPos = (currentPos + 1) % enemyRef.RoamPos.Length;
     }
+    public void SetSpeed(float _value)
+    {
+        enemyRef.Agent.speed = _value;
+    }
     public void Stop(bool _should)
     {
         enemyRef.Agent.isStopped = _should;
     }
-    IEnumerator UpdatePath()
+    public void EnableNav(bool _should)
     {
-        while (true)
-        {
-            enemyRef.Agent.isStopped = false;
-            enemyRef.Agent.SetDestination(enemyRef.Target.position);
-
-            yield return new WaitForSeconds(pathToDelay);
-        }
+        enemyRef.Agent.enabled = _should;
+    }
+    public void ShouldUpdatePath(bool _should)
+    {
+        shouldUpdatePath = _should;
     }
     public void MoveTo(Vector3 _loc)
     {
-        enemyRef.Agent.isStopped = false;
+        Stop(false);
         enemyRef.Agent.SetDestination(_loc);
     }
-    public void ReactToSound(Sound _sound)
+    IEnumerator UpdatePath()
     {
-
-        if (_sound.soundType == Sound.SoundType.DEFAULT)
+        while (shouldUpdatePath)
         {
-            MoveTo(_sound.position);
+            if(Vector3.Distance(enemyRef.Agent.destination, enemyRef.Target.position) > 0.3f)
+            {
+                enemyRef.Agent.SetDestination(enemyRef.Target.position);
+            }
+ 
+            yield return new WaitForSeconds(0.1f) ;
         }
-        Debug.Log($"Responding to sound {_sound.position} at Range {_sound.range}");
+        pathRoutine = null;
     }
+
+    public void StopChase() => stopChase();
+    public void GoToNextPoint() => goToNextPoint();
+    public void Chase() => chase();
 }

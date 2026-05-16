@@ -1,36 +1,3 @@
-/*
-    PURPOSE:
-    Handles enemy movement commands through the NavMeshAgent.
-
-    This script does not decide what the enemy wants.
-    It only moves the enemy where the brain tells it to go.
-
-    PSEUDOCODE:
-    If told to travel:
-        Set travel speed.
-        Move to the travel point.
-
-    If told to wander:
-        Set wander speed.
-        Move to the wander point.
-
-    If told to investigate:
-        Set investigate speed.
-        Move to the investigation location.
-
-    If told to chase:
-        Start repeatedly updating the destination to the player's position.
-
-    If told to stop:
-        Pause the NavMeshAgent.
-
-    NOTES:
-    - This script is intentionally simple.
-    - EnemyRouteBrain decides the state.
-    - This script executes the movement.
-    - Chase uses a coroutine so the enemy updates the player's position over time instead of only once.
-*/
-
 using System.Collections;
 using UnityEngine;
 
@@ -45,7 +12,12 @@ public class EnemyRouteMovement : MonoBehaviour
     [SerializeField] private float chaseSpeed = 5f;
 
     [Header("Path Updating")]
-    [SerializeField] private float chasePathUpdateDelay = 0.2f;
+    [SerializeField] private float chasePathUpdateDelay = 0.1f;
+
+    [Header("Animation Parameters")]
+    [SerializeField] private string speedParameter = "Speed";
+    [SerializeField] private string investigateParameter = "IsLooking";
+    [SerializeField] private string attackTrigger = "Attack";
 
     private Coroutine chaseRoutine;
 
@@ -54,6 +26,11 @@ public class EnemyRouteMovement : MonoBehaviour
     private void Awake()
     {
         enemyRef = GetComponent<EnemyRouteReferences>();
+    }
+
+    private void Update()
+    {
+        UpdateSpeedAnimation();
     }
 
     public void MoveToTravelPoint(Vector3 position)
@@ -115,6 +92,44 @@ public class EnemyRouteMovement : MonoBehaviour
         }
     }
 
+    public void SetInvestigatingAnimation(bool isInvestigating)
+    {
+        if (enemyRef.Animator == null)
+        {
+            return;
+        }
+
+        enemyRef.Animator.SetBool(investigateParameter, isInvestigating);
+    }
+
+    public void TriggerAttackAnimation()
+    {
+        if (enemyRef.Animator == null)
+        {
+            return;
+        }
+
+        enemyRef.Animator.SetTrigger(attackTrigger);
+    }
+
+    public void SetAttackCollider(bool enabled)
+    {
+        if (enemyRef.AttackCollider != null)
+        {
+            enemyRef.AttackCollider.enabled = enabled;
+        }
+    }
+
+    private void UpdateSpeedAnimation()
+    {
+        if (enemyRef.Animator == null || enemyRef.Agent == null)
+        {
+            return;
+        }
+
+        enemyRef.Animator.SetFloat(speedParameter, enemyRef.Agent.velocity.magnitude);
+    }
+
     private IEnumerator UpdateChasePath()
     {
         while (true)
@@ -123,13 +138,7 @@ public class EnemyRouteMovement : MonoBehaviour
             {
                 enemyRef.Agent.speed = chaseSpeed;
                 enemyRef.Agent.isStopped = false;
-
-                Vector3 targetPosition = enemyRef.Target.position;
-
-                if (enemyRef.Agent.destination != targetPosition)
-                {
-                    enemyRef.Agent.SetDestination(targetPosition);
-                }
+                enemyRef.Agent.SetDestination(enemyRef.Target.position);
             }
 
             yield return new WaitForSeconds(chasePathUpdateDelay);

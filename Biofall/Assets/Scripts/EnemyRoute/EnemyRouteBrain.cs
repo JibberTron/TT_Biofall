@@ -68,7 +68,8 @@ public class EnemyRouteBrain : MonoBehaviour
         ROOM_WANDER,
         INVESTIGATING_NOISE,
         CHASING,
-        SEARCHING_LAST_KNOWN
+        SEARCHING_LAST_KNOWN,
+        ATTACKING
     }
 
     [Header("State")]
@@ -87,6 +88,14 @@ public class EnemyRouteBrain : MonoBehaviour
     [SerializeField] private float losePlayerRange = 18f;
     [SerializeField] private float playerMoveNoiseThreshold = 0.1f;
     [SerializeField] private float closeProximityRange = 2f;
+
+    [Header("Attack")]
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float attackCooldown = 1.5f;
+    [SerializeField] private float attackHitboxDelay = 0.35f;
+    [SerializeField] private float attackHitboxActiveTime = 0.25f;
+
+    private bool isAttacking;
 
     [Header("Timing")]
     [SerializeField] private float idleStartTime = 1f;
@@ -214,6 +223,12 @@ public class EnemyRouteBrain : MonoBehaviour
                 movement.StopChase();
                 movement.MoveToInvestigatePoint(lastKnownPlayerPosition);
                 break;
+
+            case EnemyState.ATTACKING:
+                movement.StopChase();
+                movement.StopMovement(true);
+                movement.TriggerAttackAnimation();
+                break;
         }
     }
 
@@ -240,6 +255,43 @@ public class EnemyRouteBrain : MonoBehaviour
 
         StopActiveRoutine();
         activeRoutine = StartCoroutine(FollowRouteToRoom(selectedRoom));
+    }
+
+    private IEnumerator AttackThenChase()
+    {
+        isAttacking = true;
+
+        movement.StopMovement(true);
+        movement.TriggerAttackAnimation();
+
+        yield return new WaitForSeconds(attackHitboxDelay);
+
+        movement.SetAttackCollider(true);
+
+        yield return new WaitForSeconds(attackHitboxActiveTime);
+
+        movement.SetAttackCollider(false);
+
+        yield return new WaitForSeconds(attackCooldown);
+
+        isAttacking = false;
+
+        if (enemyRef.Target != null)
+        {
+            float distanceToPlayer = Vector3.Distance(transform.position, enemyRef.Target.position);
+
+            if (distanceToPlayer <= losePlayerRange)
+            {
+                ChangeState(EnemyState.CHASING);
+            }
+            else
+            {
+                ChangeState(EnemyState.SEARCHING_LAST_KNOWN);
+
+                StopActiveRoutine();
+                activeRoutine = StartCoroutine(SearchLastKnownThenRoute());
+            }
+        }
     }
 
     private IEnumerator FollowRouteToRoom(RoomPatrolPoint room)
@@ -338,6 +390,15 @@ public class EnemyRouteBrain : MonoBehaviour
     private void HandleChase()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, enemyRef.Target.position);
+
+        if (distanceToPlayer <= attackRange && !isAttacking)
+        {
+            ChangeState(EnemyState.ATTACKING);
+
+            StopActiveRoutine();
+            activeRoutine = StartCoroutine(AttackThenChase());
+            return;
+        }
 
         if (distanceToPlayer <= chaseRange)
         {

@@ -1,8 +1,18 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InjectionAntibodyPickup : MonoBehaviour, IInteractable
 {
-   public void Interact()
+    private bool playerNearby;
+
+    void Update()
+    {
+        if (playerNearby && Input.GetKeyDown(KeyCode.E))
+        {
+            Interact();
+        }
+    }
+    public void Interact()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
@@ -19,5 +29,17 @@ public class InjectionAntibodyPickup : MonoBehaviour, IInteractable
                 Destroy(gameObject);
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            playerNearby = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+            playerNearby = false;
     }
 }

@@ -68,9 +68,9 @@ public class InfectionSystem : MonoBehaviour
         currentInfection += currentTickRate * Time.deltaTime;
         currentInfection = Mathf.Min(currentInfection, maxInfection);
 
-        if (currentInfection <= 0)
+        if (currentInfection >= maxInfection)
         {
-            currentInfection = 0;
+            currentInfection = maxInfection;
             if (healthSystem != null)
                 healthSystem.TakeDamage(healthSystem.currentHealth);
         }

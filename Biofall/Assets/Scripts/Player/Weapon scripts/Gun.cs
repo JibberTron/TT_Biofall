@@ -20,6 +20,8 @@ public class Gun : MonoBehaviour
     [SerializeField] Transform gunBarrel;
     [SerializeField] Animator animator;
 
+    [SerializeField] HidingSystem hidingSystem;
+
     int currentAmmo;
     bool isReloading;
     float nextFireTime;
@@ -39,7 +41,9 @@ public class Gun : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && cameraOrbit.isAiming && Time.time >= nextFireTime)
+        if (Input.GetMouseButtonDown(0) && cameraOrbit.isAiming
+            && Time.time >= nextFireTime
+            && (hidingSystem == null || !hidingSystem.IsHiding()))
             Shoot();
     }
 

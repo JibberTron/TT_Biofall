@@ -1,5 +1,54 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &529831138713125208
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7466106957328729592}
+  - component: {fileID: 2566377854888274725}
+  m_Layer: 0
+  m_Name: Infection hallucination
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7466106957328729592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529831138713125208}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.12697983, y: -1.1052074, z: 0.37970126}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3861786650346691327}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2566377854888274725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529831138713125208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 1833ead82bde3bb49b9e658ff285499a, type: 2}
 --- !u!1 &866996773081776741
 GameObject:
   m_ObjectHideFlags: 0
@@ -325,7 +374,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -361,6 +410,7 @@ GameObject:
   - component: {fileID: 7756606161862089630}
   - component: {fileID: 5788958315336630329}
   - component: {fileID: 8485487063210877488}
+  - component: {fileID: 6545430053113170481}
   - component: {fileID: 1510492274118259377}
   - component: {fileID: 5103200429067656528}
   - component: {fileID: 8287386097019901355}
@@ -394,6 +444,7 @@ Transform:
   - {fileID: 2293950126780056071}
   - {fileID: 4947975593668376090}
   - {fileID: 1357272164578536619}
+  - {fileID: 7466106957328729592}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1683797887275768770
@@ -469,6 +520,7 @@ MonoBehaviour:
   gunBarrel: {fileID: 6623143779122407383}
   animator: {fileID: 1464396738270886436}
   hidingSystem: {fileID: 5103200429067656528}
+  hallucination: {fileID: 6545430053113170481}
 --- !u!114 &5788958315336630329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -488,6 +540,7 @@ MonoBehaviour:
   hitAnimLength: 1
   animator: {fileID: 1464396738270886436}
   playerController: {fileID: 1510492274118259377}
+  hallucination: {fileID: 6545430053113170481}
   isHit: 0
 --- !u!114 &8485487063210877488
 MonoBehaviour:
@@ -502,12 +555,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InfectionSystem
   maxInfection: 100
-  currentInfection: 0
+  currentInfection: 0.1
   baseTickRate: 0.1
   oralRecovery: 10
   oralSlowAmount: 0.05
   oralSlowDuration: 30
   injectionStopDuration: 60
+--- !u!114 &6545430053113170481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8490025096354038525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65bf46d234599674b82ca4d8298dbe85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InfectionHallucination
+  infectionThreshold: 75
+  minDuration: 5
+  maxDuration: 15
+  minCooldown: 5
+  maxCooldown: 15
+  pulseSpeed: 1
+  minVignetteIntensity: 0.2
+  maxVignetteIntensity: 0.5
+  vignetteColor: {r: 0.4, g: 0, b: 0.5, a: 1}
+  maxSaturation: -80
+  maxBlur: 1
+  maxAberration: 0.8
+  maxLensDistortion: -0.6
+  maxFilmGrain: 1.2
+  maxHueShift: 40
+  volume: {fileID: 2566377854888274725}
+  infectionSystem: {fileID: 8485487063210877488}
+  gunManager: {fileID: 1683797887275768770}
+  animator: {fileID: 1464396738270886436}
 --- !u!114 &1510492274118259377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -524,8 +608,9 @@ MonoBehaviour:
   animator: {fileID: 1464396738270886436}
   healthSystem: {fileID: 5788958315336630329}
   hidingSystem: {fileID: 5103200429067656528}
-  speed: 4
-  sprintMod: 4
+  hallucination: {fileID: 6545430053113170481}
+  speed: 5
+  sprintMod: 2
   crouchSpeed: 2
   crouchHeight: 2
   standingHeight: 2
@@ -537,6 +622,11 @@ MonoBehaviour:
   handAimConstraint: {fileID: 7361468050465005217}
   HP: 100
   HPOrig: 100
+  walkNoiseRadius: 10
+  sprintNoiseRadius: 20
+  crouchNoiseRadius: 2
+  noiseAttractionStrength: 1
+  noiseInterval: 0.3
 --- !u!114 &5103200429067656528
 MonoBehaviour:
   m_ObjectHideFlags: 0

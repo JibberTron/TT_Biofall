@@ -6,31 +6,31 @@ using System.Collections;
 public class enemyMovement : MonoBehaviour
 {
     enemyReferences enemyRef;
-    public enemyReferences EnemyRef => enemyRef;
 
-    [Header("Stats")]
+    [Header("-----AI Movement Stats-----")]
+    [Range(1, 5)][SerializeField] float roamSpeed = 1.5f;
+    [Range(1, 10)][SerializeField] float chaseSpeed = 2f;
     [SerializeField] float pathToDelay = 0.2f;
-    [SerializeField] Collider armCollider;
+
     int currentPos;
 
     Coroutine pathRoutine;
 
     float origSpeed;
-    public float OrigSpeed;
 
     bool shouldUpdatePath = true;
 
+    [HideInInspector]public float OrigSpeed => origSpeed;
+    public float RoamSpeed => roamSpeed;
+    public float ChaseSpeed => chaseSpeed;
     void Awake()
     {
         enemyRef = GetComponent<enemyReferences>();
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         origSpeed = enemyRef.Agent.speed;
     }
-
-    // Update is called once per frame
     void Update()
     {
 
@@ -51,11 +51,45 @@ public class enemyMovement : MonoBehaviour
        StopCoroutine(pathRoutine);
        pathRoutine = null;
     }
+    bool CheckDistanceToRoamPoint(Vector3 _loc)
+    {
+        float distance = Vector3.Distance(enemyRef.Target.position, _loc);
+        if(distance <= 100f)
+        {
+            return true;
+        }
+        
+        return false;
+    }
     void goToNextPoint()
     {
         if (enemyRef.RoamPos.Length == 0) return;
+
         enemyRef.Agent.destination = enemyRef.RoamPos[Random.Range(0, enemyRef.RoamPos.Length)].position;
         currentPos = (currentPos + 1) % enemyRef.RoamPos.Length;
+    }
+    public void EnableAgentRotation(bool _should)
+    {
+        enemyRef.Agent.updateRotation = _should;
+    }
+    public void SetMovement()
+    {
+        enemyRef.EAnims.SetMovement(enemyRef.Agent.velocity.magnitude);
+    }
+    public void Investigate(bool _isTrue)
+    {
+        enemyRef.EAnims.Investigate(_isTrue);
+    }
+    public void RotateToPlayer(Transform _loc)
+    {
+        Vector3 look = enemyRef.Target.position - _loc.position;
+        look.y = 0;
+
+        if (look.sqrMagnitude < 0.001f) return;
+
+        Quaternion lookRot = Quaternion.LookRotation(look);
+
+        _loc.rotation = Quaternion.Slerp(_loc.rotation, lookRot, 10f * Time.deltaTime);
     }
     public void SetSpeed(float _value)
     {
@@ -87,7 +121,7 @@ public class enemyMovement : MonoBehaviour
                 enemyRef.Agent.SetDestination(enemyRef.Target.position);
             }
  
-            yield return new WaitForSeconds(0.1f) ;
+            yield return new WaitForSeconds(pathToDelay) ;
         }
         pathRoutine = null;
     }

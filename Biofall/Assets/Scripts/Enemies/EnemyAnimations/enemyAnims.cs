@@ -3,7 +3,6 @@ using UnityEngine;
 public class enemyAnims : MonoBehaviour
 {
     enemyReferences enemyRef;
-
     Animator anims;
 
     void Awake()
@@ -22,9 +21,9 @@ public class enemyAnims : MonoBehaviour
     {
         enemyRef.Animator.SetFloat("Speed", _mag);
     }
-    public void Grab()
+    public void Attack(bool _should)
     {
-        enemyRef.Animator.SetTrigger("Attack");
+        enemyRef.Animator.SetBool("Attack", _should);
     }
     public void Death(bool _should)
     {

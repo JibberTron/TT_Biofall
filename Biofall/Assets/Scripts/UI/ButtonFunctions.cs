@@ -22,4 +22,11 @@ public class ButtonFunctions : MonoBehaviour
             Application.Quit();
         #endif
     }
+
+    public void Play()
+    {
+        Debug.Log("PLAY BUTTON WORKS");
+
+        Gamemanager.instance.StateUnpause();
+    }
 }

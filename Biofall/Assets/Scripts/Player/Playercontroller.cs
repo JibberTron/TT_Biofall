@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] CharacterController controller;
     [SerializeField] Animator animator;
     [SerializeField] HealthSystem healthSystem;
+    [SerializeField] HidingSystem hidingSystem;
+    [SerializeField] InfectionHallucination hallucination;
 
     [Header("Movement")]
     [SerializeField] float speed = 5f;
@@ -33,6 +35,13 @@ public class PlayerController : MonoBehaviour
     public int HP = 100;
     public int HPOrig = 100;
 
+    [Header("Noise")]
+    [SerializeField] float walkNoiseRadius = 10f;      // Raised from 3 — now exceeds enemy hearingRange of 8
+    [SerializeField] float sprintNoiseRadius = 20f;    // Raised from 8 — sprinting is very loud
+    [SerializeField] float crouchNoiseRadius = 2f;     // Raised from 1 — slightly more detectable but still stealthy
+    [SerializeField] float noiseAttractionStrength = 1f; // Raised from 0.1 — meaningfully boosts room activity
+    [SerializeField] float noiseInterval = 0.3f;
+
     Vector3 moveDir;
     Vector3 playerVel;
     float shootTimer;
@@ -41,6 +50,7 @@ public class PlayerController : MonoBehaviour
     float crouchBlendTime;
     Vector3 originalCenter;
     float originalHeight;
+    float noiseTimer;
 
     void Start()
     {
@@ -59,7 +69,7 @@ public class PlayerController : MonoBehaviour
     {
         bool canAim = gunManager != null && gunManager.HasGun();
         bool isAiming = canAim && cameraOrbit != null && cameraOrbit.isAiming;
-        Debug.Log($"canAim: {canAim} | cameraAiming: {cameraOrbit.isAiming} | isAiming: {isAiming}");
+
         animator.SetBool("Aiming", isAiming);
 
         float targetWeight = isAiming ? 1f : 0f;
@@ -70,7 +80,6 @@ public class PlayerController : MonoBehaviour
         if (handAimConstraint != null)
             handAimConstraint.weight = Mathf.Lerp(handAimConstraint.weight, targetWeight, Time.deltaTime * 10f);
 
-        // Rotate player to face camera direction while aiming
         if (isAiming)
         {
             Transform cam = Camera.main.transform;
@@ -130,20 +139,55 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        bool hiding = hidingSystem != null && hidingSystem.IsHiding();
+        bool hallucinating = hallucination != null && hallucination.IsHallucinating();
+
         Transform cam = Camera.main.transform;
         Vector3 camForward = new Vector3(cam.forward.x, 0f, cam.forward.z).normalized;
 
         moveDir = v * camForward;
 
         float currentSpeed;
-        if (isCrouching)
+        if (hiding)
+            currentSpeed = crouchSpeed * 0.5f;
+        else if (isCrouching)
             currentSpeed = crouchSpeed;
-        else if (Input.GetKey(KeyCode.LeftShift))
+        else if (Input.GetKey(KeyCode.LeftShift) && !hiding && !hallucinating)
             currentSpeed = speed * sprintMod;
+        else if (hallucinating)
+            currentSpeed = speed * 0.5f;
         else
             currentSpeed = speed;
 
         controller.Move(moveDir * currentSpeed * Time.deltaTime);
+
+        // Emit noise based on movement state
+        if (moveDir != Vector3.zero && !hiding)
+        {
+            noiseTimer += Time.deltaTime;
+            if (noiseTimer >= noiseInterval)
+            {
+                noiseTimer = 0f;
+                float radius = isCrouching ? crouchNoiseRadius
+                             : Input.GetKey(KeyCode.LeftShift) ? sprintNoiseRadius
+                             : walkNoiseRadius;
+
+                Debug.Log($"Player Noise Radius: {radius}");
+
+                NoiseSystem.CreateNoise(new NoiseData(
+                    transform.position,
+                    radius,
+                    noiseAttractionStrength,
+                    0.5f,
+                    gameObject
+                ));
+            }
+        }
+        else
+        {
+            noiseTimer = 0f;
+            Debug.Log("Player Noise Radius: 0 (silent)");
+        }
 
         if (moveDir != Vector3.zero && !cameraOrbit.isAiming)
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * 10f);
@@ -152,6 +196,6 @@ public class PlayerController : MonoBehaviour
         controller.Move(playerVel * Time.deltaTime);
 
         animator.SetFloat("Speed", Mathf.Abs(v));
-        animator.SetBool("Sprint", Input.GetKey(KeyCode.LeftShift) && Mathf.Abs(v) > 0.1f && !isCrouching);
+        animator.SetBool("Sprint", Input.GetKey(KeyCode.LeftShift) && Mathf.Abs(v) > 0.1f && !isCrouching && !hiding && !hallucinating);
     }
 }

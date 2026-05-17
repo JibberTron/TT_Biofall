@@ -20,6 +20,9 @@ public class Gun : MonoBehaviour
     [SerializeField] Transform gunBarrel;
     [SerializeField] Animator animator;
 
+    [SerializeField] HidingSystem hidingSystem;
+    [SerializeField] InfectionHallucination hallucination;
+
     int currentAmmo;
     bool isReloading;
     float nextFireTime;
@@ -39,7 +42,10 @@ public class Gun : MonoBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0) && cameraOrbit.isAiming && Time.time >= nextFireTime)
+        if (Input.GetMouseButtonDown(0) && cameraOrbit.isAiming
+            && Time.time >= nextFireTime
+            && (hidingSystem == null || !hidingSystem.IsHiding())
+            && (hallucination == null || !hallucination.IsHallucinating()))
             Shoot();
     }
 
@@ -57,6 +63,15 @@ public class Gun : MonoBehaviour
 
         if (cameraOrbit != null)
             cameraOrbit.AddRecoil(recoilAmount);
+
+        NoiseSystem.CreateNoise(new NoiseData(
+            transform.position,
+            15f,
+            0.5f,
+            1f,
+            gameObject
+        ));
+        Debug.Log("Gun Noise Radius: 15");
 
         Vector2 wobble = Random.insideUnitCircle * wobbleAmount;
         Vector3 shootDir = Camera.main.transform.forward

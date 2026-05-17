@@ -1,18 +1,24 @@
 using UnityEngine;
 
-public class PebbleInventory : MonoBehaviour
+public class PebbleThrower : MonoBehaviour
 {
-    [Header("Pebble Inventory")]
-    [SerializeField] private int currentPebbles = 0;
-    [SerializeField] private int maxPebbles = 5;
+    [Header("Inventory")]
+    [SerializeField] private PlayerInventory inventory;
 
     [Header("Throw Settings")]
     [SerializeField] private GameObject pebblePrefab;
     [SerializeField] private Transform throwOrigin;
     [SerializeField] private float throwForce = 12f;
     [SerializeField] private KeyCode throwKey = KeyCode.Mouse0;
+    [SerializeField] private float aimDistance = 100f;
 
-    public int CurrentPebbles => currentPebbles;
+    private void Awake()
+    {
+        if (inventory == null)
+        {
+            inventory = GetComponent<PlayerInventory>();
+        }
+    }
 
     private void Update()
     {
@@ -22,17 +28,10 @@ public class PebbleInventory : MonoBehaviour
         }
     }
 
-    public void AddPebbles(int amount)
-    {
-        currentPebbles = Mathf.Clamp(currentPebbles + amount, 0, maxPebbles);
-        Debug.Log($"Pebbles: {currentPebbles}/{maxPebbles}");
-    }
-
     private void ThrowPebble()
     {
-        if (currentPebbles <= 0)
+        if (inventory == null || !inventory.TryUsePebble())
         {
-            Debug.Log("No pebbles to throw.");
             return;
         }
 
@@ -42,19 +41,17 @@ public class PebbleInventory : MonoBehaviour
             return;
         }
 
-        currentPebbles--;
-
         Camera cam = Camera.main;
 
         Vector3 targetPoint;
 
-        if (cam != null && Physics.Raycast(cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out RaycastHit hit, 100f))
+        if (cam != null && Physics.Raycast(cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f)), out RaycastHit hit, aimDistance))
         {
             targetPoint = hit.point;
         }
         else
         {
-            targetPoint = cam.transform.position + cam.transform.forward * 100f;
+            targetPoint = throwOrigin.position + throwOrigin.forward * aimDistance;
         }
 
         Vector3 throwDirection = (targetPoint - throwOrigin.position).normalized;
@@ -68,6 +65,6 @@ public class PebbleInventory : MonoBehaviour
             rb.AddForce(throwDirection * throwForce, ForceMode.Impulse);
         }
 
-        Debug.Log($"Threw pebble toward reticle. Pebbles left: {currentPebbles}/{maxPebbles}");
+        Debug.Log($"Threw pebble. Pebbles left: {inventory.Pebbles}");
     }
 }

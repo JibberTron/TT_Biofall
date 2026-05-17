@@ -37,7 +37,7 @@ public class PlayerInteraction : MonoBehaviour
         }
         else
         {
-            Debug.Log("Ray hit nothing!");
+            //Debug.Log("Ray hit nothing!");
         }
     }
 }

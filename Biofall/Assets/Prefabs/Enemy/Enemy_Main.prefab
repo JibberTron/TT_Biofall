@@ -1712,9 +1712,9 @@ GameObject:
   - component: {fileID: 283667058553985413}
   - component: {fileID: 464783584655013198}
   - component: {fileID: 5842404332521390943}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Enemy_Main
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1778,7 +1778,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::enemyHealth
   currentHP: 100
   maxHP: 10
-  isDead: 0
 --- !u!114 &8757159481238421551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1791,6 +1790,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f9e495ad3e62854c94a3e86aee836e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyMovement
+  roamSpeed: 1.5
+  chaseSpeed: 2
   pathToDelay: 0.2
   armCollider: {fileID: 0}
   OrigSpeed: 0
@@ -1810,6 +1811,9 @@ MonoBehaviour:
   investigateTime: 3
   detectionAngle: 90
   incapacitatedTimer: 5
+  incapacitatedDelay: 6
+  idleDelay: 1
+  currentState: 0
 --- !u!95 &283667058553985413
 Animator:
   serializedVersion: 7
@@ -1842,7 +1846,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 2
+  m_Speed: 1.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 350

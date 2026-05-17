@@ -3,55 +3,61 @@ using UnityEngine;
 
 public class enemyBrain : MonoBehaviour
 {
+    enemyReferences enemyRef;
+    enemyMovement movement;
+    enemyHealth health;
+
     public enum EnemyState
     {
         IDLE,
         ROAMING,
         INVESTIGATING,
         CHASING,
+        ATTACKING,
         INCAPACITATED,
         DEAD
     }
-
-    enemyMovement movement;
-    enemyAnims anims;
-    enemyHealth health;
 
     [Header("-----AI Stats-----")]
     [Range(5, 100)][SerializeField] float detectionRange = 8f;
     [Range(3, 10)][SerializeField] float investigateTime = 3f;
     [Range(0, 90)][SerializeField] float detectionAngle = 90f;
     [Range(5, 500)][SerializeField] float incapacitatedTimer = 5f;
+    [Range(6, 500)][SerializeField] float incapacitatedDelay = 6f;
+    [Range(0, 120)][SerializeField] float idleDelay = 1f;
+    [SerializeField] EnemyState currentState;
+
+    Coroutine stateRoutine;
 
     float distance;
     float distanceTimer;
-
-    EnemyState currentState;
-    public EnemyState CurrentState => currentState;
+    float angleTimer;
     
-    bool isInvestigating;
-    bool isIncapacitated;
 
     void Start()
     {
         movement = GetComponent<enemyMovement>();
-        anims = GetComponent<enemyAnims>();
+        enemyRef = GetComponent<enemyReferences>();
         health = GetComponent<enemyHealth>();
 
         StartCoroutine(StartAfterIdle());
     }
-
     void Update()
     {
-        if (movement.EnemyRef.Target == null || isInvestigating) return;
+        HandleUpdates();
+    }
+    void HandleUpdates()
+    {
+        if (enemyRef.Target == null) return;
         if (currentState == EnemyState.INCAPACITATED) return;
-        if (health.isDead)
+   
+        if (health.IsDead)
         {
             ChangeState(EnemyState.INCAPACITATED);
             return;
         }
 
-        if (currentState != EnemyState.CHASING && PlayerFound())
+        if (PlayerFound())
         {
             ChangeState(EnemyState.CHASING);
             return;
@@ -63,10 +69,6 @@ public class enemyBrain : MonoBehaviour
                 HandleRoam();
                 break;
 
-            case EnemyState.INVESTIGATING:
-                HandleInvestigate();
-                break;
-
             case EnemyState.CHASING:
                 HandleChase();
                 break;
@@ -75,12 +77,21 @@ public class enemyBrain : MonoBehaviour
     void ChangeState(EnemyState newState)
     {
         if (currentState == newState) return;
-
+        if(currentState == EnemyState.INVESTIGATING)
+        {
+            movement.Investigate(false);
+        }
+        if(stateRoutine != null)
+        {
+            StopCoroutine(stateRoutine);
+            stateRoutine = null;
+        }
         currentState = newState;
 
         switch (newState)
         {
             case EnemyState.ROAMING:
+                movement.Stop(false);
                 movement.StopChase();
                 movement.GoToNextPoint();
                 break;
@@ -90,7 +101,11 @@ public class enemyBrain : MonoBehaviour
                 break;
 
             case EnemyState.INVESTIGATING:
-                StartCoroutine(Investigate());
+                movement.Stop(true);
+                movement.SetSpeed(0);
+                movement.Investigate(true);
+
+                stateRoutine = StartCoroutine(Investigate());
                 break;
 
             case EnemyState.DEAD:
@@ -98,21 +113,21 @@ public class enemyBrain : MonoBehaviour
                 break;
 
             case EnemyState.INCAPACITATED:
-                Debug.Log("HERER");
-                StartCoroutine(Incapacitated());
+                stateRoutine = StartCoroutine(Incapacitated());
                 break;
         }
     }
     void HandleRoam()
     {
         if (ReachedDestination())
-        {
+        { 
+            Debug.Log("RIP");
             ChangeState(EnemyState.INVESTIGATING);
             return;
         }
 
-        movement.SetSpeed(1.5f);
-        anims.SetMovement(movement.EnemyRef.Agent.velocity.magnitude);
+        movement.SetSpeed(movement.RoamSpeed);
+        movement.SetMovement();
     }
     void HandleChase()
     {
@@ -122,28 +137,29 @@ public class enemyBrain : MonoBehaviour
         {
             distanceTimer = 0f;
 
-            distance = Vector3.Distance(transform.position, movement.EnemyRef.Target.position);
+            distance = Vector3.Distance(transform.position, enemyRef.Target.position);
         }
-        movement.SetSpeed(2f);
-        anims.SetMovement(movement.EnemyRef.Agent.velocity.magnitude);
+        movement.SetSpeed(movement.ChaseSpeed);
+        movement.SetMovement();
     }
-    void HandleInvestigate()
+    void HandleAttack()
     {
-        // animation handled in coroutine
+
     }
     void HandleDead()
     {
         movement.Stop(true);
-        movement.EnemyRef.Agent.ResetPath();
+        enemyRef.Agent.ResetPath();
+
         movement.EnableNav(false);
         movement.SetSpeed(0);
         movement.ShouldUpdatePath(false);
-        anims.Death(true);
+        health.Death(true);
     }
     bool ReachedDestination()
     {
-        return !isInvestigating && !movement.EnemyRef.Agent.pathPending && movement.EnemyRef.Agent.hasPath && 
-            movement.EnemyRef.Agent.remainingDistance <= 0.5f && movement.EnemyRef.Agent.velocity.sqrMagnitude < 0.01f;
+        return !enemyRef.Agent.pathPending && enemyRef.Agent.hasPath &&
+           enemyRef.Agent.remainingDistance <= 0.5f && enemyRef.Agent.velocity.sqrMagnitude < 0.01f;
     }
     bool PlayerFound()
     {
@@ -151,76 +167,54 @@ public class enemyBrain : MonoBehaviour
     }
     bool CanSeePlayer()
     {
-        Vector3 playerDir = (movement.EnemyRef.Target.transform.position - transform.position).normalized;
-        float angleToPlayer = Vector3.Angle(transform.forward, playerDir);
-
-        if (angleToPlayer <= detectionAngle)
+        angleTimer += Time.deltaTime;
+        if(angleTimer >= 0.1f)
         {
-            if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange))
+            angleTimer = 0;
+            Vector3 playerDir = (enemyRef.Target.transform.position - transform.position).normalized;
+            float angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+
+            if (angleToPlayer <= detectionAngle)
             {
-                if (hit.collider.CompareTag("Player"))
+                if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange))
                 {
-                    RotateToPlayer();
-                    return true;
+                    if (hit.collider.CompareTag("Player"))
+                    {
+                        movement.RotateToPlayer(transform);
+                        return true;
+                    }
                 }
             }
+            return false;
         }
         return false;
     }
-    void RotateToPlayer()
-    {
-        Vector3 look = movement.EnemyRef.Target.position - transform.position;
-        look.y = 0;
-
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(look), 0.2f);
-    }
     IEnumerator Incapacitated()
     {
-        if (currentState == EnemyState.INCAPACITATED)
+        if(currentState != EnemyState.INCAPACITATED)
         {
-            HandleDead();
-            isIncapacitated = true;
-            yield return new WaitForSeconds(incapacitatedTimer);
-   
-            anims.Death(false);
-            health.isDead = false;
-            health.currentHP = 10;
-            
-            anims.StandUp(isIncapacitated);
-
-            yield return new WaitForSeconds(6f);
-
-            movement.EnableNav(true);
-            movement.EnemyRef.Agent.ResetPath();
-            movement.Stop(false);
-
-            isIncapacitated = false;
-            movement.ShouldUpdatePath(true);
-            anims.StandUp(isIncapacitated);
-            if(PlayerFound())
-            {
-                ChangeState(EnemyState.CHASING);
-            }
-            else
-            {
-                ChangeState(EnemyState.ROAMING);
-            }
-            
+            yield break;
         }
-    }
-    IEnumerator Investigate()
-    {
-        isInvestigating = true;
+        HandleDead();
 
-        movement.Stop(true);
-        movement.SetSpeed(0);
-        anims.Investigate(true);
-  
-        yield return new WaitForSeconds(investigateTime);
+        yield return new WaitForSeconds(incapacitatedTimer);
 
-        anims.Investigate(false);
-        movement.SetSpeed(movement.OrigSpeed);
+        health.StandUp(true);
+        health.Death(false);
+        health.IsDead = false;
+        health.CurrentHP = 10;
+        health.IncapInvinsibility = true;
+
+        yield return new WaitForSeconds(incapacitatedDelay);
+
+        movement.EnableNav(true);
+        enemyRef.Agent.ResetPath();
         movement.Stop(false);
+
+        movement.ShouldUpdatePath(true);
+        health.StandUp(false);
+        health.IncapInvinsibility = false;
+        stateRoutine = null;
 
         if (PlayerFound())
         {
@@ -230,15 +224,34 @@ public class enemyBrain : MonoBehaviour
         {
             ChangeState(EnemyState.ROAMING);
         }
-    
-        isInvestigating = false;
+    }
+    IEnumerator Investigate()
+    {
+        if(currentState != EnemyState.INVESTIGATING)
+        {
+            yield break;
+        }
+        if(PlayerFound())
+        {
+            ChangeState(EnemyState.CHASING);
+            yield break;
+        }
+        yield return new WaitForSeconds(investigateTime);
+
+        Debug.Log("OUTSIDE OF INVESTIGATE CO");
+
+        movement.Stop(false);
+        movement.SetSpeed(movement.OrigSpeed);
+
+        stateRoutine = null;
+        ChangeState(EnemyState.ROAMING);
     }
     IEnumerator StartAfterIdle()
     {
         currentState = EnemyState.IDLE;
         movement.ShouldUpdatePath(false);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(idleDelay);
 
         movement.ShouldUpdatePath(true);
         ChangeState(EnemyState.ROAMING);

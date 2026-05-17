@@ -1,9 +1,8 @@
 using UnityEngine;
 
-public class PebblePickup : MonoBehaviour, IInteractable
+public class BatteryPickup : MonoBehaviour, IInteractable
 {
-    [SerializeField] private int pebbleAmount = 3;
-    [SerializeField] private bool destroyAfterPickup = true;
+    [SerializeField] private int amount = 1;
 
     public void Interact()
     {
@@ -23,11 +22,7 @@ public class PebblePickup : MonoBehaviour, IInteractable
             return;
         }
 
-        inventory.AddPebbles(pebbleAmount);
-
-        if (destroyAfterPickup)
-        {
-            Destroy(gameObject);
-        }
+        inventory.AddBatteries(amount);
+        Destroy(gameObject);
     }
 }

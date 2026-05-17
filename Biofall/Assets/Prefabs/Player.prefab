@@ -407,6 +407,7 @@ GameObject:
   - component: {fileID: 1683797887275768770}
   - component: {fileID: 7870568859748509292}
   - component: {fileID: 2637394459136125735}
+  - component: {fileID: 3639960058528446066}
   - component: {fileID: 7756606161862089630}
   - component: {fileID: 5788958315336630329}
   - component: {fileID: 8485487063210877488}
@@ -497,6 +498,24 @@ MonoBehaviour:
   interactMask:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &3639960058528446066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8490025096354038525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d75e131b7553078438cbb2541b286a3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInventory
+  maxBatteries: 4
+  maxPebbles: 10
+  maxAmmo: 45
+  batteries: 0
+  pebbles: 5
+  ammo: 0
 --- !u!114 &7756606161862089630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -651,12 +670,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c568a7526417c24fb71aebe56590d91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PebbleInventory
-  currentPebbles: 5
-  maxPebbles: 20
+  inventory: {fileID: 3639960058528446066}
   pebblePrefab: {fileID: 6389520232373704164, guid: d97a7fcf498ed414ea0e431f8ebf4d43, type: 3}
   throwOrigin: {fileID: 1357272164578536619}
   throwForce: 12
   throwKey: 116
+  aimDistance: 100
 --- !u!33 &7045127064301644312
 MeshFilter:
   m_ObjectHideFlags: 0

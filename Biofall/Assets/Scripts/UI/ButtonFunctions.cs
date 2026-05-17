@@ -23,16 +23,6 @@ public class ButtonFunctions : MonoBehaviour
         #endif
     }
 
-    public void Control()
-    {
-        Gamemanager.instance.StateControlPanelOn();
-    }
-
-    public void Back()
-    {
-        Gamemanager.instance.StateControlPanelOff();
-    }
-
     public void Play()
     {
         Debug.Log("PLAY BUTTON WORKS");

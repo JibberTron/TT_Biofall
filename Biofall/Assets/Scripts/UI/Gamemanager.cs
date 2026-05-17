@@ -12,8 +12,6 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuGameOver;
     [SerializeField] GameObject menuWin;
-    [SerializeField] GameObject mainMenu;
-    [SerializeField] GameObject controlPanel;
     [SerializeField] GameObject HUD;
 
     public Image infectionBar;
@@ -25,7 +23,7 @@ public class Gamemanager : MonoBehaviour
 
     private bool isFlashing;
     private InfectionHallucination hallucination;
-    private InfectionSystem infection;
+    public InfectionSystem infection;
 
     float timeScaleOrig;
 
@@ -48,9 +46,9 @@ public class Gamemanager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateInfectionHUD();
+        // UpdateInfectionHUD();
 
-        if(hallucination.IsHallucinating() && isFlashing)
+        if(hallucination != null && hallucination.IsHallucinating() && isFlashing)
         {
             StartCoroutine(FlashHallucination());
         }
@@ -99,22 +97,10 @@ public class Gamemanager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
-    public void StateControlPanelOn()
-    {
-        mainMenu.SetActive(false);
-        controlPanel.SetActive(true);
-    }
-
-    public void StateControlPanelOff()
-    {
-        mainMenu.SetActive(true);
-        controlPanel.SetActive(false);
-    }
-
-    private void UpdateInfectionHUD()
-    {
-        infectionBar.fillAmount = infection.currentInfection / infection.maxInfection;
-    }
+    // private void UpdateInfectionHUD()
+    // {
+        // Gamemanager.instance.infectionBar.fillAmount = infection.currentInfection / infection.maxInfection;
+    // }
 
     IEnumerator FlashHallucination()
     {

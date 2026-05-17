@@ -17,15 +17,16 @@ public class Gamemanager : MonoBehaviour
 
     public Image infectionBar;
     public Image playerHPBar;
+    public Image gunImage;
     public bool isPaused;
+    public GameObject hallucinationFlashScreen;
+    private bool isFlashing;
+
+    private InfectionHallucination hallucination;
+    private InfectionSystem infection;
     public GameObject player;
     public PlayerController playerScript;
-    public GameObject hallucinationFlashScreen;
-    public Gun gun;
-
-    private bool isFlashing;
-    private InfectionHallucination hallucination;
-    public InfectionSystem infection;
+    private Gun gun;
 
     float timeScaleOrig;
 
@@ -71,6 +72,7 @@ public class Gamemanager : MonoBehaviour
             }
         }
     }
+
 
     public void StatePause()
     {

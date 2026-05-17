@@ -6,6 +6,7 @@ public class enemyBrain : MonoBehaviour
     enemyReferences enemyRef;
     enemyMovement movement;
     enemyHealth health;
+    enemyAttack attack;
 
     public enum EnemyState
     {
@@ -32,13 +33,15 @@ public class enemyBrain : MonoBehaviour
     float distance;
     float distanceTimer;
     float angleTimer;
-    
+
+    bool isAttacking;
 
     void Start()
     {
         movement = GetComponent<enemyMovement>();
         enemyRef = GetComponent<enemyReferences>();
         health = GetComponent<enemyHealth>();
+        attack = GetComponentInChildren<enemyAttack>();
 
         StartCoroutine(StartAfterIdle());
     }
@@ -50,7 +53,7 @@ public class enemyBrain : MonoBehaviour
     {
         if (enemyRef.Target == null) return;
         if (currentState == EnemyState.INCAPACITATED) return;
-   
+
         if (health.IsDead)
         {
             ChangeState(EnemyState.INCAPACITATED);
@@ -76,31 +79,43 @@ public class enemyBrain : MonoBehaviour
     }
     void ChangeState(EnemyState newState)
     {
-        if (currentState == newState) return;
+        if (currentState == newState || isAttacking) return;
+
         if(currentState == EnemyState.INVESTIGATING)
         {
             movement.Investigate(false);
         }
-        if(stateRoutine != null)
+
+        if (currentState == EnemyState.ATTACKING)
+        {
+            isAttacking = false;
+            distanceTimer = 0f;
+        }
+
+        if (stateRoutine != null)
         {
             StopCoroutine(stateRoutine);
             stateRoutine = null;
         }
+
         currentState = newState;
 
         switch (newState)
         {
             case EnemyState.ROAMING:
+                movement.EnableAgentRotation(true);
                 movement.Stop(false);
                 movement.StopChase();
                 movement.GoToNextPoint();
                 break;
 
             case EnemyState.CHASING:
+                movement.EnableAgentRotation(true);
                 movement.Chase();
                 break;
 
             case EnemyState.INVESTIGATING:
+                movement.EnableAgentRotation(false);
                 movement.Stop(true);
                 movement.SetSpeed(0);
                 movement.Investigate(true);
@@ -115,13 +130,28 @@ public class enemyBrain : MonoBehaviour
             case EnemyState.INCAPACITATED:
                 stateRoutine = StartCoroutine(Incapacitated());
                 break;
+
+            case EnemyState.ATTACKING:
+                movement.EnableAgentRotation(false);
+                enemyRef.Agent.ResetPath();
+                enemyRef.Agent.velocity = Vector3.zero;
+
+                movement.Stop(true);
+                movement.SetSpeed(0);
+
+                attack.EnableCollider();
+
+                if (!isAttacking)
+                {
+                    stateRoutine = StartCoroutine(Attacking());
+                }
+                break;
         }
     }
     void HandleRoam()
     {
         if (ReachedDestination())
         { 
-            Debug.Log("RIP");
             ChangeState(EnemyState.INVESTIGATING);
             return;
         }
@@ -138,13 +168,14 @@ public class enemyBrain : MonoBehaviour
             distanceTimer = 0f;
 
             distance = Vector3.Distance(transform.position, enemyRef.Target.position);
-        }
-        movement.SetSpeed(movement.ChaseSpeed);
-        movement.SetMovement();
-    }
-    void HandleAttack()
-    {
+            movement.SetSpeed(movement.ChaseSpeed);
+            movement.SetMovement();
 
+            if (!isAttacking && distance <= attack.AttackDistance)
+            {
+                ChangeState(EnemyState.ATTACKING);
+            }
+        }
     }
     void HandleDead()
     {
@@ -154,6 +185,7 @@ public class enemyBrain : MonoBehaviour
         movement.EnableNav(false);
         movement.SetSpeed(0);
         movement.ShouldUpdatePath(false);
+
         health.Death(true);
     }
     bool ReachedDestination()
@@ -168,9 +200,11 @@ public class enemyBrain : MonoBehaviour
     bool CanSeePlayer()
     {
         angleTimer += Time.deltaTime;
+
         if(angleTimer >= 0.1f)
         {
             angleTimer = 0;
+
             Vector3 playerDir = (enemyRef.Target.transform.position - transform.position).normalized;
             float angleToPlayer = Vector3.Angle(playerDir, transform.forward);
 
@@ -191,16 +225,15 @@ public class enemyBrain : MonoBehaviour
     }
     IEnumerator Incapacitated()
     {
-        if(currentState != EnemyState.INCAPACITATED)
-        {
-            yield break;
-        }
+        if(currentState != EnemyState.INCAPACITATED) yield break;
+
         HandleDead();
 
         yield return new WaitForSeconds(incapacitatedTimer);
 
         health.StandUp(true);
         health.Death(false);
+
         health.IsDead = false;
         health.CurrentHP = 10;
         health.IncapInvinsibility = true;
@@ -209,10 +242,13 @@ public class enemyBrain : MonoBehaviour
 
         movement.EnableNav(true);
         enemyRef.Agent.ResetPath();
+
         movement.Stop(false);
 
         movement.ShouldUpdatePath(true);
+
         health.StandUp(false);
+
         health.IncapInvinsibility = false;
         stateRoutine = null;
 
@@ -225,20 +261,61 @@ public class enemyBrain : MonoBehaviour
             ChangeState(EnemyState.ROAMING);
         }
     }
+    IEnumerator Attacking()
+    {
+        isAttacking = true;
+
+        while (currentState == EnemyState.ATTACKING)
+        {
+            movement.RotateToPlayer(transform);
+
+            attack.Attack(true);
+            attack.EnableCollider();
+
+            float timer = 0f;
+
+            while (timer < attack.AttackDelay)
+            {
+                movement.RotateToPlayer(transform);
+                if (health.IsDead)
+                {
+                    attack.Attack(false);
+                    attack.DisableCollider();
+
+                    isAttacking = false;
+
+                    ChangeState(EnemyState.INCAPACITATED);
+                    yield break;
+                }
+
+                timer += Time.deltaTime;
+                yield return null;
+            }
+
+            attack.Attack(false);
+            attack.DisableCollider();
+
+            float dist = Vector3.Distance(transform.position, enemyRef.Target.position);
+
+            if (dist > attack.AttackDistance)
+            {
+                break;
+            }
+        }
+
+        isAttacking = false;
+        ChangeState(EnemyState.CHASING);
+    }
     IEnumerator Investigate()
     {
-        if(currentState != EnemyState.INVESTIGATING)
-        {
-            yield break;
-        }
+        if(currentState != EnemyState.INVESTIGATING) yield break;
+ 
         if(PlayerFound())
         {
             ChangeState(EnemyState.CHASING);
             yield break;
         }
         yield return new WaitForSeconds(investigateTime);
-
-        Debug.Log("OUTSIDE OF INVESTIGATE CO");
 
         movement.Stop(false);
         movement.SetSpeed(movement.OrigSpeed);

@@ -34,8 +34,7 @@ public class enemyHealth : MonoBehaviour, iDamage
     }
     public void TakeDamage(int amount)
     {
-        if (isDead) return;
-        if (incapInvinsibility) return;
+        if (isDead || incapInvinsibility) return;
 
         currentHP -= amount;
 

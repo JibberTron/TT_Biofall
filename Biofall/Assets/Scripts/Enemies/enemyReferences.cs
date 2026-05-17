@@ -20,7 +20,9 @@ public class enemyReferences : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         eAnims = GetComponent<enemyAnims>();
-
+    }
+    void Start()
+    {
         if (target == null)
         {
             Debug.Log("Enemy Reference target == null!");
@@ -32,6 +34,10 @@ public class enemyReferences : MonoBehaviour
         if (agent == null)
         {
             Debug.Log("Nav Mesh Agent == null!");
+        }
+        if(roamPos.Length == 0)
+        {
+            Debug.Log("Roam Positions array is empty");
         }
     }
 }

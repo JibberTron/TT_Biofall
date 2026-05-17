@@ -6,7 +6,6 @@ using System.Collections;
 public class enemyMovement : MonoBehaviour
 {
     enemyReferences enemyRef;
-    //public enemyReferences EnemyRef => enemyRef;
 
     [Header("-----AI Movement Stats-----")]
     [Range(1, 5)][SerializeField] float roamSpeed = 1.5f;
@@ -65,22 +64,13 @@ public class enemyMovement : MonoBehaviour
     void goToNextPoint()
     {
         if (enemyRef.RoamPos.Length == 0) return;
-        //for(int i = 0; i < enemyRef.RoamPos.Length; ++i)
-        //{
-        //    if (CheckDistanceToRoamPoint(enemyRef.RoamPos[i].position))
-        //    {
 
-        //        enemyRef.Agent.destination = enemyRef.RoamPos[Random.Range(0, i)].position;
-        //        break;
-        //    }
-        //    else
-        //    {
-        //        enemyRef.Agent.destination = enemyRef.RoamPos[Random.Range(0, enemyRef.RoamPos.Length)].position;
-        //        currentPos = (currentPos + 1) % enemyRef.RoamPos.Length;
-        //    }
-        //}
         enemyRef.Agent.destination = enemyRef.RoamPos[Random.Range(0, enemyRef.RoamPos.Length)].position;
         currentPos = (currentPos + 1) % enemyRef.RoamPos.Length;
+    }
+    public void EnableAgentRotation(bool _should)
+    {
+        enemyRef.Agent.updateRotation = _should;
     }
     public void SetMovement()
     {
@@ -95,7 +85,11 @@ public class enemyMovement : MonoBehaviour
         Vector3 look = enemyRef.Target.position - _loc.position;
         look.y = 0;
 
-        _loc.rotation = Quaternion.Slerp(_loc.rotation, Quaternion.LookRotation(look), 0.3f);
+        if (look.sqrMagnitude < 0.001f) return;
+
+        Quaternion lookRot = Quaternion.LookRotation(look);
+
+        _loc.rotation = Quaternion.Slerp(_loc.rotation, lookRot, 10f * Time.deltaTime);
     }
     public void SetSpeed(float _value)
     {
@@ -127,7 +121,7 @@ public class enemyMovement : MonoBehaviour
                 enemyRef.Agent.SetDestination(enemyRef.Target.position);
             }
  
-            yield return new WaitForSeconds(0.1f) ;
+            yield return new WaitForSeconds(pathToDelay) ;
         }
         pathRoutine = null;
     }

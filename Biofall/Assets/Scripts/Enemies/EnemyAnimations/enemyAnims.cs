@@ -21,9 +21,9 @@ public class enemyAnims : MonoBehaviour
     {
         enemyRef.Animator.SetFloat("Speed", _mag);
     }
-    public void Attack()
+    public void Attack(bool _should)
     {
-        enemyRef.Animator.SetTrigger("Attack");
+        enemyRef.Animator.SetBool("Attack", _should);
     }
     public void Death(bool _should)
     {

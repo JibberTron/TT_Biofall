@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.AI;
 //TODO: Make it to where the enemy will only go by the patrol points closest to the player
 //  by getting the distance from patrol point to player we can figure out which ones are closest and only patrol those areas
 // if there is only one patrol point in the area maybe make a random patrol in situations like that
@@ -126,6 +127,21 @@ public class enemyMovement : MonoBehaviour
         pathRoutine = null;
     }
 
+    // ==================================================================
+    public void MoveToNoise(Vector3 _loc)
+    {
+        Stop(false);
+
+        if (NavMesh.SamplePosition(_loc, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+        {
+            enemyRef.Agent.SetDestination(hit.position);
+        }
+        else
+        {
+            enemyRef.Agent.SetDestination(_loc);
+        }
+    }
+    // ====================================================================
     public void StopChase() => stopChase();
     public void GoToNextPoint() => goToNextPoint();
     public void Chase() => chase();

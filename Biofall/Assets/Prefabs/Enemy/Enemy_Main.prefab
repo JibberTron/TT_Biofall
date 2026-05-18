@@ -232,7 +232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::enemyAttack
   armCollider: {fileID: 9027883659155267022}
   attackDelay: 2.6
-  attackDistance: 2
+  attackDistance: 1.75
   damage: 5
 --- !u!95 &562107651166037661
 Animator:
@@ -547,10 +547,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.35
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: 0.22, z: 0}
+  m_Center: {x: 0, y: 0.32, z: 0}
 --- !u!1 &1730907900315678432
 GameObject:
   m_ObjectHideFlags: 0

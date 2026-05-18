@@ -6,12 +6,12 @@ public class enemyAttack : MonoBehaviour
 
     [Header("-----AI Attack Stats-----")]
     [SerializeField] Collider armCollider;
-    [SerializeField] float attackDelay = 2.6f;
-    [SerializeField] float attackDistance = 2f;
-    [SerializeField] int damage = 5;
+    [Range(2.6f, 5.2f)][SerializeField] float attackDelay = 2.6f;
+    [Range(0, 100)][SerializeField] int damage = 5;
     [HideInInspector]public float AttackDelay => attackDelay;
     [HideInInspector]public float AttackDistance => attackDistance;
 
+    float attackDistance = 1.5f;
     bool canHit;
 
     void Start()

@@ -13,17 +13,20 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] GameObject menuGameOver;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject HUD;
+    [SerializeField] GameObject ammoText;
 
     public Image infectionBar;
     public Image playerHPBar;
+    public Image gunImage;
     public bool isPaused;
+    public GameObject hallucinationFlashScreen;
+    private bool isFlashing;
+
+    private InfectionHallucination hallucination;
+    private InfectionSystem infection;
     public GameObject player;
     public PlayerController playerScript;
-    public GameObject hallucinationFlashScreen;
-
-    private bool isFlashing;
-    private InfectionHallucination hallucination;
-    public InfectionSystem infection;
+    private Gun gun;
 
     float timeScaleOrig;
 
@@ -41,12 +44,13 @@ public class Gamemanager : MonoBehaviour
 
         infection = player.GetComponent<InfectionSystem>();
         hallucination = player.GetComponent<InfectionHallucination>();
+        gun = player.GetComponent<Gun>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        // UpdateInfectionHUD();
+        UpdateInfectionHUD();
 
         if(hallucination != null && hallucination.IsHallucinating() && isFlashing)
         {
@@ -68,6 +72,7 @@ public class Gamemanager : MonoBehaviour
             }
         }
     }
+
 
     public void StatePause()
     {
@@ -97,10 +102,10 @@ public class Gamemanager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
-    // private void UpdateInfectionHUD()
-    // {
-        // Gamemanager.instance.infectionBar.fillAmount = infection.currentInfection / infection.maxInfection;
-    // }
+    private void UpdateInfectionHUD()
+    {
+        Gamemanager.instance.infectionBar.fillAmount = infection.currentInfection / infection.maxInfection;
+    }
 
     IEnumerator FlashHallucination()
     {
@@ -120,5 +125,14 @@ public class Gamemanager : MonoBehaviour
         hallucinationFlashScreen.SetActive(false);
 
         isFlashing = false;
+    }
+
+    public void GunAmmo()
+    {
+        int currentAmmo = gun.GetCurrentAmmo();
+
+        int totalAmmo = gun.GetTotalAmmo();
+
+        string ammo = currentAmmo.ToString() + " | " + totalAmmo.ToString();
     }
 }

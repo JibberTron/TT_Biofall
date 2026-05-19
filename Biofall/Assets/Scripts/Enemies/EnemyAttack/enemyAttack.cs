@@ -11,7 +11,7 @@ public class enemyAttack : MonoBehaviour
     [HideInInspector]public float AttackDelay => attackDelay;
     [HideInInspector]public float AttackDistance => attackDistance;
 
-    float attackDistance = 1.5f;
+    float attackDistance = 1.3f;
     bool canHit;
 
     void Start()

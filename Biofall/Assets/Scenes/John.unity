@@ -1281,6 +1281,18 @@ PrefabInstance:
       propertyPath: 'roamPos.Array.data[1]'
       value: 
       objectReference: {fileID: 1467917593}
+    - target: {fileID: 1024248202996773885, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
+      propertyPath: patrolPoints.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024248202996773885, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
+      propertyPath: 'patrolPoints.Array.data[0]'
+      value: 
+      objectReference: {fileID: 845820420}
+    - target: {fileID: 1024248202996773885, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
+      propertyPath: 'patrolPoints.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1467917593}
     - target: {fileID: 2771297330186510523, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
       propertyPath: attackDistance
       value: 1.75
@@ -4951,8 +4963,6 @@ MonoBehaviour:
   incapacitatedDelay: 6
   idleDelay: 1
   currentState: 0
-  noiseRoomBoost: 2
-  noiseBoostRadius: 25
 --- !u!1001 &2976107634244102410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6456,6 +6466,7 @@ MonoBehaviour:
   roamPos:
   - {fileID: 845820420}
   - {fileID: 1467917593}
+  soundPoints: []
   target: {fileID: 0}
 --- !u!4 &6936951125302932720
 Transform:

@@ -65,9 +65,17 @@ public class enemyMovement : MonoBehaviour
     void goToNextPoint()
     {
         if (enemyRef.RoamPos.Length == 0) return;
-
+        
         enemyRef.Agent.destination = enemyRef.RoamPos[Random.Range(0, enemyRef.RoamPos.Length)].position;
         currentPos = (currentPos + 1) % enemyRef.RoamPos.Length;
+    }
+    public  void AddSoundPoints(NoiseData _pos)
+    {
+        enemyRef.SoundPoints.Add(_pos);
+    }
+    public void RemoveSoundPoints()
+    {
+        enemyRef.SoundPoints.Clear();
     }
     public void EnableAgentRotation(bool _should)
     {

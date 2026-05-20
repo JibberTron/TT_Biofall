@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class enemyBrain : MonoBehaviour
@@ -30,15 +31,14 @@ public class enemyBrain : MonoBehaviour
     [SerializeField] EnemyState currentState;
 
     Coroutine stateRoutine;
-
     NoiseSensor noiseSensor;
-    private Vector3 lastKnownNoisePosition;
 
     float distance;
-    float distanceTimer;
     float angleTimer;
 
     bool isAttacking;
+    bool lostPlayer = true;
+
     void Awake()
     {
         movement = GetComponent<enemyMovement>();
@@ -49,47 +49,24 @@ public class enemyBrain : MonoBehaviour
     }
     void Start()
     {
-        
-
         StartCoroutine(StartAfterIdle());
     }
     void Update()
     {
         HandleUpdates();
     }
-    private void OnEnable()
-    {
-        noiseSensor.OnNoiseHeard += HearNoise;
-    }
-
-    private void OnDisable()
-    {
-        noiseSensor.OnNoiseHeard -= HearNoise;
-    }
-
-    void HearNoise(NoiseData noiseData)
-    {
-        if (currentState == EnemyState.CHASING ||
-            currentState == EnemyState.ATTACKING ||
-            currentState == EnemyState.INCAPACITATED)
-        {
-            return;
-        }
-
-        lastKnownNoisePosition = noiseData.position;
-
-        ChangeState(EnemyState.INVESTIGATING_NOISE);
-    }
     void HandleUpdates()
     {
         if (enemyRef.Target == null) return;
         if (currentState == EnemyState.INCAPACITATED) return;
-
+     
         if (health.IsDead)
         {
             ChangeState(EnemyState.INCAPACITATED);
             return;
         }
+
+        UpdateDistance();
 
         if (PlayerFound())
         {
@@ -112,6 +89,12 @@ public class enemyBrain : MonoBehaviour
     {
         if (currentState == newState || isAttacking) return;
 
+        if (stateRoutine != null)
+        {
+            StopCoroutine(stateRoutine);
+            stateRoutine = null;
+        }
+
         if (currentState == EnemyState.INVESTIGATING)
         {
             movement.Investigate(false);
@@ -120,13 +103,6 @@ public class enemyBrain : MonoBehaviour
         if (currentState == EnemyState.ATTACKING)
         {
             isAttacking = false;
-            distanceTimer = 0f;
-        }
-
-        if (stateRoutine != null)
-        {
-            StopCoroutine(stateRoutine);
-            stateRoutine = null;
         }
 
         currentState = newState;
@@ -182,10 +158,51 @@ public class enemyBrain : MonoBehaviour
                 movement.EnableAgentRotation(true);
                 movement.Stop(false);
                 movement.SetSpeed(movement.RoamSpeed);
-                movement.MoveToNoise(lastKnownNoisePosition);
                 stateRoutine = StartCoroutine(InvestigateNoise());
                 break;
         }
+    }
+    void OnEnable()
+    {
+        noiseSensor.OnNoiseHeard += HearNoise;
+    }
+    void OnDisable()
+    {
+        noiseSensor.OnNoiseHeard -= HearNoise;
+    }
+    void UpdateDistance()
+    {
+        if(Time.frameCount % 4 == 0)
+        {
+            distance = Vector3.Distance(transform.position, enemyRef.Target.position);
+        }
+    }
+    void HearNoise(NoiseData noiseData)
+    {
+        if (currentState == EnemyState.ATTACKING || currentState == EnemyState.INCAPACITATED) return;
+
+        movement.AddSoundPoints(noiseData);
+
+        if (currentState == EnemyState.INVESTIGATING_NOISE)
+        {
+            if (stateRoutine != null)
+            {
+                StopCoroutine(stateRoutine);
+            }
+            stateRoutine = StartCoroutine(InvestigateNoise());
+            return;
+        }
+
+        if (currentState == EnemyState.CHASING)
+        {
+            if (lostPlayer)  
+            {
+                ChangeState(EnemyState.INVESTIGATING_NOISE);
+            }
+            return;
+        }
+
+        ChangeState(EnemyState.INVESTIGATING_NOISE);
     }
     void HandleRoam()
     {
@@ -200,20 +217,24 @@ public class enemyBrain : MonoBehaviour
     }
     void HandleChase()
     {
-        distanceTimer += Time.deltaTime;
-
-        if (distanceTimer >= 0.1f)
+        movement.SetSpeed(movement.ChaseSpeed);
+        movement.SetMovement();
+        if (lostPlayer)
         {
-            distanceTimer = 0f;
-
-            distance = Vector3.Distance(transform.position, enemyRef.Target.position);
-            movement.SetSpeed(movement.ChaseSpeed);
-            movement.SetMovement();
-
-            if (!isAttacking && distance <= attack.AttackDistance)
+            if (enemyRef.SoundPoints.Count > 0)
             {
-                ChangeState(EnemyState.ATTACKING);
+                ChangeState(EnemyState.INVESTIGATING_NOISE);
             }
+            else
+            {
+                ChangeState(EnemyState.INVESTIGATING);
+            }
+            return;
+        }
+
+        if (!isAttacking && distance <= attack.AttackDistance)
+        {
+            ChangeState(EnemyState.ATTACKING);
         }
     }
     void HandleDead()
@@ -253,11 +274,13 @@ public class enemyBrain : MonoBehaviour
                 {
                     if (hit.collider.CompareTag("Player"))
                     {
+                        lostPlayer = false;
                         movement.RotateToPlayer(transform);
                         return true;
                     }
                 }
             }
+            lostPlayer = true;
             return false;
         }
         return false;
@@ -345,23 +368,6 @@ public class enemyBrain : MonoBehaviour
         isAttacking = false;
         ChangeState(EnemyState.CHASING);
     }
-    IEnumerator Investigate()
-    {
-        if (currentState != EnemyState.INVESTIGATING) yield break;
-
-        if (PlayerFound())
-        {
-            ChangeState(EnemyState.CHASING);
-            yield break;
-        }
-        yield return new WaitForSeconds(investigateTime);
-
-        movement.Stop(false);
-        movement.SetSpeed(movement.OrigSpeed);
-
-        stateRoutine = null;
-        ChangeState(EnemyState.ROAMING);
-    }
     IEnumerator StartAfterIdle()
     {
         currentState = EnemyState.IDLE;
@@ -372,38 +378,67 @@ public class enemyBrain : MonoBehaviour
         movement.ShouldUpdatePath(true);
         ChangeState(EnemyState.ROAMING);
     }
-    IEnumerator InvestigateNoise()
+    IEnumerator Investigate()
     {
-        float timeout = 6f;
-        float timer = 0f;
+        if (currentState != EnemyState.INVESTIGATING) yield break;
+        Debug.Log("Inside Investigate co");
+        if (PlayerFound())
+        {
+            ChangeState(EnemyState.CHASING);
+            yield break;
+        }
+        
+        yield return new WaitForSeconds(investigateTime);
 
         movement.Stop(false);
+        movement.SetSpeed(movement.OrigSpeed);
 
-        while (true)
-        {
-            if (PlayerFound())
-            {
-                ChangeState(EnemyState.CHASING);
-                yield break;
-            }
-
-            timer += Time.deltaTime;
-            if (timer >= timeout)
-                break;
-
-            if (ReachedDestination())
-            {
-                ChangeState(EnemyState.INVESTIGATING);
-                yield break;
-            }
-
-            yield return null;
-        }
-
-        movement.Stop(true);
-
-        yield return new WaitForSeconds(3f);
-
+        stateRoutine = null;
+        Debug.Log("Exited Investigate co");
         ChangeState(EnemyState.ROAMING);
+    }
+    IEnumerator InvestigateNoise()
+    {
+        if (enemyRef.SoundPoints.Count == 0) 
+        { 
+            ChangeState(EnemyState.ROAMING); 
+            yield break;
+        } 
+
+        const float timeout = 8f; 
+        float timer = 0f;
+
+        while (true) 
+        { 
+            if (PlayerFound())
+            { 
+                movement.RemoveSoundPoints(); 
+                ChangeState(EnemyState.CHASING); 
+                yield break; 
+            } 
+            Vector3 targetPos = enemyRef.SoundPoints[^1].position; 
+          
+            movement.MoveTo(targetPos); 
+
+            yield return new WaitForSeconds(0.1f);
+
+            movement.SetMovement();
+
+            if (!enemyRef.Agent.pathPending &&enemyRef.Agent.remainingDistance <= 0.5f) 
+            { 
+                movement.RemoveSoundPoints(); 
+                ChangeState(EnemyState.INVESTIGATING); 
+                yield break; 
+            } 
+            timer += Time.deltaTime; 
+
+            if (timer >= timeout) break; 
+
+            yield return null; 
+        } 
+        movement.Stop(true); 
+        movement.RemoveSoundPoints(); 
+
+        ChangeState(EnemyState.ROAMING); 
     }
 }

@@ -36,7 +36,7 @@ public class InteractionPromptDetector : MonoBehaviour
 
         bool isLookingAtInteractable = Physics.Raycast(ray, out RaycastHit hit, interactDist, interactMask);
 
-        promptText.text = promptMessage;
+        promptText.gameObject.SetActive(isLookingAtInteractable);
 
         if(isLookingAtInteractable)
         {

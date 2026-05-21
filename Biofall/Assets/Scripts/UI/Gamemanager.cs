@@ -27,6 +27,9 @@ public class Gamemanager : MonoBehaviour
     public GameObject player;
     public PlayerController playerScript;
     private Gun gun;
+    private PebbleThrower thrownPebble;
+    private HidingSystem hidingSystem;
+    private CameraOrbit cameraOrbit;
 
     float timeScaleOrig;
 
@@ -45,6 +48,9 @@ public class Gamemanager : MonoBehaviour
         infection = player.GetComponent<InfectionSystem>();
         hallucination = player.GetComponent<InfectionHallucination>();
         gun = player.GetComponent<Gun>();
+        thrownPebble = player.GetComponent<PebbleThrower>();
+        hidingSystem = player.GetComponent<HidingSystem>();
+        cameraOrbit = FindFirstObjectByType<CameraOrbit>();
     }
 
     // Update is called once per frame
@@ -80,6 +86,11 @@ public class Gamemanager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        playerScript.enabled = false;
+        gun.enabled = false;
+        hidingSystem.enabled = false;
+        thrownPebble.enabled = false;
+        cameraOrbit.enabled = false;
         HUD.SetActive(false);
     }
 
@@ -92,6 +103,11 @@ public class Gamemanager : MonoBehaviour
         // turn what ever menu is active off
         menuActive.SetActive(false);
         menuActive = null;
+        playerScript.enabled = true;
+        gun.enabled = true;
+        hidingSystem.enabled = true;
+        thrownPebble.enabled = true;
+        cameraOrbit.enabled = true;
         HUD.SetActive(true);
     }
 

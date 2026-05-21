@@ -5,8 +5,9 @@ public class enemyHealth : MonoBehaviour, iDamage
     enemyReferences enemyRef;
 
     [Header("Health")]
-    [SerializeField] int currentHP = 100;
-    [SerializeField] int maxHP = 10;
+    [Range(1, 150)][SerializeField] int maxHP = 10;
+
+    int currentHP = 100;
 
     bool isDead = false;
     bool incapInvinsibility = false;

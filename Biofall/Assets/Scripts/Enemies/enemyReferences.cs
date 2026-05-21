@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
+using NUnit.Framework;
 
 public class enemyReferences : MonoBehaviour
 {
@@ -8,7 +10,9 @@ public class enemyReferences : MonoBehaviour
     NavMeshAgent agent;
     Animator animator;
     enemyAnims eAnims;
+    List<NoiseData> soundPoints = new List<NoiseData>();
 
+    [HideInInspector] public List<NoiseData> SoundPoints => soundPoints;
     public Transform[] RoamPos => roamPos;
     public Transform Target => target;
     public NavMeshAgent Agent => agent;

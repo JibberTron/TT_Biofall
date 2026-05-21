@@ -110,6 +110,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3043540091997229479}
   - component: {fileID: 1024248202996773885}
+  - component: {fileID: 3851839100965114764}
   - component: {fileID: 1231940820632185483}
   - component: {fileID: 1078933468545308156}
   - component: {fileID: 2629264132253655610}
@@ -158,6 +159,20 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   target: {fileID: 0}
+--- !u!114 &3851839100965114764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401403973634559812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e439e9307d83c40984ebfeac8c80ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NoiseSensor
+  hearingMultiplier: 1
+  minimumAttractionStrength: 0
 --- !u!114 &1231940820632185483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,7 +197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f7f192409ba9a4888a64fe7ca3b787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyHealth
-  currentHP: 100
   maxHP: 10
 --- !u!114 &2629264132253655610
 MonoBehaviour:
@@ -232,7 +246,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::enemyAttack
   armCollider: {fileID: 9027883659155267022}
   attackDelay: 2.6
-  attackDistance: 2
   damage: 5
 --- !u!95 &562107651166037661
 Animator:
@@ -547,10 +560,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.35
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: 0.22, z: 0}
+  m_Center: {x: 0, y: 0.32, z: 0}
 --- !u!1 &1730907900315678432
 GameObject:
   m_ObjectHideFlags: 0

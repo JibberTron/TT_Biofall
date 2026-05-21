@@ -12,7 +12,7 @@ public class InteractionPromptDetector : MonoBehaviour
     [SerializeField] private TMP_Text promptText;
     [SerializeField] private string promptMessage = "Press [E] to interact";
 
-    private void Satrt()
+    private void Start()
     {
         if (promptText != null)
         {
@@ -38,7 +38,7 @@ public class InteractionPromptDetector : MonoBehaviour
 
         promptText.gameObject.SetActive(isLookingAtInteractable);
 
-        if(isLookingAtInteractable)
+        if (isLookingAtInteractable)
         {
             promptText.text = promptMessage;
         }

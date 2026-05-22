@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 using System.Collections;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class Gamemanager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject HUD;
     [SerializeField] GameObject ammoText;
+    [SerializeField] GameObject controlPanel;
 
     public Image infectionBar;
     public Image playerHPBar;
@@ -118,6 +120,18 @@ public class Gamemanager : MonoBehaviour
         menuActive.SetActive(true);
     }
 
+    public void ControlsLegend()
+    {
+        menuPause.SetActive(false);
+        controlPanel.SetActive(true);
+    }
+
+    public void StateControlPanelOff()
+    {
+        StateUnpause();
+        controlPanel.SetActive(false);
+    }
+
     private void UpdateInfectionHUD()
     {
         Gamemanager.instance.infectionBar.fillAmount = infection.currentInfection / infection.maxInfection;
@@ -150,5 +164,6 @@ public class Gamemanager : MonoBehaviour
         int totalAmmo = gun.GetTotalAmmo();
 
         string ammo = currentAmmo.ToString() + " | " + totalAmmo.ToString();
+        ammoText.GetComponent<TextMeshProUGUI>().text = ammo;
     }
 }

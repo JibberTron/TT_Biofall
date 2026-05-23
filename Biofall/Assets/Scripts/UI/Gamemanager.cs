@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Unity.VisualScripting;
 using System.Collections;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine.SceneManagement;
 
 public class Gamemanager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Gamemanager : MonoBehaviour
     [SerializeField] GameObject HUD;
     [SerializeField] GameObject ammoText;
     [SerializeField] GameObject controlPanel;
+    [SerializeField] GameObject menuFade;
 
     public Image infectionBar;
     public Image playerHPBar;
@@ -79,6 +81,12 @@ public class Gamemanager : MonoBehaviour
                StateUnpause();
             }
         }
+
+        //temp to debug
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            Win();
+        }
     }
 
 
@@ -88,6 +96,8 @@ public class Gamemanager : MonoBehaviour
         Time.timeScale = 0;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        hallucination.enabled = false;
+        infection.enabled = false;
         playerScript.enabled = false;
         gun.enabled = false;
         hidingSystem.enabled = false;
@@ -105,6 +115,8 @@ public class Gamemanager : MonoBehaviour
         // turn what ever menu is active off
         menuActive.SetActive(false);
         menuActive = null;
+        hallucination.enabled = true;
+        infection.enabled = true;
         playerScript.enabled = true;
         gun.enabled = true;
         hidingSystem.enabled = true;
@@ -118,6 +130,52 @@ public class Gamemanager : MonoBehaviour
         StatePause();
         menuActive = menuGameOver;
         menuActive.SetActive(true);
+    }
+
+    public void Win()
+    {
+
+        menuActive = menuWin;
+        menuActive.SetActive(true);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        hallucination.enabled = false;
+        infection.enabled = false;
+        playerScript.enabled = false;
+        gun.enabled = false;
+        hidingSystem.enabled = false;
+        thrownPebble.enabled = false;
+        cameraOrbit.enabled = false;
+        HUD.SetActive(false);
+
+        StartCoroutine(WinSequence()); 
+    }
+
+    IEnumerator FadeOut()
+    {
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        hallucination.enabled = false;
+        infection.enabled = false;
+        playerScript.enabled = false;
+        gun.enabled = false;
+        hidingSystem.enabled = false;
+        thrownPebble.enabled = false;
+        cameraOrbit.enabled = false;
+        HUD.SetActive(false);
+        menuActive = menuFade;
+        menuActive.SetActive(true);
+
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadScene("FinalCredits");
+    }
+
+    IEnumerator WinSequence()
+    {
+        yield return new WaitForSeconds(2f);
+
+        StartCoroutine(FadeOut());
     }
 
     public void ControlsLegend()

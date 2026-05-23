@@ -28,7 +28,7 @@ public class FootstepSounds : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(animator.GetFloat("Speed"));
+        
         bool isMoving = animator != null && (animator.GetFloat("Speed") > 0.1f || Mathf.Abs(animator.GetFloat("Horizontal")) > 0.1f);
         bool isSprinting = animator != null && animator.GetBool("Sprint");
         bool isCrouching = animator != null && animator.GetBool("Crouch");

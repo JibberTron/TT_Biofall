@@ -5463,9 +5463,9 @@ MonoBehaviour:
   walkInterval: 0.6
   sprintInterval: 0.4
   crouchInterval: 0.8
-  walkVolume: 0.07
-  sprintVolume: 0.08
-  crouchVolume: 0.06
+  walkVolume: 0.5
+  sprintVolume: 0.8
+  crouchVolume: 0.1
   controller: {fileID: 6775125213807112613}
   animator: {fileID: 1464396738270886436}
 --- !u!114 &1683797887275768770
@@ -5591,6 +5591,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4f7f3a8ee30f4b0478a678b8e56a21cd, type: 3}
   - {fileID: 8300000, guid: d3edab948ced1aa4a881d688e956e5ec, type: 3}
   deathClip: {fileID: 8300000, guid: e2d9a6c093df1b04a8aba679c114c769, type: 3}
+  hurtVolume: 3
+  deathVolume: 3
   isHit: 0
 --- !u!114 &8485487063210877488
 MonoBehaviour:
@@ -5640,7 +5642,7 @@ MonoBehaviour:
   maxHueShift: 40
   heartbeatSource: {fileID: 3905954745575038152}
   heartbeatClip: {fileID: 8300000, guid: f08dcd2bd44ae3d4686730f6b47e80f6, type: 3}
-  heartbeatVolume: 0.4
+  heartbeatVolume: 1
   heartbeatFadeSpeed: 2
   volume: {fileID: 2566377854888274725}
   infectionSystem: {fileID: 8485487063210877488}
@@ -5663,7 +5665,7 @@ MonoBehaviour:
   healthSystem: {fileID: 5788958315336630329}
   hidingSystem: {fileID: 5103200429067656528}
   hallucination: {fileID: 6545430053113170481}
-  speed: 5
+  speed: 4
   sprintMod: 2
   crouchSpeed: 2
   crouchHeight: 2

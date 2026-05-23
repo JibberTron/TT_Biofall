@@ -115,7 +115,6 @@ GameObject:
   - component: {fileID: 1078933468545308156}
   - component: {fileID: 2629264132253655610}
   - component: {fileID: 8699673031127768025}
-  - component: {fileID: 2771297330186510523}
   - component: {fileID: 562107651166037661}
   - component: {fileID: 3654914916954126228}
   - component: {fileID: 8286086348768244845}
@@ -158,7 +157,7 @@ MonoBehaviour:
   roamPos:
   - {fileID: 0}
   - {fileID: 0}
-  target: {fileID: 0}
+  armCollider: {fileID: 9027883659155267022}
 --- !u!114 &3851839100965114764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NoiseSensor
   hearingMultiplier: 1
-  minimumAttractionStrength: 0
+  minimumAttractionStrength: 1
 --- !u!114 &1231940820632185483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,27 +225,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyAI
   detectionRange: 8
+  outOfDetectionRange: 18
   investigateTime: 3
   detectionAngle: 90
   incapacitatedTimer: 5
   incapacitatedDelay: 6
   idleDelay: 1
   currentState: 0
---- !u!114 &2771297330186510523
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401403973634559812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83d042a62fd7d7741a5268ab5a14359c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::enemyAttack
-  armCollider: {fileID: 9027883659155267022}
-  attackDelay: 2.6
-  damage: 5
 --- !u!95 &562107651166037661
 Animator:
   serializedVersion: 7
@@ -260,7 +245,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 862715a3c395dac4fbcf96faa386c098, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -283,7 +268,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 350
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
   m_AutoRepath: 1
@@ -306,7 +291,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -514,6 +499,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4807790470617169379}
   - component: {fileID: 9027883659155267022}
+  - component: {fileID: 2425248131537344140}
   m_Layer: 0
   m_Name: mixamorig:LeftHand
   m_TagString: Untagged
@@ -560,10 +546,24 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 0.35
+  m_Radius: 0.2
   m_Height: 1
   m_Direction: 1
-  m_Center: {x: 0, y: 0.32, z: 0}
+  m_Center: {x: 0, y: 0.24, z: 0}
+--- !u!114 &2425248131537344140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227222738022269831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83d042a62fd7d7741a5268ab5a14359c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::enemyAttack
+  attackDelay: 2.6
+  damage: 5
 --- !u!1 &1730907900315678432
 GameObject:
   m_ObjectHideFlags: 0

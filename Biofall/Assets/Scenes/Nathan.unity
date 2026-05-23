@@ -167,10 +167,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8485487063210877488, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
-      propertyPath: currentInfection
-      value: 75
-      objectReference: {fileID: 0}
     - target: {fileID: 8490025096354038525, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -290,9 +286,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f7f192409ba9a4888a64fe7ca3b787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyHealth
-  currentHP: 100
   maxHP: 100
-  isDead: 0
 --- !u!4 &83891319
 Transform:
   m_ObjectHideFlags: 0

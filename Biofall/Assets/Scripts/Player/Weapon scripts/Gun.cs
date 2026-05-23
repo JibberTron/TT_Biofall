@@ -19,9 +19,14 @@ public class Gun : MonoBehaviour
     [SerializeField] CameraOrbit cameraOrbit;
     [SerializeField] Transform gunBarrel;
     [SerializeField] Animator animator;
-
     [SerializeField] HidingSystem hidingSystem;
     [SerializeField] InfectionHallucination hallucination;
+    [SerializeField] ParticleSystem muzzleFlash;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip shootSound;
+    [SerializeField] AudioClip reloadSound;
+    [SerializeField] float shootVolume = 1f;
+    [SerializeField] float reloadVolume = 0.5f;
 
     int currentAmmo;
     bool isReloading;
@@ -61,6 +66,15 @@ public class Gun : MonoBehaviour
         nextFireTime = Time.time + fireRate;
         currentAmmo--;
 
+        if (muzzleFlash != null)
+            muzzleFlash.Play();
+
+        if (audioSource != null && shootSound != null)
+        {
+            audioSource.pitch = Random.Range(0.9f, 1.1f);
+            audioSource.PlayOneShot(shootSound, shootVolume);
+        }
+
         if (cameraOrbit != null)
             cameraOrbit.AddRecoil(recoilAmount);
 
@@ -71,7 +85,6 @@ public class Gun : MonoBehaviour
             1f,
             gameObject
         ));
-        Debug.Log("Gun Noise Radius: 15");
 
         Vector2 wobble = Random.insideUnitCircle * wobbleAmount;
         Vector3 shootDir = Camera.main.transform.forward
@@ -100,7 +113,17 @@ public class Gun : MonoBehaviour
         }
 
         isReloading = true;
-        yield return new WaitForSeconds(reloadTime);
+        animator.SetTrigger("Reload");
+
+        yield return new WaitForSeconds(0.3f);
+
+        if (audioSource != null && reloadSound != null)
+        {
+            audioSource.pitch = 1f;
+            audioSource.PlayOneShot(reloadSound, reloadVolume);
+        }
+
+        yield return new WaitForSeconds(reloadTime - 0.3f);
 
         int needed = maxAmmo - currentAmmo;
         int pulled = Mathf.Min(needed, totalAmmo);

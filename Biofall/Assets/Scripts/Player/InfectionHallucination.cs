@@ -28,6 +28,12 @@ public class InfectionHallucination : MonoBehaviour
     [SerializeField] float maxFilmGrain = 0.8f;
     [SerializeField] float maxHueShift = 20f;
 
+    [Header("Heartbeat Audio")]
+    [SerializeField] AudioSource heartbeatSource;
+    [SerializeField] AudioClip heartbeatClip;
+    [SerializeField] float heartbeatVolume = 0.4f;
+    [SerializeField] float heartbeatFadeSpeed = 2f;
+
     [Header("References")]
     [SerializeField] Volume volume;
     [SerializeField] InfectionSystem infectionSystem;
@@ -40,6 +46,7 @@ public class InfectionHallucination : MonoBehaviour
     ChromaticAberration chromaticAberration;
     LensDistortion lensDistortion;
     FilmGrain filmGrain;
+    AudioReverbFilter reverbFilter;
 
     bool isHallucinating;
     float cooldownTimer;
@@ -52,6 +59,21 @@ public class InfectionHallucination : MonoBehaviour
         volume.profile.TryGet(out chromaticAberration);
         volume.profile.TryGet(out lensDistortion);
         volume.profile.TryGet(out filmGrain);
+
+        if (heartbeatSource != null)
+        {
+            heartbeatSource.clip = heartbeatClip;
+            heartbeatSource.loop = true;
+            heartbeatSource.volume = 0f;
+            heartbeatSource.pitch = 0.85f;
+
+            reverbFilter = heartbeatSource.gameObject.GetComponent<AudioReverbFilter>();
+            if (reverbFilter == null)
+                reverbFilter = heartbeatSource.gameObject.AddComponent<AudioReverbFilter>();
+
+            reverbFilter.reverbPreset = AudioReverbPreset.Cave;
+            reverbFilter.enabled = false;
+        }
 
         ResetEffects();
         cooldownTimer = Random.Range(minCooldown, maxCooldown);
@@ -67,6 +89,7 @@ public class InfectionHallucination : MonoBehaviour
         {
             if (isHallucinating) StopAllCoroutines();
             ResetEffects();
+            StopHeartbeat();
             isHallucinating = false;
             return;
         }
@@ -100,6 +123,8 @@ public class InfectionHallucination : MonoBehaviour
 
         if (vignette != null) vignette.color.value = vignetteColor;
 
+        StartHeartbeat();
+
         // Fade in
         float fadeIn = 0f;
         while (fadeIn < 1f)
@@ -117,6 +142,10 @@ public class InfectionHallucination : MonoBehaviour
                 lensDistortion.intensity.value = Mathf.Lerp(0f, maxLensDistortion * 0.5f, fadeIn);
             if (filmGrain != null)
                 filmGrain.intensity.value = Mathf.Lerp(0f, maxFilmGrain * 0.5f, fadeIn);
+
+            if (heartbeatSource != null)
+                heartbeatSource.volume = Mathf.Lerp(0f, heartbeatVolume, fadeIn);
+
             yield return null;
         }
 
@@ -170,10 +199,14 @@ public class InfectionHallucination : MonoBehaviour
             if (filmGrain != null)
                 filmGrain.intensity.value = Mathf.Lerp(maxFilmGrain, 0f, fadeTime);
 
+            if (heartbeatSource != null)
+                heartbeatSource.volume = Mathf.Lerp(heartbeatVolume, 0f, fadeTime);
+
             yield return null;
         }
 
         ResetEffects();
+        StopHeartbeat();
 
         if (gunManager != null) gunManager.enabled = true;
         if (animator != null)
@@ -183,6 +216,22 @@ public class InfectionHallucination : MonoBehaviour
         }
 
         isHallucinating = false;
+    }
+
+    void StartHeartbeat()
+    {
+        if (heartbeatSource == null || heartbeatClip == null) return;
+        heartbeatSource.volume = 0f;
+        heartbeatSource.Play();
+        if (reverbFilter != null) reverbFilter.enabled = true;
+    }
+
+    void StopHeartbeat()
+    {
+        if (heartbeatSource == null) return;
+        heartbeatSource.Stop();
+        heartbeatSource.volume = 0f;
+        if (reverbFilter != null) reverbFilter.enabled = false;
     }
 
     void ResetEffects()
@@ -207,6 +256,7 @@ public class InfectionHallucination : MonoBehaviour
 
         StopAllCoroutines();
         ResetEffects();
+        StopHeartbeat();
 
         if (gunManager != null) gunManager.enabled = true;
         if (animator != null)

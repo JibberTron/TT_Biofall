@@ -10,8 +10,8 @@ AnimatorStateMachine:
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
-    m_State: {fileID: -2966048196484482684}
-    m_Position: {x: 400, y: 120, z: 0}
+    m_State: {fileID: -484665690465308280}
+    m_Position: {x: 435, y: 185, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -21,15 +21,15 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 40, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: -2966048196484482684}
---- !u!1102 &-2966048196484482684
+  m_DefaultState: {fileID: -484665690465308280}
+--- !u!1102 &-484665690465308280
 AnimatorState:
   serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CreditsScrollClip
+  m_Name: CreditsScoll
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -42,7 +42,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: bcba0045d31410e4bb676387136a47e9, type: 2}
+  m_Motion: {fileID: 7400000, guid: 57e3d7631140a624a887603ddbe453d5, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

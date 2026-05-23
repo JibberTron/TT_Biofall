@@ -104,6 +104,7 @@ public class Gamemanager : MonoBehaviour
         hidingSystem.enabled = false;
         thrownPebble.enabled = false;
         cameraOrbit.enabled = false;
+        AudioListener.pause = true;
         HUD.SetActive(false);
     }
 
@@ -123,6 +124,7 @@ public class Gamemanager : MonoBehaviour
         hidingSystem.enabled = true;
         thrownPebble.enabled = true;
         cameraOrbit.enabled = true;
+        AudioListener.pause = false;
         HUD.SetActive(true);
     }
 
@@ -178,7 +180,6 @@ public class Gamemanager : MonoBehaviour
 
         StartCoroutine(FadeOut());
     }
-
     public void ControlsLegend()
     {
         menuPause.SetActive(false);

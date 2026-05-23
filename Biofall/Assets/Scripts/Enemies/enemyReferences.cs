@@ -5,31 +5,35 @@ using NUnit.Framework;
 
 public class enemyReferences : MonoBehaviour
 {
-    [SerializeField] Transform[] roamPos;
-    [SerializeField] Transform target;
+    [SerializeField] List<Transform> roamPos;
+    [SerializeField] Collider armCollider;
     NavMeshAgent agent;
     Animator animator;
     enemyAnims eAnims;
     List<NoiseData> soundPoints = new List<NoiseData>();
+    GameObject player = null;
+    HidingSystem visibility;
 
-    [HideInInspector] public List<NoiseData> SoundPoints => soundPoints;
-    public Transform[] RoamPos => roamPos;
-    public Transform Target => target;
+    public List<Transform> RoamPos => roamPos;
     public NavMeshAgent Agent => agent;
     public Animator Animator => animator;
     public enemyAnims EAnims => eAnims;
+    [HideInInspector] public List<NoiseData> SoundPoints => soundPoints;
+    [HideInInspector] public GameObject Player => player;
+    [HideInInspector] public HidingSystem Visibility => visibility;
 
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         eAnims = GetComponent<enemyAnims>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
     void Start()
     {
-        if (target == null)
+        if (player == null)
         {
-            Debug.Log("Enemy Reference target == null!");
+            Debug.Log("Player Game Object == null");
         }
         if (eAnims == null)
         {
@@ -39,9 +43,18 @@ public class enemyReferences : MonoBehaviour
         {
             Debug.Log("Nav Mesh Agent == null!");
         }
-        if(roamPos.Length == 0)
+        if(roamPos.Count == 0)
         {
             Debug.Log("Roam Positions array is empty");
         }
+        visibility = player.GetComponent<HidingSystem>();
+    }
+    public void EnableDamage()
+    {
+        armCollider.enabled = true;
+    }
+    public void DisableDamage()
+    {
+        armCollider.enabled = false;
     }
 }

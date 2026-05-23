@@ -18,6 +18,13 @@ public class HealthSystem : MonoBehaviour, iDamage
     [SerializeField] PlayerController playerController;
     [SerializeField] InfectionHallucination hallucination;
 
+    [Header("Audio")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip[] hurtClips;
+    [SerializeField] AudioClip deathClip;
+    [SerializeField] float hurtVolume = 0.25f;
+    [SerializeField] float deathVolume = 0.25f;
+
     int hitStack;
     float timeSinceLastHit;
     bool recentlyHit;
@@ -88,6 +95,7 @@ public class HealthSystem : MonoBehaviour, iDamage
             infectionSystem.AddInfection(scaledDamage * 0.2f);
 
         TriggerHitAnimation(hitFromPosition);
+        PlayHurtSound();
 
         if (currentHealth <= 0)
             Die();
@@ -109,6 +117,15 @@ public class HealthSystem : MonoBehaviour, iDamage
         isHit = true;
     }
 
+    void PlayHurtSound()
+    {
+        if (audioSource == null || hurtClips.Length == 0) return;
+        AudioClip clip = hurtClips[Random.Range(0, hurtClips.Length)];
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.PlayOneShot(clip, hurtVolume);
+        audioSource.pitch = 1f;
+    }
+
     void Recover()
     {
         if (hitStack > 1) return;
@@ -122,10 +139,12 @@ public class HealthSystem : MonoBehaviour, iDamage
         if (isDead) return;
         isDead = true;
 
+        if (audioSource != null && deathClip != null)
+            audioSource.PlayOneShot(deathClip, deathVolume);
+
         if (playerController != null)
             playerController.enabled = false;
 
-        // Disable CharacterController so it doesn't fight ragdoll
         CharacterController cc = GetComponent<CharacterController>();
         if (cc != null)
             cc.enabled = false;
@@ -133,7 +152,6 @@ public class HealthSystem : MonoBehaviour, iDamage
         if (ragdollController != null)
             ragdollController.TriggerDeath();
 
-        // Trigger death cam
         CameraOrbit cam = Camera.main.GetComponent<CameraOrbit>();
         if (cam != null)
             cam.TriggerDeathCam();

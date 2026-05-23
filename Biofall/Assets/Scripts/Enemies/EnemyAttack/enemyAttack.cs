@@ -5,14 +5,12 @@ public class enemyAttack : MonoBehaviour
     enemyReferences enemyRef;
 
     [Header("-----AI Attack Stats-----")]
-    [SerializeField] Collider armCollider;
     [Range(2.6f, 5.2f)][SerializeField] float attackDelay = 2.6f;
     [Range(0, 100)][SerializeField] int damage = 5;
     [HideInInspector]public float AttackDelay => attackDelay;
     [HideInInspector]public float AttackDistance => attackDistance;
 
-    float attackDistance = 1.3f;
-    bool canHit;
+    float attackDistance = 1.75f;
 
     void Start()
     {
@@ -22,30 +20,12 @@ public class enemyAttack : MonoBehaviour
     {
         
     }
-    public void EnableCollider()
-    {
-        canHit = true;
-    }
-    public void DisableCollider()
-    {
-        canHit = false;
-    }
-    public void EnableDamage()
-    {
-        armCollider.enabled = true;
-    }
-    public void DisableDamage()
-    {
-        armCollider.enabled = false;
-    }
     private void OnTriggerEnter(Collider other)
     {
-        if (!canHit) return;
-
         Vector3 hitPosition = other.ClosestPoint(transform.position);
         Vector3 hitDirection = (other.transform.position - transform.position).normalized;
 
-        iDamage dam = other.GetComponentInParent<iDamage>();
+        iDamage dam = other.GetComponent<iDamage>();
         if (dam == null) return;
         
         dam.TakeDamage(damage);

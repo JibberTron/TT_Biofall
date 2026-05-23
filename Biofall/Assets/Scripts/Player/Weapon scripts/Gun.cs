@@ -96,11 +96,15 @@ public class Gun : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, shootDist))
         {
+            Debug.Log("Hit: " + hit.collider.name);
             iDamage dmg = hit.collider.GetComponent<iDamage>();
             if (dmg == null)
                 dmg = hit.collider.GetComponentInParent<iDamage>();
             if (dmg != null)
                 dmg.TakeDamage(10);
+        }
+        else { 
+            Debug.Log("Hit nothing"); 
         }
     }
 

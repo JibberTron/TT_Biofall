@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class enemyBrain : MonoBehaviour
 {
@@ -13,42 +16,52 @@ public class enemyBrain : MonoBehaviour
     {
         IDLE,
         ROAMING,
-        INVESTIGATING,
         CHASING,
         ATTACKING,
         INCAPACITATED,
+        INVESTIGATING,
         INVESTIGATING_NOISE,
+        INVESTIGATING_HIDING,
         DEAD
     }
 
     [Header("-----AI Stats-----")]
     [Range(5, 100)][SerializeField] float detectionRange = 8f;
+    [Range(5, 100)][SerializeField] float outOfDetectionRange = 18f;
     [Range(3, 10)][SerializeField] float investigateTime = 3f;
     [Range(0, 90)][SerializeField] float detectionAngle = 90f;
     [Range(5, 500)][SerializeField] float incapacitatedTimer = 5f;
     [Range(6, 500)][SerializeField] float incapacitatedDelay = 6f;
     [Range(0, 120)][SerializeField] float idleDelay = 1f;
+
     [SerializeField] EnemyState currentState;
 
     Coroutine stateRoutine;
     NoiseSensor noiseSensor;
+    GameObject player;
+    Vector3 playerLastKnownLocation;
 
-    float distance;
-    float angleTimer;
+    float stateLockTimer = 0f;
+    const float stateLockTime = 0.2f;
+    float hidingGiveUpTimer = 0f;
+    const float hidingGiveUpCooldown = 10f;
+    float hideTimer;
 
     bool isAttacking;
-    bool lostPlayer = true;
+    bool gavUpOnHiding = false;
+    bool isInvestigating = false;
 
     void Awake()
     {
         movement = GetComponent<enemyMovement>();
         enemyRef = GetComponent<enemyReferences>();
         health = GetComponent<enemyHealth>();
-        attack = GetComponent<enemyAttack>();
+        attack = GetComponentInChildren<enemyAttack>();
         noiseSensor = GetComponent<NoiseSensor>();
     }
     void Start()
     {
+        player = enemyRef.Player;
         StartCoroutine(StartAfterIdle());
     }
     void Update()
@@ -57,20 +70,23 @@ public class enemyBrain : MonoBehaviour
     }
     void HandleUpdates()
     {
-        if (enemyRef.Target == null) return;
+        if (player == null) return;
+
+        stateLockTimer += Time.deltaTime;
+        if (gavUpOnHiding)
+        {
+            hidingGiveUpTimer -= Time.deltaTime;
+            if (hidingGiveUpTimer <= 0f) gavUpOnHiding = false;
+        }
+        if (currentState == EnemyState.INVESTIGATING && stateRoutine == null && !isInvestigating)
+        {
+            ChangeState(EnemyState.ROAMING);
+        }
         if (currentState == EnemyState.INCAPACITATED) return;
-     
+
         if (health.IsDead)
         {
             ChangeState(EnemyState.INCAPACITATED);
-            return;
-        }
-
-        UpdateDistance();
-
-        if (PlayerFound())
-        {
-            ChangeState(EnemyState.CHASING);
             return;
         }
 
@@ -78,38 +94,54 @@ public class enemyBrain : MonoBehaviour
         {
             case EnemyState.ROAMING:
                 HandleRoam();
-                break;
+                return;
 
             case EnemyState.CHASING:
                 HandleChase();
                 break;
         }
     }
-    void ChangeState(EnemyState newState)
+    void ChangeState(EnemyState _newState)
     {
-        if (currentState == newState || isAttacking) return;
+        if (currentState == _newState || isAttacking) return;
 
+        if (stateLockTimer < stateLockTime)
+        {
+            return;
+        }
+
+        if (_newState != EnemyState.INVESTIGATING)
+        {
+            isInvestigating = false;
+        }
+
+        stateLockTimer = 0f;
+
+        if (currentState == EnemyState.CHASING)
+        {
+            movement.StopChase();
+        }               
+        if (currentState == EnemyState.INVESTIGATING)
+        {
+            movement.Investigate(false);
+            movement.Stop(false);
+        }
+        if (currentState == EnemyState.ATTACKING)
+        {
+            isAttacking = false;
+        }
         if (stateRoutine != null)
         {
             StopCoroutine(stateRoutine);
             stateRoutine = null;
         }
 
-        if (currentState == EnemyState.INVESTIGATING)
-        {
-            movement.Investigate(false);
-        }
+        currentState = _newState;
 
-        if (currentState == EnemyState.ATTACKING)
-        {
-            isAttacking = false;
-        }
-
-        currentState = newState;
-
-        switch (newState)
+        switch (_newState)
         {
             case EnemyState.ROAMING:
+                gavUpOnHiding = true;
                 movement.EnableAgentRotation(true);
                 movement.Stop(false);
                 movement.StopChase();
@@ -146,8 +178,6 @@ public class enemyBrain : MonoBehaviour
                 movement.Stop(true);
                 movement.SetSpeed(0);
 
-                attack.EnableCollider();
-
                 if (!isAttacking)
                 {
                     stateRoutine = StartCoroutine(Attacking());
@@ -158,47 +188,28 @@ public class enemyBrain : MonoBehaviour
                 movement.EnableAgentRotation(true);
                 movement.Stop(false);
                 movement.SetSpeed(movement.RoamSpeed);
+
                 stateRoutine = StartCoroutine(InvestigateNoise());
                 break;
-        }
-    }
-    void OnEnable()
-    {
-        noiseSensor.OnNoiseHeard += HearNoise;
-    }
-    void OnDisable()
-    {
-        noiseSensor.OnNoiseHeard -= HearNoise;
-    }
-    void UpdateDistance()
-    {
-        if(Time.frameCount % 4 == 0)
-        {
-            distance = Vector3.Distance(transform.position, enemyRef.Target.position);
-        }
-    }
-    void HearNoise(NoiseData noiseData)
-    {
-        if (currentState == EnemyState.ATTACKING || currentState == EnemyState.INCAPACITATED) return;
 
-        movement.AddSoundPoints(noiseData);
-
-        if (currentState == EnemyState.INVESTIGATING_NOISE)
-        {
-            if (stateRoutine != null)
-            {
-                StopCoroutine(stateRoutine);
-            }
-            stateRoutine = StartCoroutine(InvestigateNoise());
-            return;
+            case EnemyState.INVESTIGATING_HIDING:
+                gavUpOnHiding = true;
+                hidingGiveUpTimer = hidingGiveUpCooldown;
+                movement.Stop(false);
+                movement.StopChase();
+                stateRoutine = StartCoroutine(InvestigateHiding());
+                break;
         }
+    }   
+    void HearNoise(NoiseData _noiseData)
+    {
+        if (currentState == EnemyState.ATTACKING || currentState == EnemyState.INCAPACITATED || enemyRef.Visibility.IsHiding()) return;
+ 
+        movement.AddSoundPoints(_noiseData);
 
-        if (currentState == EnemyState.CHASING)
+        if (currentState == EnemyState.INVESTIGATING_NOISE || currentState == EnemyState.CHASING)
         {
-            if (lostPlayer)  
-            {
-                ChangeState(EnemyState.INVESTIGATING_NOISE);
-            }
+            ChangeState(EnemyState.INVESTIGATING_NOISE);
             return;
         }
 
@@ -214,25 +225,36 @@ public class enemyBrain : MonoBehaviour
 
         movement.SetSpeed(movement.RoamSpeed);
         movement.SetMovement();
+    
+        if (PlayerFound() && currentState != EnemyState.INVESTIGATING_HIDING)
+        {
+            ChangeState(EnemyState.CHASING);
+            return;
+        }
     }
     void HandleChase()
     {
+        if (currentState != EnemyState.CHASING) return;
+        
         movement.SetSpeed(movement.ChaseSpeed);
         movement.SetMovement();
-        if (lostPlayer)
-        {
-            if (enemyRef.SoundPoints.Count > 0)
-            {
-                ChangeState(EnemyState.INVESTIGATING_NOISE);
-            }
-            else
-            {
-                ChangeState(EnemyState.INVESTIGATING);
-            }
+
+        if (enemyRef.Visibility.IsHiding())
+        {        
+            if (!HasArrived()) return;
+            Debug.Log("Made it boys");
+            ChangeState(EnemyState.INVESTIGATING_HIDING);
             return;
         }
 
-        if (!isAttacking && distance <= attack.AttackDistance)
+        if (Vector3.Distance(transform.position, player.transform.position) >= outOfDetectionRange)
+        {
+            movement.RemoveSoundPoints();
+            ChangeState(EnemyState.INVESTIGATING);
+            return;
+        }
+
+        if (!isAttacking && Vector3.Distance(transform.position, player.transform.position) <= attack.AttackDistance)
         {
             ChangeState(EnemyState.ATTACKING);
         }
@@ -248,41 +270,68 @@ public class enemyBrain : MonoBehaviour
 
         health.Death(true);
     }
+    bool HasArrived()
+    {
+        if (!enemyRef.Agent.enabled) return false;
+        if (enemyRef.Agent.pathPending) return false;
+
+        if (!enemyRef.Agent.hasPath) return true;
+
+        if (enemyRef.Agent.remainingDistance > enemyRef.Agent.stoppingDistance)
+            return false;
+
+        if (enemyRef.Agent.velocity.sqrMagnitude > 0.05f)
+            return false;
+
+        return true;
+    }
     bool ReachedDestination()
     {
-        return !enemyRef.Agent.pathPending && enemyRef.Agent.hasPath &&
-           enemyRef.Agent.remainingDistance <= 0.5f && enemyRef.Agent.velocity.sqrMagnitude < 0.01f;
+        if (!enemyRef.Agent.enabled) return false;
+
+        if (enemyRef.Agent.pathPending) return false;
+
+        if (enemyRef.Agent.remainingDistance > enemyRef.Agent.stoppingDistance + 0.1f)
+            return false;
+
+        if (enemyRef.Agent.hasPath && enemyRef.Agent.velocity.sqrMagnitude > 0.01f)
+            return false;
+
+        return true;
+    }
+    bool HasReachedNoisePoint(Vector3 _target)
+    {
+        NavMeshAgent agent = enemyRef.Agent;
+        if (agent.pathPending) return false;
+
+        float distToTarget = Vector3.Distance(transform.position, _target);
+
+        return distToTarget <= 2.8f && agent.remainingDistance <= agent.stoppingDistance + 0.6f && agent.velocity.sqrMagnitude < 0.25f;
     }
     bool PlayerFound()
     {
-        return (CanSeePlayer() && distance <= detectionRange);
+        if (enemyRef.Visibility.IsHiding()) return false;
+
+        float currentDistance = Vector3.Distance(transform.position, player.transform.position);
+        return CanSeePlayer() && currentDistance <= detectionRange;
     }
     bool CanSeePlayer()
     {
-        angleTimer += Time.deltaTime;
-
-        if (angleTimer >= 0.1f)
-        {
-            angleTimer = 0;
-
-            Vector3 playerDir = (enemyRef.Target.transform.position - transform.position).normalized;
-            float angleToPlayer = Vector3.Angle(playerDir, transform.forward);
-
-            if (angleToPlayer <= detectionAngle)
-            {
-                if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange))
-                {
-                    if (hit.collider.CompareTag("Player"))
-                    {
-                        lostPlayer = false;
-                        movement.RotateToPlayer(transform);
-                        return true;
-                    }
-                }
-            }
-            lostPlayer = true;
+        if (enemyRef.Visibility.IsHiding())
             return false;
+
+        Vector3 playerDir = (player.transform.position - transform.position).normalized;
+
+        float angleToPlayer = Vector3.Angle(playerDir, transform.forward);
+
+        if (angleToPlayer > detectionAngle)
+            return false;
+
+        if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange))
+        {
+            return hit.collider.CompareTag("Player");
         }
+
         return false;
     }
     IEnumerator Incapacitated()
@@ -306,12 +355,11 @@ public class enemyBrain : MonoBehaviour
         enemyRef.Agent.ResetPath();
 
         movement.Stop(false);
-
         movement.ShouldUpdatePath(true);
 
         health.StandUp(false);
-
         health.IncapInvinsibility = false;
+
         stateRoutine = null;
 
         if (PlayerFound())
@@ -330,22 +378,19 @@ public class enemyBrain : MonoBehaviour
         while (currentState == EnemyState.ATTACKING)
         {
             movement.RotateToPlayer(transform);
-
             attack.Attack(true);
-            attack.EnableCollider();
 
             float timer = 0f;
 
             while (timer < attack.AttackDelay)
             {
                 movement.RotateToPlayer(transform);
+
                 if (health.IsDead)
                 {
                     attack.Attack(false);
-                    attack.DisableCollider();
-
                     isAttacking = false;
-
+                    stateRoutine = null;
                     ChangeState(EnemyState.INCAPACITATED);
                     yield break;
                 }
@@ -355,90 +400,179 @@ public class enemyBrain : MonoBehaviour
             }
 
             attack.Attack(false);
-            attack.DisableCollider();
 
-            float dist = Vector3.Distance(transform.position, enemyRef.Target.position);
+            float dist = Vector3.Distance(transform.position, player.transform.position);
 
-            if (dist > attack.AttackDistance)
-            {
-                break;
-            }
+            if (dist > attack.AttackDistance) break;
         }
-
+        stateRoutine = null;
         isAttacking = false;
         ChangeState(EnemyState.CHASING);
     }
     IEnumerator StartAfterIdle()
     {
         currentState = EnemyState.IDLE;
+
         movement.ShouldUpdatePath(false);
 
         yield return new WaitForSeconds(idleDelay);
 
         movement.ShouldUpdatePath(true);
+        stateRoutine = null;
         ChangeState(EnemyState.ROAMING);
     }
     IEnumerator Investigate()
     {
         if (currentState != EnemyState.INVESTIGATING) yield break;
-        Debug.Log("Inside Investigate co");
-        if (PlayerFound())
+
+        float timer = 0;
+
+        while (currentState == EnemyState.INVESTIGATING)
         {
-            ChangeState(EnemyState.CHASING);
-            yield break;
+            if (PlayerFound())
+            {
+                stateRoutine = null;
+                ChangeState(EnemyState.CHASING);
+                yield break;
+            }
+
+            if (timer >= investigateTime) break;
+
+            timer += Time.deltaTime;
+            yield return null;
         }
-        
-        yield return new WaitForSeconds(investigateTime);
 
         movement.Stop(false);
         movement.SetSpeed(movement.OrigSpeed);
 
         stateRoutine = null;
-        Debug.Log("Exited Investigate co");
+        isInvestigating = false;
         ChangeState(EnemyState.ROAMING);
     }
     IEnumerator InvestigateNoise()
     {
-        if (enemyRef.SoundPoints.Count == 0) 
-        { 
-            ChangeState(EnemyState.ROAMING); 
+        if (enemyRef.SoundPoints.Count == 0)
+        {
+            ChangeState(EnemyState.ROAMING);
             yield break;
-        } 
+        }
 
-        const float timeout = 8f; 
+        Vector3 currentTarget = Vector3.zero;
         float timer = 0f;
+        const float timeout = 20f;
 
-        while (true) 
-        { 
+        while (currentState == EnemyState.INVESTIGATING_NOISE)
+        {
             if (PlayerFound())
-            { 
-                movement.RemoveSoundPoints(); 
-                ChangeState(EnemyState.CHASING); 
-                yield break; 
-            } 
-            Vector3 targetPos = enemyRef.SoundPoints[^1].position; 
-          
-            movement.MoveTo(targetPos); 
+            {
+                movement.RemoveSoundPoints();
+                ChangeState(EnemyState.CHASING);
+                yield break;
+            }
 
-            yield return new WaitForSeconds(0.1f);
+            NoiseData targetNoise = enemyRef.SoundPoints[0];
+            foreach (var noise in enemyRef.SoundPoints)
+            {
+                if (noise.attractionStrength > targetNoise.attractionStrength)
+                {
+                    targetNoise = noise;
+                }              
+            }
+
+            if (Vector3.Distance(currentTarget, targetNoise.position) > 1.5f)
+            {
+                currentTarget = targetNoise.position;
+                movement.MoveTo(currentTarget);
+            }
 
             movement.SetMovement();
 
-            if (!enemyRef.Agent.pathPending &&enemyRef.Agent.remainingDistance <= 0.5f) 
-            { 
-                movement.RemoveSoundPoints(); 
-                ChangeState(EnemyState.INVESTIGATING); 
-                yield break; 
-            } 
-            timer += Time.deltaTime; 
+            if (HasReachedNoisePoint(currentTarget))
+            {
+                movement.RemoveSoundPoints();
+                ChangeState(EnemyState.INVESTIGATING);
+                yield break;
+            }
 
-            if (timer >= timeout) break; 
+            if (timer >= timeout) break;
 
-            yield return null; 
-        } 
-        movement.Stop(true); 
-        movement.RemoveSoundPoints(); 
+            timer += Time.deltaTime;
+            yield return null;
+        }
 
-        ChangeState(EnemyState.ROAMING); 
+        movement.RemoveSoundPoints();
+        ChangeState(EnemyState.ROAMING);
     }
+    IEnumerator InvestigateHiding()
+    {
+        yield return null;
+
+        float moveTimeout = 5f;
+        float timer = 0f;
+
+        while (enemyRef.Agent.pathPending)  yield return null;
+
+        while (true)
+        {
+            if (!enemyRef.Agent.enabled)
+                yield break;
+
+            bool arrived = enemyRef.Agent.hasPath == false || 
+                (enemyRef.Agent.remainingDistance <= enemyRef.Agent.stoppingDistance &&enemyRef.Agent.velocity.sqrMagnitude < 0.05f);
+
+            if (arrived) break;
+
+            timer += Time.deltaTime;
+
+            if (timer >= moveTimeout)
+            {
+                Debug.Log("Failed to reach hiding location");
+                stateRoutine = null;
+                ChangeState(EnemyState.ROAMING);
+                yield break;
+            }
+
+            yield return null;
+        }
+
+        movement.Stop(true);
+        enemyRef.Agent.ResetPath();
+
+        movement.ResetMovement();
+        movement.SetSpeed(0);
+        movement.Investigate(true);
+
+        hideTimer = 0f;
+
+        while (currentState == EnemyState.INVESTIGATING_HIDING)
+        {
+            if (PlayerFound())
+            {
+                movement.Investigate(false);
+                stateRoutine = null;
+                ChangeState(EnemyState.CHASING);
+                yield break;
+            }
+
+            hideTimer += Time.deltaTime;
+
+            if (hideTimer >= investigateTime) break;
+
+            yield return null;
+        }
+
+        movement.Investigate(false);
+
+        gavUpOnHiding = true;
+        hidingGiveUpTimer = hidingGiveUpCooldown;
+        if (PlayerFound())
+        {
+            stateRoutine = null;
+            ChangeState(EnemyState.CHASING);
+            yield break;
+        }
+        ChangeState(EnemyState.ROAMING);
+    }
+    void OnEnable() => noiseSensor.OnNoiseHeard += HearNoise;
+    void OnDisable() => noiseSensor.OnNoiseHeard -= HearNoise;
 }

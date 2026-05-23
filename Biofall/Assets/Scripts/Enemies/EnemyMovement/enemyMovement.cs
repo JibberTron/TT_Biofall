@@ -1,9 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-//TODO: Make it to where the enemy will only go by the patrol points closest to the player
-//  by getting the distance from patrol point to player we can figure out which ones are closest and only patrol those areas
-// if there is only one patrol point in the area maybe make a random patrol in situations like that
+
 public class enemyMovement : MonoBehaviour
 {
     enemyReferences enemyRef;
@@ -16,6 +14,7 @@ public class enemyMovement : MonoBehaviour
     int currentPos;
 
     Coroutine pathRoutine;
+    GameObject player = null;
 
     float origSpeed;
 
@@ -26,10 +25,11 @@ public class enemyMovement : MonoBehaviour
     public float ChaseSpeed => chaseSpeed;
     void Awake()
     {
-        enemyRef = GetComponent<enemyReferences>();
+        enemyRef = GetComponent<enemyReferences>();      
     }
     void Start()
     {
+        player = enemyRef.Player;
         origSpeed = enemyRef.Agent.speed;
     }
     void Update()
@@ -52,26 +52,16 @@ public class enemyMovement : MonoBehaviour
        StopCoroutine(pathRoutine);
        pathRoutine = null;
     }
-    bool CheckDistanceToRoamPoint(Vector3 _loc)
-    {
-        float distance = Vector3.Distance(enemyRef.Target.position, _loc);
-        if(distance <= 100f)
-        {
-            return true;
-        }
-        
-        return false;
-    }
     void goToNextPoint()
     {
-        if (enemyRef.RoamPos.Length == 0) return;
-        
-        enemyRef.Agent.destination = enemyRef.RoamPos[Random.Range(0, enemyRef.RoamPos.Length)].position;
-        currentPos = (currentPos + 1) % enemyRef.RoamPos.Length;
+        if (enemyRef.RoamPos.Count == 0) return;
+
+        enemyRef.Agent.destination = enemyRef.RoamPos[currentPos].position;
+        currentPos = (currentPos + 1) % enemyRef.RoamPos.Count;
     }
-    public  void AddSoundPoints(NoiseData _pos)
+    public  void AddSoundPoints(NoiseData _sound)
     {
-        enemyRef.SoundPoints.Add(_pos);
+        enemyRef.SoundPoints.Add(_sound);
     }
     public void RemoveSoundPoints()
     {
@@ -85,13 +75,17 @@ public class enemyMovement : MonoBehaviour
     {
         enemyRef.EAnims.SetMovement(enemyRef.Agent.velocity.magnitude);
     }
+    public void ResetMovement()
+    {
+        enemyRef.EAnims.SetMovement(0);
+    }
     public void Investigate(bool _isTrue)
     {
         enemyRef.EAnims.Investigate(_isTrue);
     }
     public void RotateToPlayer(Transform _loc)
     {
-        Vector3 look = enemyRef.Target.position - _loc.position;
+        Vector3 look = player.transform.position - _loc.position;
         look.y = 0;
 
         if (look.sqrMagnitude < 0.001f) return;
@@ -119,37 +113,27 @@ public class enemyMovement : MonoBehaviour
     public void MoveTo(Vector3 _loc)
     {
         Stop(false);
+        enemyRef.Agent.ResetPath();
+        enemyRef.Agent.SetDestination(_loc);
+    }
+    public void MoveToDest(Vector3 _loc)
+    {
+        Stop(false);
         enemyRef.Agent.SetDestination(_loc);
     }
     IEnumerator UpdatePath()
     {
         while (shouldUpdatePath)
         {
-            if(Vector3.Distance(enemyRef.Agent.destination, enemyRef.Target.position) > 0.3f)
+            if (enemyRef.Agent.isOnNavMesh)
             {
-                enemyRef.Agent.SetDestination(enemyRef.Target.position);
+                enemyRef.Agent.SetDestination(player.transform.position);
             }
- 
+
             yield return new WaitForSeconds(pathToDelay) ;
         }
         pathRoutine = null;
     }
-
-    // ==================================================================
-    public void MoveToNoise(Vector3 _loc)
-    {
-        Stop(false);
-
-        if (NavMesh.SamplePosition(_loc, out NavMeshHit hit, 5f, NavMesh.AllAreas))
-        {
-            enemyRef.Agent.SetDestination(hit.position);
-        }
-        else
-        {
-            enemyRef.Agent.SetDestination(_loc);
-        }
-    }
-    // ====================================================================
     public void StopChase() => stopChase();
     public void GoToNextPoint() => goToNextPoint();
     public void Chase() => chase();

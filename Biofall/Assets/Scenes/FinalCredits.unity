@@ -202,14 +202,14 @@ MonoBehaviour:
   m_text: 'Turbo Turtles
 
 
-    
+
 
     John Buelterman
 
     AI & Gameplay Programmer
 
 
-    
+
 
     Roslyn
     Marks
@@ -217,36 +217,36 @@ MonoBehaviour:
     Gameplay Systems Programmer
 
 
-    
+
 
     Joseph Morical
 
-    Level
-    Designer
+    Level Designer
 
-    Gameplay Programmer
+    Gameplay
+    Programmer
 
     Narrative Designer
 
 
-    
 
-    Cecilia
-    Rivera
 
-    Gameplay & Systems Programmer
+    Cecilia Rivera
+
+    Gameplay & Systems
+    Programmer
 
     UI/UX Designer
 
 
-    
 
-    Nathan
-    Simmons
+
+    Nathan Simmons
 
     Gameplay Programmer
 
-    Audio Designer
+    Audio
+    Designer
 
 '
   m_isRightToLeft: 0
@@ -439,7 +439,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

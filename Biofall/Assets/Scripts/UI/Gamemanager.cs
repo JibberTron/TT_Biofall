@@ -22,6 +22,7 @@ public class Gamemanager : MonoBehaviour
     public Image infectionBar;
     public Image playerHPBar;
     public Image gunImage;
+    public Image transitionScreen;
     public bool isPaused;
     public GameObject hallucinationFlashScreen;
     private bool isFlashing;

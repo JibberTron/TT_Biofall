@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Enemy
+  - Door
+  - Transition Screen
   layers:
   - Default
   - TransparentFX

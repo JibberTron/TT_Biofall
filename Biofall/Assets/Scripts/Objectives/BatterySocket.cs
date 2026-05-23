@@ -1,16 +1,24 @@
 using UnityEngine;
+using TMPro;
 
 public class BatterySocket : MonoBehaviour, IInteractable
 {
     [Header("Battery Requirement")]
     [SerializeField] private int requiredBatteries = 1;
     [SerializeField] private int insertedBatteries = 0;
+    [SerializeField] private TMP_Text batteryCountText;
 
     [Header("Power Target")]
-    [SerializeField] private PowerReceiver powerReceiver;
+    [SerializeField] private PowerReceiver[] powerReceivers;
 
     [Header("Behavior")]
     [SerializeField] private bool allowBatteryRemoval = true;
+
+    private void Start()
+    {
+        UpdateBatteryText();
+        UpdatePowerState();
+    }
 
     public void Interact()
     {
@@ -44,6 +52,7 @@ public class BatterySocket : MonoBehaviour, IInteractable
         }
 
         UpdatePowerState();
+        UpdateBatteryText();
     }
 
     private void InsertBattery(PlayerInventory inventory)
@@ -52,6 +61,14 @@ public class BatterySocket : MonoBehaviour, IInteractable
         {
             insertedBatteries++;
             Debug.Log($"Inserted battery: {insertedBatteries}/{requiredBatteries}");
+        }
+    }
+
+    private void UpdateBatteryText()
+    {
+        if (batteryCountText != null)
+        {
+            batteryCountText.text = $"{insertedBatteries}/{requiredBatteries}";
         }
     }
 
@@ -72,9 +89,12 @@ public class BatterySocket : MonoBehaviour, IInteractable
     {
         bool isPowered = insertedBatteries >= requiredBatteries;
 
-        if (powerReceiver != null)
+        foreach (PowerReceiver receiver in powerReceivers)
         {
-            powerReceiver.SetPowered(isPowered);
+            if (receiver != null)
+            {
+                receiver.SetPowered(isPowered);
+            }
         }
     }
 }

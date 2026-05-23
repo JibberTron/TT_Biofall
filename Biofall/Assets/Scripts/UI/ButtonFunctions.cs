@@ -29,4 +29,14 @@ public class ButtonFunctions : MonoBehaviour
 
         Gamemanager.instance.StateUnpause();
     }
+
+    public void Back()
+    {
+        Gamemanager.instance.StateControlPanelOff();
+    }
+
+    public void Controls()
+    {
+        Gamemanager.instance.ControlsLegend();
+    }
 }

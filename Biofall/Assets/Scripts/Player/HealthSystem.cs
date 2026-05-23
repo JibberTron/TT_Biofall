@@ -22,6 +22,8 @@ public class HealthSystem : MonoBehaviour, iDamage
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip[] hurtClips;
     [SerializeField] AudioClip deathClip;
+    [SerializeField] float hurtVolume = 0.25f;
+    [SerializeField] float deathVolume = 0.25f;
 
     int hitStack;
     float timeSinceLastHit;
@@ -120,7 +122,7 @@ public class HealthSystem : MonoBehaviour, iDamage
         if (audioSource == null || hurtClips.Length == 0) return;
         AudioClip clip = hurtClips[Random.Range(0, hurtClips.Length)];
         audioSource.pitch = Random.Range(0.9f, 1.1f);
-        audioSource.PlayOneShot(clip, 0.25f);
+        audioSource.PlayOneShot(clip, hurtVolume);
         audioSource.pitch = 1f;
     }
 
@@ -138,7 +140,7 @@ public class HealthSystem : MonoBehaviour, iDamage
         isDead = true;
 
         if (audioSource != null && deathClip != null)
-            audioSource.PlayOneShot(deathClip, 0.25f);
+            audioSource.PlayOneShot(deathClip, deathVolume);
 
         if (playerController != null)
             playerController.enabled = false;

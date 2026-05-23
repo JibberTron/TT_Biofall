@@ -28,6 +28,13 @@ public class ZombieGirl : MonoBehaviour, iDamage
     [SerializeField] Animator animator;
     [SerializeField] NavMeshAgent agent;
 
+    [Header("Audio")]
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip screamClip;
+    [SerializeField] AudioClip runClip;
+    [SerializeField] AudioClip deathClip;
+    [SerializeField] float sfxVolume = 0.8f;
+
     int currentHealth;
     bool isDead;
     bool hasSeenPlayer;
@@ -80,6 +87,8 @@ public class ZombieGirl : MonoBehaviour, iDamage
         if (Physics.Raycast(transform.position + Vector3.up, dirToPlayer, distToPlayer, sightMask)) return;
 
         hasSeenPlayer = true;
+        if (audioSource != null && screamClip != null)
+            audioSource.PlayOneShot(screamClip, sfxVolume);
         StartCoroutine(ScreamThenChase());
     }
 
@@ -91,6 +100,13 @@ public class ZombieGirl : MonoBehaviour, iDamage
         yield return new WaitForSeconds(screamDuration);
 
         agent.isStopped = false;
+
+        if (audioSource != null && runClip != null)
+        {
+            audioSource.clip = runClip;
+            audioSource.loop = true;
+            audioSource.Play();
+        }
     }
 
     void Chase()
@@ -156,6 +172,14 @@ public class ZombieGirl : MonoBehaviour, iDamage
         if (isDead) return;
         isDead = true;
 
+        if (audioSource != null)
+        {
+            audioSource.loop = false;
+            audioSource.Stop();
+            if (deathClip != null)
+                audioSource.PlayOneShot(deathClip, sfxVolume);
+        }
+
         agent.isStopped = true;
         agent.velocity = Vector3.zero;
         agent.enabled = false;
@@ -166,6 +190,6 @@ public class ZombieGirl : MonoBehaviour, iDamage
         if (ragdoll != null)
             ragdoll.TriggerDeath();
 
-       
+        
     }
 }

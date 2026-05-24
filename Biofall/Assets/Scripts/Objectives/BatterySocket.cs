@@ -9,7 +9,7 @@ public class BatterySocket : MonoBehaviour, IInteractable
     [SerializeField] private TMP_Text batteryCountText;
 
     [Header("Power Target")]
-    [SerializeField] private PowerReceiver[] powerReceivers;
+    [SerializeField] private PowerReceiver[] powerReceivers = new PowerReceiver[0];
 
     [Header("Behavior")]
     [SerializeField] private bool allowBatteryRemoval = true;

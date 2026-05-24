@@ -6,11 +6,38 @@ public class PowerReceiver : MonoBehaviour
     [SerializeField] private GameObject objectWhenPowered;
     [SerializeField] private GameObject objectWhenUnpowered;
 
+    private int activePowerSources;
     private bool isPowered;
+
+    public bool IsPowered => isPowered;
+
+    public void AddPowerSource()
+    {
+        activePowerSources++;
+        UpdatePoweredState();
+    }
+
+    public void RemovePowerSource()
+    {
+        activePowerSources = Mathf.Max(0, activePowerSources - 1);
+        UpdatePoweredState();
+    }
 
     public void SetPowered(bool powered)
     {
-        isPowered = powered;
+        if (powered)
+        {
+            AddPowerSource();
+        }
+        else
+        {
+            RemovePowerSource();
+        }
+    }
+
+    private void UpdatePoweredState()
+    {
+        isPowered = activePowerSources > 0;
 
         if (objectWhenPowered != null)
         {
@@ -22,6 +49,6 @@ public class PowerReceiver : MonoBehaviour
             objectWhenUnpowered.SetActive(!isPowered);
         }
 
-        Debug.Log($"{gameObject.name} powered: {isPowered}");
+        Debug.Log($"{gameObject.name} powered: {isPowered} | Sources: {activePowerSources}");
     }
 }

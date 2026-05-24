@@ -7,7 +7,6 @@ public class PressureValve : MonoBehaviour, IInteractable
     [SerializeField] private SteamHazard[] steamHazards;
 
     [Header("Valve Settings")]
-    [SerializeField] private bool turnAllOnIfAllOff = true;
     [SerializeField] private KeyCode holdKey = KeyCode.E;
     [SerializeField] private float holdDuration = 1.5f;
 
@@ -66,40 +65,16 @@ public class PressureValve : MonoBehaviour, IInteractable
             return;
         }
 
-        bool anyActive = false;
-
         foreach (SteamHazard hazard in steamHazards)
         {
-            if (hazard != null && hazard.IsActive())
+            if (hazard == null)
             {
-                anyActive = true;
-                break;
+                continue;
             }
+
+            hazard.SetActive(!hazard.IsActive());
         }
 
-        bool newState = !anyActive;
-
-        if (turnAllOnIfAllOff)
-        {
-            foreach (SteamHazard hazard in steamHazards)
-            {
-                if (hazard != null)
-                {
-                    hazard.SetActive(newState);
-                }
-            }
-        }
-        else
-        {
-            foreach (SteamHazard hazard in steamHazards)
-            {
-                if (hazard != null)
-                {
-                    hazard.SetActive(!hazard.IsActive());
-                }
-            }
-        }
-
-        Debug.Log($"{gameObject.name} toggled assigned steam hazards.");
+        Debug.Log($"{gameObject.name} flipped assigned steam hazards.");
     }
 }

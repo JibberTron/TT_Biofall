@@ -51,7 +51,11 @@ public class SteamHazard : MonoBehaviour
                 }
 
                 steamAudioSource.loop = true;
-                steamAudioSource.Play();
+
+                if (!steamAudioSource.isPlaying)
+                {
+                    steamAudioSource.Play();
+                }
             }
             else
             {

@@ -118,12 +118,21 @@ public class BatterySocket : MonoBehaviour, IInteractable
 
         foreach (PowerReceiver receiver in powerReceivers)
         {
-            if (receiver != null)
+            if (receiver == null)
             {
-                receiver.SetPowered(isPowered);
+                continue;
+            }
+
+            if (isPowered && !wasPowered)
+            {
+                receiver.AddPowerSource();
+            }
+            else if (!isPowered && wasPowered)
+            {
+                receiver.RemovePowerSource();
             }
         }
-        if(isPowered)
+        if (isPowered)
         {
             if (shouldActivateEnemy)
             {

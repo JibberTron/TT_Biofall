@@ -61,12 +61,40 @@ public class enemyBrain : MonoBehaviour
     }
     void Start()
     {
+        StartChecks();
         player = enemyRef.Player;
         StartCoroutine(StartAfterIdle());
     }
     void Update()
     {
         HandleUpdates();
+    }
+    void StartChecks()
+    {
+        if(movement == null)
+        {
+            Debug.Log("Enemy Movement == null");
+            return;
+        }
+        if (enemyRef == null)
+        {
+            Debug.Log("Enemy References == null");
+        }
+        if (health == null)
+        {
+            Debug.Log("Enemy Health == null");
+            return;
+        }
+        if (attack == null)
+        {
+            Debug.Log("Enemy Attack == null");
+            return;
+        }
+        if (noiseSensor == null)
+        {
+            Debug.Log("Noise Sensor == null");
+            return;
+        }
     }
     void HandleUpdates()
     {
@@ -207,9 +235,12 @@ public class enemyBrain : MonoBehaviour
  
         movement.AddSoundPoints(_noiseData);
 
-        if (currentState == EnemyState.INVESTIGATING_NOISE || currentState == EnemyState.CHASING)
+        if (currentState == EnemyState.INVESTIGATING_NOISE)
         {
-            ChangeState(EnemyState.INVESTIGATING_NOISE);
+            return;
+        }
+        if(currentState == EnemyState.CHASING)
+        {
             return;
         }
 

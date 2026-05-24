@@ -36,12 +36,15 @@ public class enemyHealth : MonoBehaviour, iDamage
     public void TakeDamage(int amount)
     {
         if (isDead || incapInvinsibility) return;
-
+        
         currentHP -= amount;
+
+        enemyRef.Sounds.PlayClip(enemyRef.Sounds.enemyHit);
 
         if (currentHP <= 0)
         {
             isDead = true;
+            enemyRef.Sounds.PlayClip(enemyRef.Sounds.enemyDeath);
         }
     }
 }

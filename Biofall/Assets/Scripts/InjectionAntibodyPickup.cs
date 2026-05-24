@@ -24,7 +24,15 @@ public class InjectionAntibodyPickup : MonoBehaviour, IInteractable
             {
                 inf.UseInjectionAntibody();
 
-                Debug.Log("Infection Antibody picked up!");
+                PlayerInventory inventory = player.GetComponent<PlayerInventory>();
+
+                if (inventory != null)
+                {
+                    inventory.AddInjectionAntibody(1);
+                    Debug.Log("Injection Antibody Count: " + inventory.InjectionAntibodies);
+                }
+
+                Debug.Log("Injection Antibody picked up!");
 
                 Destroy(gameObject);
             }

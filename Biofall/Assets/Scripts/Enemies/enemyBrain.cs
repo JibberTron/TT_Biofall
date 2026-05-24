@@ -126,7 +126,7 @@ public class enemyBrain : MonoBehaviour
     void HandleUpdates()
     {
         if (player == null) return;
-
+       
         stateLockTimer += Time.deltaTime;
         if (gavUpOnHiding)
         {
@@ -258,7 +258,8 @@ public class enemyBrain : MonoBehaviour
     }   
     void HearNoise(NoiseData _noiseData)
     {
-        if (currentState == EnemyState.ATTACKING || currentState == EnemyState.INCAPACITATED || enemyRef.Visibility.IsHiding()) return;
+        if (currentState == EnemyState.ATTACKING || currentState == EnemyState.INCAPACITATED 
+            || enemyRef.Visibility.IsHiding() || activeState == EnemyActiveState.DEACTIVE) return;
  
         movement.AddSoundPoints(_noiseData);
 

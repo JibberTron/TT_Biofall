@@ -20,6 +20,8 @@ public class BatterySocket : MonoBehaviour, IInteractable
 
     [Header("Behavior")]
     [SerializeField] private bool allowBatteryRemoval = true;
+    [SerializeField] bool shouldActivateEnemy = false;
+    [SerializeField]enemyBrain enemyRef;
 
     private void Start()
     {
@@ -121,7 +123,13 @@ public class BatterySocket : MonoBehaviour, IInteractable
                 receiver.SetPowered(isPowered);
             }
         }
-
+        if(isPowered)
+        {
+            if (shouldActivateEnemy)
+            {
+                enemyRef.SetActiveState(enemyBrain.EnemyActiveState.ACTIVE);
+            }
+        }
         if (isPowered && !wasPowered)
         {
             PlaySound(poweredOnSound);

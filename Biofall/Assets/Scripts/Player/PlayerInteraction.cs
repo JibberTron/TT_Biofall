@@ -17,27 +17,36 @@ public class PlayerInteraction : MonoBehaviour
 
     void TryInteract()
     {
-        Ray ray = new Ray(playerCamera.transform.position + playerCamera.transform.forward * 0.5f, playerCamera.transform.forward);
+        Ray ray = new Ray(
+            playerCamera.transform.position + playerCamera.transform.forward * 0.5f,
+            playerCamera.transform.forward
+        );
 
-        if (Physics.Raycast(ray, out RaycastHit hit, interactDist, interactMask))
+        int raycastMask = ~LayerMask.GetMask("Player");
+
+        if (Physics.Raycast(ray, out RaycastHit hit, interactDist, raycastMask))
         {
             Debug.Log("Ray hit: " + hit.collider.name);
 
+            bool hitIsInteractableLayer = ((1 << hit.collider.gameObject.layer) & interactMask) != 0;
+
+            if (!hitIsInteractableLayer)
+            {
+                Debug.Log("Interaction blocked by: " + hit.collider.name);
+                return;
+            }
+
             IInteractable interactable = hit.collider.GetComponentInParent<IInteractable>();
 
-            if(interactable != null )
+            if (interactable != null)
             {
                 Debug.Log("Interactable found");
                 interactable.Interact();
             }
             else
             {
-                Debug.Log("Hit object is NOT interactable");
+                Debug.Log("Hit object is on Interactable layer but has no IInteractable.");
             }
-        }
-        else
-        {
-            //Debug.Log("Ray hit nothing!");
         }
     }
 }

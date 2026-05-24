@@ -9,7 +9,6 @@ public class enemyMovement : MonoBehaviour
     [Header("-----AI Movement Stats-----")]
     [Range(1, 5)][SerializeField] float roamSpeed = 1.5f;
     [Range(1, 10)][SerializeField] float chaseSpeed = 2f;
-    [SerializeField] float pathToDelay = 0.2f;
 
     int currentPos;
 
@@ -17,6 +16,7 @@ public class enemyMovement : MonoBehaviour
     GameObject player = null;
 
     float origSpeed;
+    float pathToDelay = 0.2f;
 
     bool shouldUpdatePath = true;
 

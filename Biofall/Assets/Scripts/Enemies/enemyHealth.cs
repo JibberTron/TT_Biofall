@@ -4,7 +4,7 @@ public class enemyHealth : MonoBehaviour, iDamage
 {
     enemyReferences enemyRef;
 
-    [Header("Health")]
+    [Header("-----AI Health-----")]
     [Range(1, 150)][SerializeField] int maxHP = 10;
 
     int currentHP = 100;
@@ -39,12 +39,13 @@ public class enemyHealth : MonoBehaviour, iDamage
         
         currentHP -= amount;
 
-        enemyRef.Sounds.PlayClip(enemyRef.Sounds.enemyHit);
-
         if (currentHP <= 0)
         {
             isDead = true;
-            enemyRef.Sounds.PlayClip(enemyRef.Sounds.enemyDeath);
+            enemyRef.Sounds.PlayClip(enemyRef.Sounds.EnemyDeath);
+            return;
         }
+        enemyRef.Sounds.PlayClip(enemyRef.Sounds.EnemyHit);
+
     }
 }

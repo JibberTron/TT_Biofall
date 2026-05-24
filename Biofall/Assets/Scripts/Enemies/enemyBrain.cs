@@ -12,7 +12,7 @@ public class enemyBrain : MonoBehaviour
     enemyHealth health;
     enemyAttack attack;
 
-    public enum EnemyState
+    enum EnemyState
     {
         IDLE,
         ROAMING,
@@ -25,6 +25,12 @@ public class enemyBrain : MonoBehaviour
         DEAD
     }
 
+    public enum EnemyActiveState
+    {
+        ACTIVE,
+        DEACTIVE
+    }
+
     [Header("-----AI Stats-----")]
     [Range(5, 100)][SerializeField] float detectionRange = 8f;
     [Range(5, 100)][SerializeField] float outOfDetectionRange = 18f;
@@ -32,15 +38,15 @@ public class enemyBrain : MonoBehaviour
     [Range(0, 90)][SerializeField] float detectionAngle = 90f;
     [Range(5, 500)][SerializeField] float incapacitatedTimer = 5f;
     [Range(6, 500)][SerializeField] float incapacitatedDelay = 6f;
-    [Range(0, 120)][SerializeField] float idleDelay = 1f;
 
-    [SerializeField] EnemyState currentState;
+    EnemyState currentState;
+    public EnemyActiveState activeState = EnemyActiveState.ACTIVE;
 
     Coroutine stateRoutine;
     NoiseSensor noiseSensor;
     GameObject player;
-    Vector3 playerLastKnownLocation;
 
+    float idleDelay = 1f;
     float stateLockTimer = 0f;
     const float stateLockTime = 0.2f;
     float hidingGiveUpTimer = 0f;
@@ -63,11 +69,32 @@ public class enemyBrain : MonoBehaviour
     {
         StartChecks();
         player = enemyRef.Player;
-        StartCoroutine(StartAfterIdle());
+        if(activeState == EnemyActiveState.ACTIVE)
+        {
+            StartCoroutine(StartAfterIdle());
+        }
+        else
+        {
+            currentState = EnemyState.IDLE;
+        }
+        
     }
     void Update()
     {
         HandleUpdates();
+    }
+    public void SetActiveState(EnemyActiveState _state)
+    {
+        if(_state == EnemyActiveState.ACTIVE)
+        {
+            StartCoroutine(StartAfterIdle());
+            return;
+        }
+        else
+        {
+            currentState = EnemyState.IDLE;
+            return;
+        }
     }
     void StartChecks()
     {

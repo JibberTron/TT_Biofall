@@ -2,11 +2,17 @@ using UnityEngine;
 
 public class enemySounds : MonoBehaviour
 {
+    [Header("-----AI Sounds-----")]
     [SerializeField] AudioSource sfx_Source;
-    [SerializeField] public AudioClip enemyDeath;
-    [SerializeField] public AudioClip enemyWalk;
-    [SerializeField] public AudioClip enemyHit;
-    [SerializeField] public AudioClip enemyAttack;
+    [SerializeField] AudioClip enemyDeath;
+    [SerializeField] AudioClip enemyWalk;
+    [SerializeField] AudioClip enemyHit;
+    [SerializeField] AudioClip enemyAttack;
+
+    public AudioClip EnemyDeath => enemyDeath;
+    public AudioClip EnemyWalk => enemyWalk;
+    public AudioClip EnemyHit => enemyHit;
+    public AudioClip EnemyAttack => enemyAttack;
 
     public void PlayClip(AudioClip _clip)
     {

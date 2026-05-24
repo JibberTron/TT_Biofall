@@ -6,6 +6,9 @@ using static Unity.VisualScripting.Member;
 public class DoorInteract : MonoBehaviour, IInteractable
 {
     [SerializeField] Transform hinge;
+    [SerializeField] AudioSource sfx_Sounds;
+    [SerializeField] AudioClip doorOpen;
+    [SerializeField] AudioClip doorClosed;
     NavMeshObstacle obst;
 
     bool isOpen = false;
@@ -28,6 +31,14 @@ public class DoorInteract : MonoBehaviour, IInteractable
 
         }
     }
+    void OnTriggerEnter(Collider other)
+    {
+        if (doorGuard) return;
+        if(other.CompareTag("Enemy"))
+        {
+            StartCoroutine(OpenDoor());
+        }
+    }
     IEnumerator OpenDoor()
     {
         if (!doorGuard)
@@ -40,13 +51,17 @@ public class DoorInteract : MonoBehaviour, IInteractable
             isOpen = true;
             obst.enabled = false;
 
+            sfx_Sounds.clip = doorOpen;
+            sfx_Sounds.Play();
+
             while (time < dur)
             {
                 time += Time.deltaTime;
                 float t = time / dur;
 
                 Debug.Log("Door Opened");
-                hinge.localRotation = Quaternion.Slerp(beginRot, endRot, time);
+               
+                hinge.localRotation = Quaternion.Slerp(beginRot, endRot, t);
 
                 yield return null;
             }
@@ -62,15 +77,18 @@ public class DoorInteract : MonoBehaviour, IInteractable
 
             float dur = 1f;
             float time = 0;
-            isOpen = false;
 
+            isOpen = false;
+            sfx_Sounds.clip = doorClosed;
+            sfx_Sounds.Play();
+            
             while (time < dur)
             {
                 time += Time.deltaTime;
                 float t = time / dur;
 
                 Debug.Log("Door Closed");
-                hinge.localRotation = Quaternion.Slerp(beginRot, endRot, time);
+                hinge.localRotation = Quaternion.Slerp(beginRot, endRot, t);
                 yield return null;
             }
             obst.enabled = true;

@@ -814,6 +814,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2446875394210147662, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 188588c973d91c04597eddac566182ca, type: 3}
     - target: {fileID: 2966102173181203447, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -838,6 +842,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8063476781865415822, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: playerHPBar
+      value: 
+      objectReference: {fileID: 5429633749676851322}
     - target: {fileID: 8218554033396652201, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -926,6 +934,17 @@ PrefabInstance:
       insertIndex: 2
       addedObject: {fileID: 7289301978042164785}
   m_SourcePrefab: {fileID: 100100000, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+--- !u!114 &5429633749676851322 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7752459029905121586, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+  m_PrefabInstance: {fileID: 5429633749676851321}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!114 &6853645138677323982 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3824946948217852691, guid: f38608ecd7410764dbd81b959118dbce, type: 3}

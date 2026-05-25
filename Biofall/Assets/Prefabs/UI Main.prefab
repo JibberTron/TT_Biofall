@@ -334,6 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 934d6ed276a3c5c4490e5c15539f8364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ButtonFunctions
+  openingLevel: 
 --- !u!1 &1289808741774350226
 GameObject:
   m_ObjectHideFlags: 0
@@ -2639,6 +2640,10 @@ MonoBehaviour:
   batteries: 0
   pebbles: 0
   ammo: 0
+  oralAntibodies: 0
+  injectionAntibodies: 0
+  keys: 0
+  hasFlashlight: 0
 --- !u!1 &5670957330207621802
 GameObject:
   m_ObjectHideFlags: 0
@@ -3348,9 +3353,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5147096972338104015}
-  - {fileID: 6948141630889442809}
   - {fileID: 6543472635863668044}
   - {fileID: 8259883388496607721}
+  - {fileID: 6948141630889442809}
   - {fileID: 1495034069687765957}
   - {fileID: 4789446360928714024}
   - {fileID: 14758983564328409}

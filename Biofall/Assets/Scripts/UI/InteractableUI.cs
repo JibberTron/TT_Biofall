@@ -32,11 +32,11 @@ public class InteractionPromptDetector : MonoBehaviour
             return;
         }
 
-        Ray ray = new Ray(playerCamera.transform.position + playerCamera.transform.forward * 0.5f, playerCamera.transform.forward);
+        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
 
         bool isLookingAtInteractable = Physics.Raycast(ray, out RaycastHit hit, interactDist, interactMask);
 
-        promptText.gameObject.SetActive(isLookingAtInteractable);
+        promptText.enabled = isLookingAtInteractable;
 
         if (isLookingAtInteractable)
         {

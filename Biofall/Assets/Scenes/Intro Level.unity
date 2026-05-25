@@ -168260,6 +168260,14 @@ PrefabInstance:
       propertyPath: maxHP
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 2425248131537344140, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
+      propertyPath: damage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629264132253655610, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
+      propertyPath: roamSpeed
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2629264132253655610, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
       propertyPath: chaseSpeed
       value: 3
@@ -168307,6 +168315,10 @@ PrefabInstance:
     - target: {fileID: 8699673031127768025, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
       propertyPath: activeState
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8699673031127768025, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
+      propertyPath: detectionRange
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8699673031127768025, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
       propertyPath: incapacitatedTimer

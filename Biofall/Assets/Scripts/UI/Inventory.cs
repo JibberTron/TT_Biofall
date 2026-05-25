@@ -12,7 +12,7 @@ public class Inventory : MonoBehaviour
         Pebbles
     }
 
-    [Header("inventory")]
+    [Header("Inventory")]
     [SerializeField] private PlayerInventory inventory;
 
     [Header("Slot Images")]
@@ -30,16 +30,19 @@ public class Inventory : MonoBehaviour
     [SerializeField] private TMP_Text batteryText;
     [SerializeField] private TMP_Text pebbleText;
 
+    private InventoryItems currentSlot = InventoryItems.Gun;
+    private bool hasGun;
 
-    private InventoryItems currentSlot;
-
- 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         Scroll();
         Slot();
         UpdateInventoryUI();
+
+        if(GameObject.FindFirstObjectByType<GunManager>()  != null )
+        {
+            hasGun = true;
+        }
     }
 
     void Scroll()
@@ -50,6 +53,7 @@ public class Inventory : MonoBehaviour
         {
             CycleSlot(1);
         }
+
         else if(scroll < 0f)
         {
             CycleSlot(-1);
@@ -64,7 +68,7 @@ public class Inventory : MonoBehaviour
 
         currentSlot = (InventoryItems)nextItem;
 
-        Debug.Log("Current Slot: " + currentSlot);
+        Debug.Log("Current Slot:" + currentSlot);
     }
 
     void Slot()
@@ -76,13 +80,11 @@ public class Inventory : MonoBehaviour
         switch(currentSlot)
         {
             case InventoryItems.Gun:
-                gunSlot.gameObject.SetActive(true); 
+                gunSlot.gameObject.SetActive(true);
                 break;
-
             case InventoryItems.Batteries:
                 batterySlot.gameObject.SetActive(true);
                 break;
-
             case InventoryItems.Pebbles:
                 pebbleSlot.gameObject.SetActive(true);
                 break;
@@ -95,12 +97,12 @@ public class Inventory : MonoBehaviour
         batteryText.text = inventory.Batteries.ToString();
         pebbleText.text = inventory.Pebbles.ToString();
 
-        gunIcon.enabled = inventory.Ammo > 0;
-        batteryIcon.enabled = inventory.Batteries > 0;
+        gunIcon.enabled = hasGun;
+        batteryIcon.enabled = true;
         pebbleIcon.enabled = inventory.Pebbles > 0;
 
-        ammoText.enabled = inventory.Ammo > 0;
-        batteryText.enabled = inventory.Batteries > 0;
+        ammoText.enabled = hasGun;
+        batteryText.enabled = true;
         pebbleText.enabled = inventory.Pebbles > 0;
     }
 }

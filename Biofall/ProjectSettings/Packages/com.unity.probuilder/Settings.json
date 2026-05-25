@@ -94,11 +94,7 @@
             {
                 "type": "System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "ShapeBuilder.ActiveShapeIndex",
-<<<<<<< HEAD
                 "value": "{\"m_Value\":3}"
-=======
-                "value": "{\"m_Value\":6}"
->>>>>>> 7d14367acd5766870e2dadb5e902fab1f5fd3d6e
             },
             {
                 "type": "UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",

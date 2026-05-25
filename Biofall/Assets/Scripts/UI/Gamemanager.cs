@@ -82,12 +82,6 @@ public class Gamemanager : MonoBehaviour
                StateUnpause();
             }
         }
-
-        //temp to debug
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            Win();
-        }
     }
 
 

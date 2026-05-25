@@ -774,10 +774,6 @@ PrefabInstance:
       propertyPath: inventory
       value: 
       objectReference: {fileID: 1833203397}
-    - target: {fileID: 225696838189890881, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
-      propertyPath: playerCamera
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 7447372919860816467, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
       propertyPath: m_Name
       value: UI Main

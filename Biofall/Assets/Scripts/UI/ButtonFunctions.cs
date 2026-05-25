@@ -3,14 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class ButtonFunctions : MonoBehaviour
 {
-   public void Resume()
+    [SerializeField] string openingScene;
+    public void Resume()
     {
         Gamemanager.instance.StateUnpause();
     }
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(openingScene);
         Gamemanager.instance.StateUnpause();
     }
 

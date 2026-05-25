@@ -85,6 +85,7 @@ public class enemyBrain : MonoBehaviour
     }
     public void SetActiveState(EnemyActiveState _state)
     {
+        activeState = _state;
         if(_state == EnemyActiveState.ACTIVE)
         {
             StartCoroutine(StartAfterIdle());

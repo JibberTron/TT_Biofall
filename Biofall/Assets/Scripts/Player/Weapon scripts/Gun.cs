@@ -35,6 +35,7 @@ public class Gun : MonoBehaviour
     void Start()
     {
         currentAmmo = maxAmmo;
+        UpdateAmmoHUD();
     }
 
     void Update()
@@ -65,6 +66,8 @@ public class Gun : MonoBehaviour
         animator.SetTrigger("Shoot");
         nextFireTime = Time.time + fireRate;
         currentAmmo--;
+
+        UpdateAmmoHUD();
 
         if (muzzleFlash != null)
             muzzleFlash.Play();
@@ -103,8 +106,9 @@ public class Gun : MonoBehaviour
             if (dmg != null)
                 dmg.TakeDamage(10);
         }
-        else { 
-            Debug.Log("Hit nothing"); 
+        else
+        {
+            Debug.Log("Hit nothing");
         }
     }
 
@@ -134,9 +138,22 @@ public class Gun : MonoBehaviour
         currentAmmo += pulled;
         totalAmmo -= pulled;
         isReloading = false;
+
+        UpdateAmmoHUD();
     }
 
-    public void AddAmmo(int amount) => totalAmmo += amount;
+    void UpdateAmmoHUD()
+    {
+        if (Gamemanager.instance != null)
+            Gamemanager.instance.GunAmmo();
+    }
+
+    public void AddAmmo(int amount)
+    {
+        totalAmmo += amount;
+        UpdateAmmoHUD();
+    }
+
     public int GetCurrentAmmo() => currentAmmo;
     public int GetMaxAmmo() => maxAmmo;
     public int GetTotalAmmo() => totalAmmo;

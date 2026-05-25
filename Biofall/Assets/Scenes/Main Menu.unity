@@ -1921,7 +1921,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef3d8a17a652048418e030ec31606b8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuController
-  gameSceneName: Showcase Level
+  gameSceneName: Intro Level
   mainMenu: {fileID: 1124945604}
   controlPanel: {fileID: 1595123772}
   quit: {fileID: 378104390}

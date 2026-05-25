@@ -58,6 +58,15 @@ public class PebbleThrower : MonoBehaviour
 
         GameObject pebble = Instantiate(pebblePrefab, throwOrigin.position, Quaternion.LookRotation(throwDirection));
 
+        Collider pebbleCollider = pebble.GetComponentInChildren<Collider>();
+
+        Collider[] playerColliders = GetComponentsInChildren<Collider>();
+
+        foreach (Collider playerCollider in playerColliders)
+        {
+            Physics.IgnoreCollision(pebbleCollider, playerCollider);
+        }
+
         Rigidbody rb = pebble.GetComponent<Rigidbody>();
 
         if (rb != null)

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,6 +24,14 @@ public class OralAntibodyPickup : MonoBehaviour, IInteractable
             if(inf != null)
             {
                 inf.UseOralAntibody();
+                
+                PlayerInventory inventory = player.GetComponent<PlayerInventory>();
+
+                if(inventory != null)
+                {
+                    inventory.AddOralAntibody(1);
+                    Debug.Log("Oral Antibody Count: " + inventory.OralAntibodies);
+                }
                 Debug.Log("Oral antibody picked up!");
                 Destroy(gameObject);
             }

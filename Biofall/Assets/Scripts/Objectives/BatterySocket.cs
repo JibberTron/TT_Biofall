@@ -8,11 +8,20 @@ public class BatterySocket : MonoBehaviour, IInteractable
     [SerializeField] private int insertedBatteries = 0;
     [SerializeField] private TMP_Text batteryCountText;
 
+    [Header("Audio")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip insertBatterySound;
+    [SerializeField] private AudioClip removeBatterySound;
+    [SerializeField] private AudioClip poweredOnSound;
+    [SerializeField] private AudioClip failedSound;
+
     [Header("Power Target")]
-    [SerializeField] private PowerReceiver[] powerReceivers;
+    [SerializeField] private PowerReceiver[] powerReceivers = new PowerReceiver[0];
 
     [Header("Behavior")]
     [SerializeField] private bool allowBatteryRemoval = true;
+    [SerializeField] bool shouldActivateEnemy = false;
+    [SerializeField]enemyBrain enemyRef;
 
     private void Start()
     {
@@ -55,12 +64,26 @@ public class BatterySocket : MonoBehaviour, IInteractable
         UpdateBatteryText();
     }
 
+    private void PlaySound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+    }
+
     private void InsertBattery(PlayerInventory inventory)
     {
         if (inventory.TryUseBattery())
         {
             insertedBatteries++;
+            PlaySound(insertBatterySound);
+
             Debug.Log($"Inserted battery: {insertedBatteries}/{requiredBatteries}");
+        }
+        else
+        {
+            PlaySound(failedSound);
         }
     }
 
@@ -76,14 +99,18 @@ public class BatterySocket : MonoBehaviour, IInteractable
     {
         if (insertedBatteries <= 0)
         {
+            PlaySound(failedSound);
             return;
         }
 
         insertedBatteries--;
         inventory.AddBatteries(1);
+        PlaySound(removeBatterySound);
 
         Debug.Log($"Removed battery: {insertedBatteries}/{requiredBatteries}");
     }
+
+    private bool wasPowered;
 
     private void UpdatePowerState()
     {
@@ -91,10 +118,32 @@ public class BatterySocket : MonoBehaviour, IInteractable
 
         foreach (PowerReceiver receiver in powerReceivers)
         {
-            if (receiver != null)
+            if (receiver == null)
             {
-                receiver.SetPowered(isPowered);
+                continue;
+            }
+
+            if (isPowered && !wasPowered)
+            {
+                receiver.AddPowerSource();
+            }
+            else if (!isPowered && wasPowered)
+            {
+                receiver.RemovePowerSource();
             }
         }
+        if (isPowered)
+        {
+            if (shouldActivateEnemy)
+            {
+                enemyRef.SetActiveState(enemyBrain.EnemyActiveState.ACTIVE);
+            }
+        }
+        if (isPowered && !wasPowered)
+        {
+            PlaySound(poweredOnSound);
+        }
+
+        wasPowered = isPowered;
     }
 }

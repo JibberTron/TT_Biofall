@@ -110,14 +110,17 @@ GameObject:
   m_Component:
   - component: {fileID: 3043540091997229479}
   - component: {fileID: 1024248202996773885}
+  - component: {fileID: 8699673031127768025}
+  - component: {fileID: 2629264132253655610}
+  - component: {fileID: 1078933468545308156}
   - component: {fileID: 3851839100965114764}
   - component: {fileID: 1231940820632185483}
-  - component: {fileID: 1078933468545308156}
-  - component: {fileID: 2629264132253655610}
-  - component: {fileID: 8699673031127768025}
   - component: {fileID: 562107651166037661}
   - component: {fileID: 3654914916954126228}
   - component: {fileID: 8286086348768244845}
+  - component: {fileID: 5313180879811124971}
+  - component: {fileID: 825788741480047642}
+  - component: {fileID: 8274190594161963781}
   m_Layer: 7
   m_Name: Enemy_Main
   m_TagString: Enemy
@@ -158,6 +161,51 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   armCollider: {fileID: 9027883659155267022}
+--- !u!114 &8699673031127768025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401403973634559812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ae10b54a7b4aea4f81be48c80be494a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::enemyAI
+  detectionRange: 8
+  outOfDetectionRange: 18
+  investigateTime: 3
+  detectionAngle: 90
+  incapacitatedTimer: 5
+  incapacitatedDelay: 6
+--- !u!114 &2629264132253655610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401403973634559812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f9e495ad3e62854c94a3e86aee836e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::enemyMovement
+  roamSpeed: 1.5
+  chaseSpeed: 2
+--- !u!114 &1078933468545308156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401403973634559812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24f7f192409ba9a4888a64fe7ca3b787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::enemyHealth
+  maxHP: 10
 --- !u!114 &3851839100965114764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,54 +232,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c726cd964192624ea1092b1f40449ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyAnims
---- !u!114 &1078933468545308156
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401403973634559812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24f7f192409ba9a4888a64fe7ca3b787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::enemyHealth
-  maxHP: 10
---- !u!114 &2629264132253655610
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401403973634559812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f9e495ad3e62854c94a3e86aee836e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::enemyMovement
-  roamSpeed: 1.5
-  chaseSpeed: 2
-  pathToDelay: 0.2
---- !u!114 &8699673031127768025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 401403973634559812}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ae10b54a7b4aea4f81be48c80be494a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::enemyAI
-  detectionRange: 8
-  outOfDetectionRange: 18
-  investigateTime: 3
-  detectionAngle: 90
-  incapacitatedTimer: 5
-  incapacitatedDelay: 6
-  idleDelay: 1
-  currentState: 0
 --- !u!95 &562107651166037661
 Animator:
   serializedVersion: 7
@@ -245,7 +245,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 862715a3c395dac4fbcf96faa386c098, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -267,7 +267,7 @@ NavMeshAgent:
   m_Speed: 1.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 350
+  m_AngularSpeed: 500
   m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 0
@@ -299,6 +299,147 @@ CapsuleCollider:
   m_Height: 2.22
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &5313180879811124971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401403973634559812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a55e80cc7d2ad34b8db51026e860f53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::enemySounds
+  sfx_Source: {fileID: 825788741480047642}
+  enemyDeath: {fileID: 8300000, guid: 28564e1eb58b7a648bb968f720670652, type: 3}
+  enemyWalk: {fileID: 8300000, guid: 03847df57a0051f40922c4eb74dcb084, type: 3}
+  enemyHit: {fileID: 8300000, guid: b6a0b2aa28cb7fe4a832d5307fa08296, type: 3}
+  enemyAttack: {fileID: 8300000, guid: beffcd427f441f04f8f9eb393b695c72, type: 3}
+--- !u!82 &825788741480047642
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401403973634559812}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.5
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 12
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!54 &8274190594161963781
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 401403973634559812}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &477054489217956783
 GameObject:
   m_ObjectHideFlags: 0

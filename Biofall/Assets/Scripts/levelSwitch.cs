@@ -1,16 +1,25 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class levelSwitch : MonoBehaviour
 {
     [SerializeField] string nextLevel;
-    Animator transition;
-
+    [SerializeField]Animator transition;
+    [SerializeField] Image fade;
+    
     void Start()
     {
-        transition = Gamemanager.instance.GetComponentInParent<Animator>();
-        Gamemanager.instance.transitionScreen.enabled = false;
+        if(transition == null)
+        {
+            Debug.Log("Animator == null");
+        }
+        if(fade == null)
+        {
+            Debug.Log("Image == null");
+        }
+        fade.enabled = false;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -19,7 +28,7 @@ public class levelSwitch : MonoBehaviour
     }
     IEnumerator LoadScene()
     {
-        Gamemanager.instance.transitionScreen.enabled = true;
+        fade.enabled = true;
         transition.SetTrigger("Start");
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(nextLevel);

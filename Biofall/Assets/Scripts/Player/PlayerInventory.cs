@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -11,10 +12,21 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private int batteries;
     [SerializeField] private int pebbles;
     [SerializeField] private int ammo;
+    [SerializeField] private int oralAntibodies;
+    [SerializeField] private int injectionAntibodies;
+    [SerializeField] private int keys;
+    [SerializeField] private bool hasFlashlight;
+
 
     public int Batteries => batteries;
     public int Pebbles => pebbles;
     public int Ammo => ammo;
+
+    public int OralAntibodies => oralAntibodies;
+    public int InjectionAntibodies => injectionAntibodies;
+    public int Keys => keys;
+
+    public bool HasFlashlight => hasFlashlight;
 
     public void AddBatteries(int amount)
     {
@@ -71,5 +83,29 @@ public class PlayerInventory : MonoBehaviour
         ammo -= amount;
         Debug.Log($"Ammo used. Ammo left: {ammo}/{maxAmmo}");
         return true;
+    }
+
+    public void AddOralAntibody(int amount)
+    {
+        oralAntibodies += amount;
+        Debug.Log($"Oral Antibodies: {oralAntibodies}");
+    }
+
+    public void AddInjectionAntibody(int amount)
+    {
+        injectionAntibodies += amount;
+        Debug.Log($"Injection Antibodies: {injectionAntibodies}");
+    }
+
+    public void AddKey(int amount)
+    {
+        keys += amount;
+        Debug.Log($"Keys: {keys}");
+    }
+
+    public void GiveFlashlight()
+    {
+        hasFlashlight = true;
+        Debug.Log("Flashlight collected");
     }
 }

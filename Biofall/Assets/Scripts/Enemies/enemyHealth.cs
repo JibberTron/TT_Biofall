@@ -4,7 +4,7 @@ public class enemyHealth : MonoBehaviour, iDamage
 {
     enemyReferences enemyRef;
 
-    [Header("Health")]
+    [Header("-----AI Health-----")]
     [Range(1, 150)][SerializeField] int maxHP = 10;
 
     int currentHP = 100;
@@ -36,12 +36,16 @@ public class enemyHealth : MonoBehaviour, iDamage
     public void TakeDamage(int amount)
     {
         if (isDead || incapInvinsibility) return;
-
+        
         currentHP -= amount;
 
         if (currentHP <= 0)
         {
             isDead = true;
+            enemyRef.Sounds.PlayClip(enemyRef.Sounds.EnemyDeath);
+            return;
         }
+        enemyRef.Sounds.PlayClip(enemyRef.Sounds.EnemyHit);
+
     }
 }

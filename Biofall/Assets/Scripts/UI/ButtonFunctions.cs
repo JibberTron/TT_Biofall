@@ -4,10 +4,11 @@ using UnityEngine.SceneManagement;
 public class ButtonFunctions : MonoBehaviour
 {
 
+
+
     [SerializeField] string openingLevel;
 
     public void Resume()
-
     {
         Gamemanager.instance.StateUnpause();
     }
@@ -16,6 +17,7 @@ public class ButtonFunctions : MonoBehaviour
     {
 
         SceneManager.LoadScene(openingLevel);
+
         Gamemanager.instance.StateUnpause();
     }
 

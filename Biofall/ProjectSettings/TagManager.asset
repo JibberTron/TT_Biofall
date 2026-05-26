@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Door
   - Transition Screen
+  - Start
   layers:
   - Default
   - TransparentFX

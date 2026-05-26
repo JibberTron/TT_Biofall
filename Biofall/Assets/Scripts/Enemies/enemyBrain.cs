@@ -160,9 +160,11 @@ public class enemyBrain : MonoBehaviour
     void ChangeState(EnemyState _newState)
     {
         if (currentState == _newState || isAttacking) return;
-
+        Debug.Log($"Trying to change to {_newState}");
+        Debug.Log($"Distance - {Vector3.Distance(enemyRef.Player.transform.position, transform.position)}");
         if (stateLockTimer < stateLockTime)
         {
+            Debug.Log("BLOCKED BY STATE LOCK");
             return;
         }
 

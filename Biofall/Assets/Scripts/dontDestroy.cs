@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class dontDestroy : MonoBehaviour
 {
@@ -16,4 +16,4 @@ public class dontDestroy : MonoBehaviour
             Destroy(gameObject);
         }
     }
-}
+}*/

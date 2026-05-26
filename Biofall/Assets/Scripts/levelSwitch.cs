@@ -8,22 +8,22 @@ public class levelSwitch : MonoBehaviour
     [SerializeField] string nextLevel;
     [SerializeField]Animator transition;
     [SerializeField] Image fade;
-    [SerializeField] GameObject nextStartingLocation;
-    GameObject player;
+    //[SerializeField] GameObject nextStartingLocation;
+    //GameObject player;
     
     void Awake()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        //player = GameObject.FindGameObjectWithTag("Player");
         
-        if (player == null) return;
+        //if (player == null) return;
     }
     void Start()
     {     
-        if(nextStartingLocation == null)
-        {
-            Debug.Log("Next levels Location is null, auto setting");
-            nextStartingLocation = GameObject.FindGameObjectWithTag("Start");
-        }
+        //if(nextStartingLocation == null)
+        //{
+        //    Debug.Log("Next levels Location is null, auto setting");
+        //    nextStartingLocation = GameObject.FindGameObjectWithTag("Start");
+        //}
         if (transition == null)
         {
             Debug.Log("Animator == null");
@@ -49,6 +49,6 @@ public class levelSwitch : MonoBehaviour
         
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(nextLevel);
-        player.transform.position = nextStartingLocation.transform.position;
+        //player.transform.position = nextStartingLocation.transform.position;
     }
 }

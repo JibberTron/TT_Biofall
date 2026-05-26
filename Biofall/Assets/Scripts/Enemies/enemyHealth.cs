@@ -12,6 +12,7 @@ public class enemyHealth : MonoBehaviour, iDamage
     bool isDead = false;
     bool incapInvinsibility = false;
 
+    public int MaxHP => maxHP;
     public int CurrentHP { get { return currentHP; }  set { currentHP = value; } }
     public bool IsDead{ get { return isDead; } set { isDead = value; } }
     public bool IncapInvinsibility { get { return incapInvinsibility; } set { incapInvinsibility = value; } }

@@ -406,7 +406,7 @@ public class enemyBrain : MonoBehaviour
         health.Death(false);
 
         health.IsDead = false;
-        health.CurrentHP = 10;
+        health.CurrentHP = health.MaxHP;
         health.IncapInvinsibility = true;
 
         yield return new WaitForSeconds(incapacitatedDelay);

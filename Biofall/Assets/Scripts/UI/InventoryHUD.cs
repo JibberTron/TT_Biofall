@@ -19,17 +19,17 @@ public class InventoryHUD : MonoBehaviour
 
         if (batteryText != null)
         {
-            batteryText.text = $"Batteries: {inventory.Batteries}";
+            batteryText.text = $"{inventory.Batteries}";
         }
 
         if (pebbleText != null)
         {
-            pebbleText.text = $"Pebbles: {inventory.Pebbles}";
+            pebbleText.text = $"{inventory.Pebbles}";
         }
 
         if (ammoText != null)
         {
-            ammoText.text = $"Ammo: {inventory.Ammo}";
+            ammoText.text = $"{inventory.Ammo}";
         }
     }
 }

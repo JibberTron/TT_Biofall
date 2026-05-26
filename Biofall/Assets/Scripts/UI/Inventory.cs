@@ -14,6 +14,7 @@ public class Inventory : MonoBehaviour
 
     [Header("Inventory")]
     [SerializeField] private PlayerInventory inventory;
+    [SerializeField] private GunManager gunManager;
 
     [Header("Slot Images")]
     [SerializeField] private Image gunSlot;
@@ -32,6 +33,7 @@ public class Inventory : MonoBehaviour
 
     private InventoryItems currentSlot = InventoryItems.Gun;
     private bool hasGun;
+    private Gun gun;
 
     private void Update()
     {
@@ -60,15 +62,40 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    bool CanUseSlot(InventoryItems item)
+    {
+        switch (item)
+        {
+            case InventoryItems.Gun:
+                return gunManager != null && gunManager.HasGun();
+
+            case InventoryItems.Batteries:
+                return true;
+
+            case InventoryItems.Pebbles:
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
     void CycleSlot(int direction)
     {
         int itemsCount = System.Enum.GetValues(typeof(InventoryItems)).Length;
 
-        int nextItem = ((int)currentSlot + direction + itemsCount) % itemsCount;
+        for (int i = 0; i < itemsCount; i++)
+        {
+            int nextItem = ((int)currentSlot + direction + itemsCount) % itemsCount;
 
-        currentSlot = (InventoryItems)nextItem;
+            currentSlot = (InventoryItems)nextItem;
 
-        Debug.Log("Current Slot:" + currentSlot);
+            if (CanUseSlot(currentSlot))
+            {
+                Debug.Log("Current Slot:" + currentSlot);
+                return;
+            }
+        }
     }
 
     void Slot()
@@ -93,16 +120,30 @@ public class Inventory : MonoBehaviour
 
     void UpdateInventoryUI()
     {
-        ammoText.text = inventory.Ammo.ToString();
         batteryText.text = inventory.Batteries.ToString();
         pebbleText.text = inventory.Pebbles.ToString();
 
-        gunIcon.enabled = hasGun;
         batteryIcon.enabled = true;
         pebbleIcon.enabled = inventory.Pebbles > 0;
 
-        ammoText.enabled = hasGun;
         batteryText.enabled = true;
         pebbleText.enabled = inventory.Pebbles > 0;
+
+        if (gunManager != null && gunManager.HasGun())
+        {
+            gunIcon.enabled = true;
+
+            if (gun != null)
+            {
+                ammoText.text = $"{gun.GetCurrentAmmo()} / {gun.GetTotalAmmo()}";
+            }
+
+            ammoText.enabled = true;
+        }
+        else
+        {
+            gunIcon.enabled = false;
+            ammoText.enabled = false;
+        }
     }
 }

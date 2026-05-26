@@ -79,7 +79,7 @@ public class PlayerInventory : MonoBehaviour
             Debug.Log("Not enough ammo.");
             return false;
         }
-
+    
         ammo -= amount;
         Debug.Log($"Ammo used. Ammo left: {ammo}/{maxAmmo}");
         return true;

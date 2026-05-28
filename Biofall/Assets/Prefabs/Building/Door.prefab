@@ -270,6 +270,7 @@ MonoBehaviour:
   sfx_Sounds: {fileID: 7857098908386437762}
   doorOpen: {fileID: 8300000, guid: 5b3a494eed11fc04aa3c7f2eac14a06c, type: 3}
   doorClosed: {fileID: 8300000, guid: d283971c6fec43a419dbec910e91622b, type: 3}
+  enemyOpen: {fileID: 4451075760454487449}
 --- !u!82 &7857098908386437762
 AudioSource:
   m_ObjectHideFlags: 0

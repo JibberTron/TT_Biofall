@@ -9,10 +9,13 @@ public class DoorInteract : MonoBehaviour, IInteractable
     [SerializeField] AudioSource sfx_Sounds;
     [SerializeField] AudioClip doorOpen;
     [SerializeField] AudioClip doorClosed;
+    [SerializeField] BoxCollider enemyOpen;
     NavMeshObstacle obst;
+    PowerReceiver blocker;
 
     bool isOpen = false;
     bool doorGuard;
+    bool isBlocked;
 
     void Start()
     {
@@ -31,9 +34,27 @@ public class DoorInteract : MonoBehaviour, IInteractable
 
         }
     }
+    void OnTriggerStay(Collider other)
+    {
+        if(other.CompareTag("Blocked"))
+        {         
+            blocker = other.GetComponent<PowerReceiver>();
+            if (blocker == null) return;
+            if(blocker.IsPowered)
+            {
+                isBlocked = false;
+                enemyOpen.enabled = true;
+            }
+            else
+            {
+                isBlocked = true;
+                enemyOpen.enabled = false;
+            }
+        }
+    }
     void OnTriggerEnter(Collider other)
     {
-        if (doorGuard) return;
+        if (doorGuard || isBlocked) return;
         if(other.CompareTag("Enemy"))
         {
             StartCoroutine(OpenDoor());

@@ -8,6 +8,8 @@ TagManager:
   - Door
   - Transition Screen
   - Start
+  - NoteUI
+  - Blocked
   layers:
   - Default
   - TransparentFX

@@ -8,11 +8,15 @@ public class enemySounds : MonoBehaviour
     [SerializeField] AudioClip enemyWalk;
     [SerializeField] AudioClip enemyHit;
     [SerializeField] AudioClip enemyAttack;
+    [SerializeField] AudioClip enemyChase;
+    [SerializeField] AudioClip enemyLose;
 
     public AudioClip EnemyDeath => enemyDeath;
     public AudioClip EnemyWalk => enemyWalk;
     public AudioClip EnemyHit => enemyHit;
     public AudioClip EnemyAttack => enemyAttack;
+    public AudioClip EnemyChase => enemyChase;
+    public AudioClip EnemyLose => enemyLose;
 
     public void PlayClip(AudioClip _clip)
     {

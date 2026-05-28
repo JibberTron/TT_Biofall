@@ -179,6 +179,7 @@ MonoBehaviour:
   detectionAngle: 90
   incapacitatedTimer: 5
   incapacitatedDelay: 6
+  activeState: 0
 --- !u!114 &2629264132253655610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,6 +317,8 @@ MonoBehaviour:
   enemyWalk: {fileID: 8300000, guid: 03847df57a0051f40922c4eb74dcb084, type: 3}
   enemyHit: {fileID: 8300000, guid: b6a0b2aa28cb7fe4a832d5307fa08296, type: 3}
   enemyAttack: {fileID: 8300000, guid: beffcd427f441f04f8f9eb393b695c72, type: 3}
+  enemyChase: {fileID: 8300000, guid: 30735d21275008d48ab622009b8244d0, type: 3}
+  enemyLose: {fileID: 8300000, guid: 48b4060d5512d364aa45f6b0bd777043, type: 3}
 --- !u!82 &825788741480047642
 AudioSource:
   m_ObjectHideFlags: 0
@@ -703,7 +706,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83d042a62fd7d7741a5268ab5a14359c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyAttack
-  attackDelay: 2.6
   damage: 5
 --- !u!1 &1730907900315678432
 GameObject:

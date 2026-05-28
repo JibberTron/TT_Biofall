@@ -62,7 +62,7 @@ public class DoorInteract : MonoBehaviour, IInteractable
     }
     IEnumerator OpenDoor()
     {
-        if (!doorGuard)
+        if (!doorGuard && !isBlocked)
         {
             Quaternion beginRot = hinge.localRotation;
             Quaternion endRot = Quaternion.Euler(0, 90, 0);

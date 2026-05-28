@@ -56,6 +56,7 @@ public class enemyBrain : MonoBehaviour
     bool isAttacking;
     bool gavUpOnHiding = false;
     bool isInvestigating = false;
+    bool hasPlayedChaseSound;
 
     void Awake()
     {
@@ -160,11 +161,9 @@ public class enemyBrain : MonoBehaviour
     void ChangeState(EnemyState _newState)
     {
         if (currentState == _newState || isAttacking) return;
-        Debug.Log($"Trying to change to {_newState}");
-        Debug.Log($"Distance - {Vector3.Distance(enemyRef.Player.transform.position, transform.position)}");
+
         if (stateLockTimer < stateLockTime)
         {
-            Debug.Log("BLOCKED BY STATE LOCK");
             return;
         }
 
@@ -290,6 +289,12 @@ public class enemyBrain : MonoBehaviour
     
         if (PlayerFound() && currentState != EnemyState.INVESTIGATING_HIDING)
         {
+            if(!hasPlayedChaseSound)
+            {
+                hasPlayedChaseSound = true;
+                enemyRef.Sounds.PlayClip(enemyRef.Sounds.EnemyChase);
+            }
+            
             ChangeState(EnemyState.CHASING);
             return;
         }
@@ -312,6 +317,8 @@ public class enemyBrain : MonoBehaviour
         if (Vector3.Distance(transform.position, player.transform.position) >= outOfDetectionRange)
         {
             movement.RemoveSoundPoints();
+            hasPlayedChaseSound = false;
+            
             ChangeState(EnemyState.INVESTIGATING);
             return;
         }

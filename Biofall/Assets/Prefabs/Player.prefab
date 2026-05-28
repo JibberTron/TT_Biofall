@@ -5281,7 +5281,7 @@ MonoBehaviour:
   collisionRadius: 0.2
   collisionMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   recoilRecovery: 50
   deathCamHeight: 5
   deathCamSpeed: 2
@@ -5536,6 +5536,10 @@ MonoBehaviour:
   batteries: 0
   pebbles: 5
   ammo: 0
+  oralAntibodies: 0
+  injectionAntibodies: 0
+  keys: 0
+  hasFlashlight: 0
 --- !u!114 &7756606161862089630
 MonoBehaviour:
   m_ObjectHideFlags: 0

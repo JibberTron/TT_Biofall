@@ -5,7 +5,7 @@ public class enemyAttack : MonoBehaviour
     enemyReferences enemyRef;
 
     [Header("-----AI Attack Stats-----")]
-    [Range(2.6f, 5.2f)][SerializeField] float attackDelay = 2.6f;
+    float attackDelay = 1.1f;
     [Range(0, 100)][SerializeField] int damage = 5;
     [HideInInspector]public float AttackDelay => attackDelay;
     [HideInInspector]public float AttackDistance => attackDistance;

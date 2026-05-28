@@ -202106,7 +202106,7 @@ PrefabInstance:
       objectReference: {fileID: 882955671}
     - target: {fileID: 3758178195117164009, guid: 6740e733f39ee7847850be45ca3bb255, type: 3}
       propertyPath: insertedBatteries
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3758178195117164009, guid: 6740e733f39ee7847850be45ca3bb255, type: 3}
       propertyPath: requiredBatteries

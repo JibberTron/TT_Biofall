@@ -10,12 +10,15 @@ public class GarageDoorInteract : MonoBehaviour, IInteractable
     [SerializeField] float speed = 2f;
     [SerializeField] float interactCooldown = 1f;
 
+    PowerReceiver blocker;
+
     float cooldownTimer;
     Vector3 closedPos;
     Vector3 openPos;
 
     float t = 0f;      
     bool isOpen = false;
+    bool isBlocked;
 
     void Start()
     {
@@ -31,9 +34,25 @@ public class GarageDoorInteract : MonoBehaviour, IInteractable
 
         transform.position = Vector3.Lerp(closedPos, openPos, t);
     }
-
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Blocked"))
+        {
+            blocker = other.GetComponent<PowerReceiver>();
+            if (blocker == null) return;
+            if (blocker.IsPowered)
+            {
+                isBlocked = false;
+            }
+            else
+            {
+                isBlocked = true;
+            }
+        }
+    }
     public void Interact()
     {
+        if (isBlocked) return;
         if (cooldownTimer > 0f) return;
 
         isOpen = !isOpen;

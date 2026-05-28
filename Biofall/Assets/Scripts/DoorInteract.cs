@@ -10,6 +10,7 @@ public class DoorInteract : MonoBehaviour, IInteractable
     [SerializeField] AudioClip doorOpen;
     [SerializeField] AudioClip doorClosed;
     [SerializeField] BoxCollider enemyOpen;
+
     NavMeshObstacle obst;
     PowerReceiver blocker;
 

@@ -123,6 +123,20 @@ public class PlayerController : MonoBehaviour
         if (emptyCooldown > 0f)
             emptyCooldown -= Time.deltaTime;
 
+        bool hiding = hidingSystem != null && hidingSystem.IsHiding();
+
+        if (hiding)
+        {
+            moveDir = Vector3.zero;
+            playerVel = Vector3.zero;
+
+            animator.SetFloat("Speed", 0f);
+            animator.SetFloat("Horizontal", 0f);
+            animator.SetBool("Sprint", false);
+
+            return;
+        }
+
         if (controller.isGrounded && playerVel.y < 0)
             playerVel.y = -2f;
 
@@ -137,7 +151,6 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        bool hiding = hidingSystem != null && hidingSystem.IsHiding();
         bool hallucinating = hallucination != null && hallucination.IsHallucinating();
         bool isSprinting = Input.GetKey(KeyCode.LeftShift) && !hiding && !hallucinating;
 

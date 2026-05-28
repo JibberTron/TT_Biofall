@@ -5418,7 +5418,7 @@ GameObject:
   - component: {fileID: 6991683276396588272}
   - component: {fileID: 8634127382422413471}
   - component: {fileID: 2232378662137835250}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -5513,7 +5513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d73b4716f7eb7f41a4fe09396ec1ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInteraction
-  interactDist: 20
+  interactDist: 4
   playerCamera: {fileID: 2068883245127249906}
   interactMask:
     serializedVersion: 2
@@ -5611,7 +5611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InfectionSystem
   maxInfection: 100
-  currentInfection: 75
+  currentInfection: 0
   baseTickRate: 0.1
   oralRecovery: 10
   oralSlowAmount: 0.05
@@ -5699,6 +5699,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b3ca5a7ffdeba40b9a03b3ac377579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingSystem
+  scriptsToDisableWhileHiding:
+  - {fileID: 1510492274118259377}
+  - {fileID: 2637394459136125735}
+  - {fileID: 7870568859748509292}
+  - {fileID: 8287386097019901355}
+  - {fileID: 8544593052464673218}
+  - {fileID: 7756606161862089630}
+  exitHideKey: 102
+  hidingPromptUI: {fileID: 0}
+  playerVisual: {fileID: 5756001898311691424}
 --- !u!114 &8287386097019901355
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,38 +1,28 @@
 using UnityEngine;
 
-public class HidingSpot : MonoBehaviour
+public class HidingSpot : MonoBehaviour, IInteractable
 {
-    [SerializeField] KeyCode hideKey = KeyCode.F;
+    [SerializeField] private Transform hidePoint;
+    [SerializeField] private Transform exitPoint;
+    [SerializeField] private Camera hidingCamera;
 
-    HidingSystem hidingSystem;
-    bool playerInRange;
-
-    void OnTriggerEnter(Collider other)
+    public void Interact()
     {
-        HidingSystem hs = other.GetComponent<HidingSystem>();
-        if (hs != null)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        if (player == null) return;
+
+        HidingSystem hidingSystem = player.GetComponent<HidingSystem>();
+
+        if (hidingSystem == null) return;
+
+        if (hidingSystem.IsHiding())
         {
-            hidingSystem = hs;
-            playerInRange = true;
-            Debug.Log("Press F to hide");
+            hidingSystem.ExitHidingSpot();
         }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.GetComponent<HidingSystem>() != null)
+        else
         {
-            if (hidingSystem != null && hidingSystem.IsHiding())
-                hidingSystem.ForceExitHiding();
-
-            hidingSystem = null;
-            playerInRange = false;
+            hidingSystem.EnterHidingSpot(hidePoint, exitPoint, hidingCamera);
         }
-    }
-
-    void Update()
-    {
-        if (playerInRange && hidingSystem != null && Input.GetKeyDown(hideKey))
-            hidingSystem.ToggleHiding();
     }
 }

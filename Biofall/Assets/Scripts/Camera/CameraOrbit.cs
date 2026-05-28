@@ -126,11 +126,12 @@ public class CameraOrbit : MonoBehaviour
                                + Vector3.up * currentOffsetY;
 
         Vector3 desiredPos = shoulderPos - rotation * Vector3.forward * currentDistance;
-        Vector3 direction = desiredPos - shoulderPos;
+        Vector3 castOrigin = target.position + Vector3.up * currentOffsetY;
+        Vector3 direction = desiredPos - castOrigin;
         float dist = direction.magnitude;
 
-        if (Physics.SphereCast(shoulderPos, collisionRadius, direction.normalized, out RaycastHit hit, dist, collisionMask))
-            transform.position = shoulderPos + direction.normalized * (hit.distance - collisionRadius);
+        if (Physics.SphereCast(castOrigin, collisionRadius, direction.normalized, out RaycastHit hit, dist, collisionMask))
+            transform.position = castOrigin + direction.normalized * (hit.distance - collisionRadius);
         else
             transform.position = desiredPos;
 

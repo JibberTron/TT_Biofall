@@ -146726,7 +146726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6874604342815177570, guid: 0866da96089b9c748ac56d9d2933ecee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 6874604342815177570, guid: 0866da96089b9c748ac56d9d2933ecee, type: 3}
       propertyPath: m_LocalPosition.z
@@ -146763,6 +146763,10 @@ PrefabInstance:
     - target: {fileID: 8495958231907993857, guid: 0866da96089b9c748ac56d9d2933ecee, type: 3}
       propertyPath: m_Name
       value: Hiding Spot (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8495958231907993857, guid: 0866da96089b9c748ac56d9d2933ecee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -150521,7 +150525,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7813213558721286989, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.40000013
+      value: 0.336
       objectReference: {fileID: 0}
     - target: {fileID: 7813213558721286989, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_LocalPosition.z
@@ -156819,7 +156823,7 @@ PrefabInstance:
     - target: {fileID: 7204411234763170935, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1956987440}
+      objectReference: {fileID: 1619890858}
     - target: {fileID: 7813213558721286989, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_LocalPosition.x
       value: 14.900001
@@ -168482,7 +168486,7 @@ PrefabInstance:
     - target: {fileID: 7204411234763170935, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1619890858}
+      objectReference: {fileID: 675739801}
     - target: {fileID: 7813213558721286989, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.5
@@ -176412,7 +176416,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3560594573985331213, guid: c2c8784841f6d78459c1a1f5d8efba8c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.7999993
+      value: 0.735
       objectReference: {fileID: 0}
     - target: {fileID: 3560594573985331213, guid: c2c8784841f6d78459c1a1f5d8efba8c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -185599,6 +185603,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Powered Object (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 9140265985518224096, guid: bef2ae36236752a4c96ea3bd37b075aa, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 4762802344286893349, guid: bef2ae36236752a4c96ea3bd37b075aa, type: 3}
@@ -186469,7 +186477,7 @@ PrefabInstance:
     - target: {fileID: 7204411234763170935, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 675739801}
+      objectReference: {fileID: 91451764}
     - target: {fileID: 7813213558721286989, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_LocalPosition.x
       value: -5.8999996
@@ -193650,6 +193658,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 955077658212096359, guid: 21f3d43fb74f25d4d85d860b4140d1d7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1237086255324219900, guid: 21f3d43fb74f25d4d85d860b4140d1d7, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.12174904
@@ -195542,6 +195554,10 @@ PrefabInstance:
     - target: {fileID: 8495958231907993857, guid: 0866da96089b9c748ac56d9d2933ecee, type: 3}
       propertyPath: m_Name
       value: Hiding Spot (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8495958231907993857, guid: 0866da96089b9c748ac56d9d2933ecee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -198716,7 +198732,7 @@ PrefabInstance:
     - target: {fileID: 7204411234763170935, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1956987440}
+      objectReference: {fileID: 1969146591}
     - target: {fileID: 7813213558721286989, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.5
@@ -199722,7 +199738,7 @@ PrefabInstance:
     - target: {fileID: 7204411234763170935, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 772195058}
+      objectReference: {fileID: 329875099}
     - target: {fileID: 7813213558721286989, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_LocalPosition.x
       value: 20.4
@@ -203393,7 +203409,7 @@ PrefabInstance:
     - target: {fileID: 2440712631996514542, guid: dfdd67ebf0932cd41a548d0e71284090, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 744169265}
+      objectReference: {fileID: 1496958255}
     - target: {fileID: 2796251830505607399, guid: dfdd67ebf0932cd41a548d0e71284090, type: 3}
       propertyPath: m_Name
       value: Flickering Light (8)
@@ -203417,7 +203433,7 @@ PrefabInstance:
     - target: {fileID: 6816248377151965595, guid: dfdd67ebf0932cd41a548d0e71284090, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 708334459}
+      objectReference: {fileID: 327815291}
     - target: {fileID: 7758387406141236231, guid: dfdd67ebf0932cd41a548d0e71284090, type: 3}
       propertyPath: flickerSpeed
       value: 0
@@ -207135,7 +207151,7 @@ PrefabInstance:
     - target: {fileID: 7204411234763170935, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1807285773}
     - target: {fileID: 7813213558721286989, guid: eff8d990756e6714081191d2f88e4e60, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.1
@@ -207448,6 +207464,10 @@ PrefabInstance:
     - target: {fileID: 8495958231907993857, guid: 0866da96089b9c748ac56d9d2933ecee, type: 3}
       propertyPath: m_Name
       value: Hiding Spot (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8495958231907993857, guid: 0866da96089b9c748ac56d9d2933ecee, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

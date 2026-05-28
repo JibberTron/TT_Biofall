@@ -76,7 +76,6 @@ public class PlayerController : MonoBehaviour
 
         if (bodyAimConstraint != null)
             bodyAimConstraint.weight = Mathf.Lerp(bodyAimConstraint.weight, targetWeight, Time.deltaTime * 10f);
-
         if (handAimConstraint != null)
             handAimConstraint.weight = Mathf.Lerp(handAimConstraint.weight, targetWeight, Time.deltaTime * 10f);
 
@@ -129,11 +128,9 @@ public class PlayerController : MonoBehaviour
         {
             moveDir = Vector3.zero;
             playerVel = Vector3.zero;
-
             animator.SetFloat("Speed", 0f);
             animator.SetFloat("Horizontal", 0f);
             animator.SetBool("Sprint", false);
-
             return;
         }
 
@@ -159,14 +156,11 @@ public class PlayerController : MonoBehaviour
         Vector3 camRight = new Vector3(cam.right.x, 0f, cam.right.z).normalized;
 
         moveDir = (v * camForward) + (h * camRight);
-
         if (moveDir.magnitude > 1f)
             moveDir.Normalize();
 
         float currentSpeed;
-        if (hiding)
-            currentSpeed = crouchSpeed * 0.5f;
-        else if (isCrouching)
+        if (isCrouching)
             currentSpeed = crouchSpeed;
         else if (isSprinting)
             currentSpeed = speed * sprintMod;
@@ -177,7 +171,7 @@ public class PlayerController : MonoBehaviour
 
         controller.Move(moveDir * currentSpeed * Time.deltaTime);
 
-        if (moveDir != Vector3.zero && !hiding)
+        if (moveDir != Vector3.zero)
         {
             noiseTimer += Time.deltaTime;
             if (noiseTimer >= noiseInterval)
@@ -201,15 +195,15 @@ public class PlayerController : MonoBehaviour
             noiseTimer = 0f;
         }
 
-        Vector3 forwardDir = v * camForward;
-        if (forwardDir != Vector3.zero && !cameraOrbit.isAiming)
-            transform.forward = Vector3.Slerp(transform.forward, forwardDir, Time.deltaTime * 10f);
+        if (moveDir != Vector3.zero && !cameraOrbit.isAiming)
+            transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * 10f);
 
         playerVel.y -= gravity * Time.deltaTime;
         controller.Move(playerVel * Time.deltaTime);
 
-        animator.SetFloat("Speed", Mathf.Abs(v));
+        float moveMagnitude = new Vector2(h, v).magnitude;
+        animator.SetFloat("Speed", moveMagnitude);
         animator.SetFloat("Horizontal", h);
-        animator.SetBool("Sprint", isSprinting && Mathf.Abs(v) > 0.1f && !isCrouching);
+        animator.SetBool("Sprint", isSprinting && moveMagnitude > 0.1f && !isCrouching);
     }
 }

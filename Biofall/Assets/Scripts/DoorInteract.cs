@@ -55,7 +55,7 @@ public class DoorInteract : MonoBehaviour, IInteractable
     }
     void OnTriggerEnter(Collider other)
     {
-        if (doorGuard || isBlocked) return;
+        if (isBlocked) return;
         if(other.CompareTag("Enemy"))
         {
             StartCoroutine(OpenDoor());

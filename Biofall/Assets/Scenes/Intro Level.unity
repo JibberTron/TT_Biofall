@@ -169697,11 +169697,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629264132253655610, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
       propertyPath: roamSpeed
-      value: 2
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 2629264132253655610, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
       propertyPath: chaseSpeed
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2691343976589773787, guid: 5cb80294ea18fce4aa40c75d2dcc0c32, type: 3}
       propertyPath: m_LocalPosition.x
@@ -174185,11 +174185,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1772739821868672025, guid: bef2ae36236752a4c96ea3bd37b075aa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.27331
+      value: -2.374
       objectReference: {fileID: 0}
     - target: {fileID: 1772739821868672025, guid: bef2ae36236752a4c96ea3bd37b075aa, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -28.943
+      value: -28.976
       objectReference: {fileID: 0}
     - target: {fileID: 1772739821868672025, guid: bef2ae36236752a4c96ea3bd37b075aa, type: 3}
       propertyPath: m_LocalRotation.w
@@ -174226,7 +174226,7 @@ PrefabInstance:
     - target: {fileID: 8805522502041451755, guid: bef2ae36236752a4c96ea3bd37b075aa, type: 3}
       propertyPath: objectWhenPowered
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1579346981}
     - target: {fileID: 9140265985518224096, guid: bef2ae36236752a4c96ea3bd37b075aa, type: 3}
       propertyPath: m_Name
       value: Powered Object (2)
@@ -182688,6 +182688,10 @@ PrefabInstance:
     - target: {fileID: 7465185782195227874, guid: 002eb691aa6fd99409ea102300ef5f9c, type: 3}
       propertyPath: m_Name
       value: BackgroundMusic
+      objectReference: {fileID: 0}
+    - target: {fileID: 7465185782195227874, guid: 002eb691aa6fd99409ea102300ef5f9c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -196313,6 +196317,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1577676972}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1579346981 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1439664445770895973, guid: bef2ae36236752a4c96ea3bd37b075aa, type: 3}
+  m_PrefabInstance: {fileID: 947128703}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1580226805
 GameObject:
   m_ObjectHideFlags: 0

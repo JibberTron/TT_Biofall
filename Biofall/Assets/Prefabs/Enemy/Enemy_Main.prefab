@@ -192,8 +192,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f9e495ad3e62854c94a3e86aee836e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::enemyMovement
-  roamSpeed: 1.5
-  chaseSpeed: 2
+  roamSpeed: 2.5
+  chaseSpeed: 6
 --- !u!114 &1078933468545308156
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -318,7 +318,7 @@ MonoBehaviour:
   enemyHit: {fileID: 8300000, guid: b6a0b2aa28cb7fe4a832d5307fa08296, type: 3}
   enemyAttack: {fileID: 8300000, guid: beffcd427f441f04f8f9eb393b695c72, type: 3}
   enemyChase: {fileID: 8300000, guid: 30735d21275008d48ab622009b8244d0, type: 3}
-  enemyLose: {fileID: 8300000, guid: 48b4060d5512d364aa45f6b0bd777043, type: 3}
+  enemyLose: {fileID: 0}
 --- !u!82 &825788741480047642
 AudioSource:
   m_ObjectHideFlags: 0

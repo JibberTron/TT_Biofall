@@ -7,8 +7,8 @@ public class enemyMovement : MonoBehaviour
     enemyReferences enemyRef;
 
     [Header("-----AI Movement Stats-----")]
-    [Range(1, 5)][SerializeField] float roamSpeed = 1.5f;
-    [Range(1, 10)][SerializeField] float chaseSpeed = 2f;
+    [Range(2.5f, 5)][SerializeField] float roamSpeed = 2.5f;
+    [Range(6, 10)][SerializeField] float chaseSpeed = 6f;
 
     int currentPos;
 
@@ -73,7 +73,9 @@ public class enemyMovement : MonoBehaviour
     }
     public void SetMovement()
     {
-        enemyRef.EAnims.SetMovement(enemyRef.Agent.velocity.magnitude);
+        float speed = enemyRef.Agent.velocity.magnitude;
+        speed = Mathf.Min(speed, 6f);
+        enemyRef.EAnims.SetMovement(speed);
     }
     public void ResetMovement()
     {

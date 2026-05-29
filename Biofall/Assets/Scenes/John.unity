@@ -2972,7 +2972,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0c2e22683ff4b645bd33ebb5348a2d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingSpot
-  hideKey: 102
+  hidePoint: {fileID: 0}
+  exitPoint: {fileID: 0}
+  hidingCamera: {fileID: 0}
 --- !u!23 &1286235477
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -13436,6 +13438,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6b3ca5a7ffdeba40b9a03b3ac377579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HidingSystem
+  scriptsToDisableWhileHiding: []
+  exitHideKey: 102
+  hidingPromptUI: {fileID: 0}
+  playerVisual: {fileID: 0}
 --- !u!4 &5194476914264482969
 Transform:
   m_ObjectHideFlags: 0
@@ -21548,6 +21554,7 @@ SceneRoots:
   - {fileID: 8460482261385872977}
   - {fileID: 679953344}
   - {fileID: 4688486473116682521}
+  - {fileID: 726793241}
   - {fileID: 1048346621}
   - {fileID: 1286235479}
   - {fileID: 6999360136389645758}
@@ -21617,4 +21624,3 @@ SceneRoots:
   - {fileID: 24650050}
   - {fileID: 737967281}
   - {fileID: 5059838104006729821}
-  - {fileID: 726793241}

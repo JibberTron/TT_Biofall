@@ -35,7 +35,7 @@ public class enemyBrain : MonoBehaviour
     [Range(5, 100)][SerializeField] float detectionRange = 8f;
     [Range(5, 100)][SerializeField] float outOfDetectionRange = 18f;
     [Range(3, 10)][SerializeField] float investigateTime = 3f;
-    [Range(0, 90)][SerializeField] float detectionAngle = 90f;
+    [Range(0, 120)][SerializeField] float detectionAngle = 120f;
     [Range(5, 500)][SerializeField] float incapacitatedTimer = 5f;
     [Range(6, 500)][SerializeField] float incapacitatedDelay = 6f;
 
@@ -82,7 +82,7 @@ public class enemyBrain : MonoBehaviour
     }
     void Update()
     {
-        HandleUpdates();
+        HandleUpdates();     
     }
     public void SetActiveState(EnemyActiveState _state)
     {
@@ -289,12 +289,7 @@ public class enemyBrain : MonoBehaviour
     
         if (PlayerFound() && currentState != EnemyState.INVESTIGATING_HIDING)
         {
-            if(!hasPlayedChaseSound)
-            {
-                hasPlayedChaseSound = true;
-                enemyRef.Sounds.PlayClip(enemyRef.Sounds.EnemyChase);
-            }
-            
+            HandleChaseNoise();
             ChangeState(EnemyState.CHASING);
             return;
         }
@@ -309,7 +304,7 @@ public class enemyBrain : MonoBehaviour
         if (enemyRef.Visibility.IsHiding())
         {        
             if (!HasArrived()) return;
-            Debug.Log("Made it boys");
+            
             ChangeState(EnemyState.INVESTIGATING_HIDING);
             return;
         }
@@ -317,8 +312,7 @@ public class enemyBrain : MonoBehaviour
         if (Vector3.Distance(transform.position, player.transform.position) >= outOfDetectionRange)
         {
             movement.RemoveSoundPoints();
-            hasPlayedChaseSound = false;
-            
+            hasPlayedChaseSound = false;          
             ChangeState(EnemyState.INVESTIGATING);
             return;
         }
@@ -326,6 +320,14 @@ public class enemyBrain : MonoBehaviour
         if (!isAttacking && Vector3.Distance(transform.position, player.transform.position) <= attack.AttackDistance)
         {
             ChangeState(EnemyState.ATTACKING);
+        }
+    }
+    void HandleChaseNoise()
+    {
+        if (!hasPlayedChaseSound)
+        {
+            hasPlayedChaseSound = true;
+            enemyRef.Sounds.PlayClip(enemyRef.Sounds.EnemyChase);
         }
     }
     void HandleDead()
@@ -338,6 +340,7 @@ public class enemyBrain : MonoBehaviour
         movement.ShouldUpdatePath(false);
 
         health.Death(true);
+        hasPlayedChaseSound = false;
     }
     bool HasArrived()
     {
@@ -433,6 +436,7 @@ public class enemyBrain : MonoBehaviour
 
         if (PlayerFound())
         {
+            HandleChaseNoise();
             ChangeState(EnemyState.CHASING);
         }
         else
@@ -501,6 +505,7 @@ public class enemyBrain : MonoBehaviour
             if (PlayerFound())
             {
                 stateRoutine = null;
+                HandleChaseNoise();
                 ChangeState(EnemyState.CHASING);
                 yield break;
             }
@@ -525,7 +530,7 @@ public class enemyBrain : MonoBehaviour
             ChangeState(EnemyState.ROAMING);
             yield break;
         }
-
+        hasPlayedChaseSound = false;
         Vector3 currentTarget = Vector3.zero;
         float timer = 0f;
         const float timeout = 20f;
@@ -535,6 +540,7 @@ public class enemyBrain : MonoBehaviour
             if (PlayerFound())
             {
                 movement.RemoveSoundPoints();
+                HandleChaseNoise();
                 ChangeState(EnemyState.CHASING);
                 yield break;
             }
@@ -637,6 +643,7 @@ public class enemyBrain : MonoBehaviour
         if (PlayerFound())
         {
             stateRoutine = null;
+            HandleChaseNoise();
             ChangeState(EnemyState.CHASING);
             yield break;
         }

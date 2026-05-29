@@ -274,6 +274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerReceiver
   objectWhenPowered: {fileID: 1439664445770895973}
   objectWhenUnpowered: {fileID: 4762802344286893349}
+  blockerCollider: {fileID: 0}
 --- !u!65 &8357210664848073998
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -293,8 +294,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 1.1, z: 0}
+  m_Size: {x: 1, y: 0.1, z: 1}
+  m_Center: {x: 0, y: 0.65, z: 0}
 --- !u!54 &833135375872759573
 Rigidbody:
   m_ObjectHideFlags: 0

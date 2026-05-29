@@ -318,7 +318,6 @@ MonoBehaviour:
   enemyHit: {fileID: 8300000, guid: b6a0b2aa28cb7fe4a832d5307fa08296, type: 3}
   enemyAttack: {fileID: 8300000, guid: beffcd427f441f04f8f9eb393b695c72, type: 3}
   enemyChase: {fileID: 8300000, guid: 30735d21275008d48ab622009b8244d0, type: 3}
-  enemyLose: {fileID: 0}
 --- !u!82 &825788741480047642
 AudioSource:
   m_ObjectHideFlags: 0
@@ -690,8 +689,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 0
   serializedVersion: 2
-  m_Radius: 0.2
-  m_Height: 1
+  m_Radius: 0.57
+  m_Height: 1.45
   m_Direction: 1
   m_Center: {x: 0, y: 0.24, z: 0}
 --- !u!114 &2425248131537344140

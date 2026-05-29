@@ -2212,6 +2212,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dfdd67ebf0932cd41a548d0e71284090, type: 3}
+--- !u!1 &47835546 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8671598673150686892, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+  m_PrefabInstance: {fileID: 200070514}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &47967413
 Mesh:
   m_ObjectHideFlags: 0
@@ -199851,17 +199856,12 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!1 &1234969597 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2441859784621631839, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
-  m_PrefabInstance: {fileID: 200070514}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1234969599 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8807296923127419850, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
   m_PrefabInstance: {fileID: 200070514}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1234969597}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
@@ -226364,7 +226364,7 @@ PrefabInstance:
     - target: {fileID: 5103200429067656528, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
       propertyPath: hidingPromptUI
       value: 
-      objectReference: {fileID: 1234969597}
+      objectReference: {fileID: 47835546}
     - target: {fileID: 5103200429067656528, guid: 72d138b93b90b2d4ebb34d2b6e71fe7c, type: 3}
       propertyPath: scriptsToDisableWhileHiding.Array.size
       value: 8

@@ -27,6 +27,7 @@ public class Gamemanager : MonoBehaviour
     public GameObject hallucinationFlashScreen;
     private bool isFlashing;
 
+    private GunManager gunManager;
     private InfectionHallucination hallucination;
     private InfectionSystem infection;
     public GameObject player;
@@ -35,6 +36,7 @@ public class Gamemanager : MonoBehaviour
     private PebbleThrower thrownPebble;
     private HidingSystem hidingSystem;
     private CameraOrbit cameraOrbit;
+  
 
     float timeScaleOrig;
 
@@ -50,6 +52,7 @@ public class Gamemanager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         playerScript = player.GetComponent<PlayerController>();
 
+        gunManager = player.GetComponent<GunManager>();
         infection = player.GetComponent<InfectionSystem>();
         hallucination = player.GetComponent<InfectionHallucination>();
         gun = player.GetComponent<Gun>();
@@ -94,7 +97,6 @@ public class Gamemanager : MonoBehaviour
         hallucination.enabled = false;
         infection.enabled = false;
         playerScript.enabled = false;
-        gun.enabled = false;
         hidingSystem.enabled = false;
         thrownPebble.enabled = false;
         cameraOrbit.enabled = false;
@@ -114,7 +116,7 @@ public class Gamemanager : MonoBehaviour
         hallucination.enabled = true;
         infection.enabled = true;
         playerScript.enabled = true;
-        gun.enabled = true;
+        gun.enabled = gunManager != null && gunManager.HasGun();
         hidingSystem.enabled = true;
         thrownPebble.enabled = true;
         cameraOrbit.enabled = true;

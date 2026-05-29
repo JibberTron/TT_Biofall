@@ -46,11 +46,11 @@ public class enemyBrain : MonoBehaviour
     NoiseSensor noiseSensor;
     GameObject player;
 
+    const float stateLockTime = 0.2f;
+    const float hidingGiveUpCooldown = 10f;
     float idleDelay = 1f;
     float stateLockTimer = 0f;
-    const float stateLockTime = 0.2f;
     float hidingGiveUpTimer = 0f;
-    const float hidingGiveUpCooldown = 10f;
     float hideTimer;
 
     bool isAttacking;

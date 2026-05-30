@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class enemyReferences : MonoBehaviour
 {
     [SerializeField] List<Transform> roamPos;
-    [SerializeField] Collider armCollider;
+    [SerializeField] CapsuleCollider armCollider;
     NavMeshAgent agent;
     Animator animator;
     enemyAnims eAnims;
@@ -32,6 +32,7 @@ public class enemyReferences : MonoBehaviour
         eAnims = GetComponent<enemyAnims>();
         sounds = GetComponent<enemySounds>();
         player = GameObject.FindGameObjectWithTag("Player");
+        armCollider.enabled = false;
     }
     void Start()
     {
@@ -61,6 +62,7 @@ public class enemyReferences : MonoBehaviour
             return;
         }
         visibility = player.GetComponent<HidingSystem>();
+  
     }
     public void EnableDamage()
     {

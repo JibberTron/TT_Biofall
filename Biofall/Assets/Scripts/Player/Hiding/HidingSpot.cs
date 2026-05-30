@@ -18,11 +18,14 @@ public class HidingSpot : MonoBehaviour, IInteractable
 
         if (hidingSystem.IsHiding())
         {
+           
             hidingSystem.ExitHidingSpot();
         }
         else
         {
             hidingSystem.EnterHidingSpot(hidePoint, exitPoint, hidingCamera);
+            player.SetActive(false);
+            player.SetActive(true);  
         }
     }
 }

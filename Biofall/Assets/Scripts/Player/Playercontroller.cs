@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour
 
         if (isAiming)
         {
+            if (Camera.main == null) return;
             Transform cam = Camera.main.transform;
             Vector3 camForward = new Vector3(cam.forward.x, 0f, cam.forward.z).normalized;
             transform.forward = Vector3.Slerp(transform.forward, camForward, Time.deltaTime * 15f);
@@ -115,7 +116,7 @@ public class PlayerController : MonoBehaviour
 
     void Movement()
     {
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
+        //Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.yellow);
 
         shootTimer += Time.deltaTime;
 

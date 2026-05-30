@@ -21,7 +21,7 @@ public class DoorInteract : MonoBehaviour, IInteractable
     void Start()
     {
         obst = GetComponentInChildren<NavMeshObstacle>();
-        obst.enabled = false;
+        obst.enabled = true;
     }
     public void Interact()
     {
@@ -85,8 +85,6 @@ public class DoorInteract : MonoBehaviour, IInteractable
             {
                 time += Time.deltaTime;
                 float t = time / dur;
-
-                Debug.Log("Door Opened");
                
                 hinge.localRotation = Quaternion.Slerp(beginRot, endRot, t);
 
@@ -114,7 +112,6 @@ public class DoorInteract : MonoBehaviour, IInteractable
                 time += Time.deltaTime;
                 float t = time / dur;
 
-                Debug.Log("Door Closed");
                 hinge.localRotation = Quaternion.Slerp(beginRot, endRot, t);
                 yield return null;
             }

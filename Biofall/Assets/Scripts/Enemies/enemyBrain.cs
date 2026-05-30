@@ -58,6 +58,7 @@ public class enemyBrain : MonoBehaviour
     bool isInvestigating = false;
     bool hasPlayedChaseSound;
 
+    EnemyState lastState;
     void Awake()
     {
         movement = GetComponent<enemyMovement>();
@@ -82,6 +83,12 @@ public class enemyBrain : MonoBehaviour
     }
     void Update()
     {
+        if(currentState != lastState)
+        {
+            Debug.Log($"{name} State: {lastState} -> {currentState}");
+            lastState = currentState;
+        }
+    
         HandleUpdates();     
     }
     public void SetActiveState(EnemyActiveState _state)
@@ -228,6 +235,7 @@ public class enemyBrain : MonoBehaviour
                 break;
 
             case EnemyState.ATTACKING:
+                if (enemyRef.Visibility.IsHiding()) break;
                 movement.EnableAgentRotation(false);
                 enemyRef.Agent.ResetPath();
                 enemyRef.Agent.velocity = Vector3.zero;
@@ -450,6 +458,12 @@ public class enemyBrain : MonoBehaviour
 
         while (currentState == EnemyState.ATTACKING)
         {
+            if (enemyRef.Visibility.IsHiding())
+            {
+                Debug.Log("Broke because of hiding");
+                yield break;
+            }
+
             movement.RotateToPlayer(transform);
             attack.Attack(true);
 

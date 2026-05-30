@@ -22,9 +22,6 @@ public class enemyAttack : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Vector3 hitPosition = other.ClosestPoint(transform.position);
-        Vector3 hitDirection = (other.transform.position - transform.position).normalized;
-
         iDamage dam = other.GetComponent<iDamage>();
         if (dam == null) return;
         

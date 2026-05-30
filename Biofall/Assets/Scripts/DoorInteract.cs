@@ -50,6 +50,11 @@ public class DoorInteract : MonoBehaviour, IInteractable
             {
                 isBlocked = true;
                 enemyOpen.enabled = false;
+
+                if (isOpen)
+                {
+                    StartCoroutine(CloseDoor());
+                }
             }
         }
     }

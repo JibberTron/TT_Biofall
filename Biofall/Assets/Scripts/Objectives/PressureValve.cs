@@ -15,6 +15,12 @@ public class PressureValve : MonoBehaviour, IInteractable
     [SerializeField] private Vector3 rotationAxis = Vector3.forward;
     [SerializeField] private float totalRotationDegrees = 180f;
 
+    [Header("Valve State Audio")]
+    [SerializeField] private AudioSource valveStateAudioSource;
+    [SerializeField] private AudioClip valveOnLoopSound;
+    [SerializeField] private bool valveIsOn;
+    [SerializeField] private AudioClip valveTurningSound;
+
     private bool isTurning;
 
     public void Interact()
@@ -29,6 +35,13 @@ public class PressureValve : MonoBehaviour, IInteractable
     {
         isTurning = true;
 
+        if (valveStateAudioSource != null && valveTurningSound != null)
+        {
+            valveStateAudioSource.clip = valveTurningSound;
+            valveStateAudioSource.loop = true;
+            valveStateAudioSource.Play();
+        }
+
         float timer = 0f;
         Quaternion startRotation = valveWheel != null ? valveWheel.localRotation : Quaternion.identity;
         Quaternion endRotation = startRotation * Quaternion.Euler(rotationAxis * totalRotationDegrees);
@@ -37,6 +50,11 @@ public class PressureValve : MonoBehaviour, IInteractable
         {
             if (!Input.GetKey(holdKey))
             {
+                if (valveStateAudioSource != null)
+                {
+                    valveStateAudioSource.Stop();
+                }
+
                 isTurning = false;
                 yield break;
             }
@@ -53,6 +71,22 @@ public class PressureValve : MonoBehaviour, IInteractable
         }
 
         ToggleSteamHazards();
+
+        valveIsOn = !valveIsOn;
+
+        if (valveStateAudioSource != null)
+        {
+            if (valveIsOn)
+            {
+                valveStateAudioSource.clip = valveOnLoopSound;
+                valveStateAudioSource.loop = true;
+                valveStateAudioSource.Play();
+            }
+            else
+            {
+                valveStateAudioSource.Stop();
+            }
+        }
 
         isTurning = false;
     }

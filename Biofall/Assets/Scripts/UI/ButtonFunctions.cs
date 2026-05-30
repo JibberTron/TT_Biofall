@@ -43,6 +43,7 @@ public class ButtonFunctions : MonoBehaviour
 
     public void Controls()
     {
+        Gamemanager.instance.StatePause();
         Gamemanager.instance.ControlsLegend();
     }
 }

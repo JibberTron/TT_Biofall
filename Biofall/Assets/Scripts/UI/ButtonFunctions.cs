@@ -22,11 +22,13 @@ public class ButtonFunctions : MonoBehaviour
 
     public void Quit()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
-            Application.Quit();
-        #endif
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#elif UNITY_WEBGL
+    Debug.Log("Quit is disabled in WebGL builds.");
+#else
+    Application.Quit();
+#endif
     }
 
     public void Play()
@@ -43,6 +45,7 @@ public class ButtonFunctions : MonoBehaviour
 
     public void Controls()
     {
+        Gamemanager.instance.StatePause();
         Gamemanager.instance.ControlsLegend();
     }
 }

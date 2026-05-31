@@ -71,20 +71,21 @@ public class Gamemanager : MonoBehaviour
             StartCoroutine(FlashHallucination());
         }
 
-        if (Input.GetButtonDown("Cancel"))
-        {
-
+        #if UNITY_WEBGL && !UNITY_EDITOR
+            if(Input.GetKeyDown(KeyCode.P))
+        #else
+            if (Input.GetButtonDown("Cancel"))
+        #endif
             if(menuActive == null)
             {
                 StatePause();
                 menuActive = menuPause;
                 menuActive.SetActive(true);
             }
-            else if (menuActive == menuPause)
+            else if(menuActive == menuPause)
             {
-               StateUnpause();
+            StateUnpause();
             }
-        }
     }
 
 

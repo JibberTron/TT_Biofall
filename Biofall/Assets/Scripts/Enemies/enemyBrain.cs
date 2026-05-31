@@ -12,7 +12,7 @@ public class enemyBrain : MonoBehaviour
     enemyHealth health;
     enemyAttack attack;
 
-    enum EnemyState
+    public enum EnemyState
     {
         IDLE,
         ROAMING,
@@ -38,10 +38,11 @@ public class enemyBrain : MonoBehaviour
     [Range(0, 120)][SerializeField] float detectionAngle = 120f;
     [Range(5, 500)][SerializeField] float incapacitatedTimer = 5f;
     [Range(6, 500)][SerializeField] float incapacitatedDelay = 6f;
+    [SerializeField] LayerMask ignoreLayer;
 
     EnemyState currentState;
     public EnemyActiveState activeState = EnemyActiveState.ACTIVE;
-
+    
     Coroutine stateRoutine;
     NoiseSensor noiseSensor;
     GameObject player;
@@ -58,6 +59,8 @@ public class enemyBrain : MonoBehaviour
     bool isInvestigating = false;
     bool hasPlayedChaseSound;
 
+    public EnemyState CurrentState => currentState;
+
     EnemyState lastState;
     void Awake()
     {
@@ -66,10 +69,10 @@ public class enemyBrain : MonoBehaviour
         health = GetComponent<enemyHealth>();
         attack = GetComponentInChildren<enemyAttack>();
         noiseSensor = GetComponent<NoiseSensor>();
+        AwakeChecks();
     }
     void Start()
     {
-        StartChecks();
         player = enemyRef.Player;
         if(activeState == EnemyActiveState.ACTIVE)
         {
@@ -78,8 +81,7 @@ public class enemyBrain : MonoBehaviour
         else
         {
             currentState = EnemyState.IDLE;
-        }
-        
+        }    
     }
     void Update()
     {
@@ -91,21 +93,7 @@ public class enemyBrain : MonoBehaviour
     
         HandleUpdates();     
     }
-    public void SetActiveState(EnemyActiveState _state)
-    {
-        activeState = _state;
-        if(_state == EnemyActiveState.ACTIVE)
-        {
-            StartCoroutine(StartAfterIdle());
-            return;
-        }
-        else
-        {
-            currentState = EnemyState.IDLE;
-            return;
-        }
-    }
-    void StartChecks()
+    void AwakeChecks()
     {
         if(movement == null)
         {
@@ -129,6 +117,11 @@ public class enemyBrain : MonoBehaviour
         if (noiseSensor == null)
         {
             Debug.Log("Noise Sensor == null");
+            return;
+        }
+        if(ignoreLayer.value == 0)
+        {
+            Debug.Log("Layer Mask not set");
             return;
         }
     }
@@ -163,6 +156,20 @@ public class enemyBrain : MonoBehaviour
             case EnemyState.CHASING:
                 HandleChase();
                 break;
+        }
+    }
+    public void SetActiveState(EnemyActiveState _state)
+    {
+        activeState = _state;
+        if(_state == EnemyActiveState.ACTIVE)
+        {
+            StartCoroutine(StartAfterIdle());
+            return;
+        }
+        else
+        {
+            currentState = EnemyState.IDLE;
+            return;
         }
     }
     void ChangeState(EnemyState _newState)
@@ -407,7 +414,7 @@ public class enemyBrain : MonoBehaviour
         if (angleToPlayer > detectionAngle)
             return false;
 
-        if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange))
+        if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange, ignoreLayer))
         {
             return hit.collider.CompareTag("Player");
         }
@@ -639,6 +646,7 @@ public class enemyBrain : MonoBehaviour
             {
                 movement.Investigate(false);
                 stateRoutine = null;
+                HandleChaseNoise();
                 ChangeState(EnemyState.CHASING);
                 yield break;
             }
@@ -661,6 +669,7 @@ public class enemyBrain : MonoBehaviour
             ChangeState(EnemyState.CHASING);
             yield break;
         }
+        hasPlayedChaseSound = false;
         ChangeState(EnemyState.ROAMING);
     }
     void OnEnable() => noiseSensor.OnNoiseHeard += HearNoise;

@@ -53,6 +53,7 @@ public class enemyBrain : MonoBehaviour
     float stateLockTimer = 0f;
     float hidingGiveUpTimer = 0f;
     float hideTimer;
+    float stoppingDistance;
 
     bool isAttacking;
     bool gavUpOnHiding = false;
@@ -74,6 +75,7 @@ public class enemyBrain : MonoBehaviour
     void Start()
     {
         player = enemyRef.Player;
+        stoppingDistance = enemyRef.Agent.stoppingDistance;
         if(activeState == EnemyActiveState.ACTIVE)
         {
             StartCoroutine(StartAfterIdle());
@@ -176,6 +178,10 @@ public class enemyBrain : MonoBehaviour
     {
         if (currentState == _newState || isAttacking) return;
 
+        if(currentState == EnemyState.INVESTIGATING_HIDING)
+        {
+            enemyRef.Agent.stoppingDistance = stoppingDistance;
+        }
         if (stateLockTimer < stateLockTime)
         {
             return;
@@ -317,11 +323,16 @@ public class enemyBrain : MonoBehaviour
         movement.SetMovement();
 
         if (enemyRef.Visibility.IsHiding())
-        {        
+        {
+            enemyRef.Agent.stoppingDistance = 2.5f;
             if (!HasArrived()) return;
             
             ChangeState(EnemyState.INVESTIGATING_HIDING);
             return;
+        }
+        else
+        {
+            enemyRef.Agent.stoppingDistance = stoppingDistance;
         }
 
         if (Vector3.Distance(transform.position, player.transform.position) >= outOfDetectionRange)
@@ -378,7 +389,7 @@ public class enemyBrain : MonoBehaviour
 
         if (enemyRef.Agent.pathPending) return false;
 
-        if (enemyRef.Agent.remainingDistance > enemyRef.Agent.stoppingDistance + 0.1f)
+        if (enemyRef.Agent.remainingDistance > enemyRef.Agent.stoppingDistance + 0.4f)
             return false;
 
         if (enemyRef.Agent.hasPath && enemyRef.Agent.velocity.sqrMagnitude > 0.01f)
@@ -569,7 +580,7 @@ public class enemyBrain : MonoBehaviour
             NoiseData targetNoise = enemyRef.SoundPoints[0];
             foreach (var noise in enemyRef.SoundPoints)
             {
-                if (noise.attractionStrength > targetNoise.attractionStrength)
+                if (noise.attractionStrength >= targetNoise.attractionStrength)
                 {
                     targetNoise = noise;
                 }              

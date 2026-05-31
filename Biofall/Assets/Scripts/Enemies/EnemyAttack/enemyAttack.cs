@@ -12,9 +12,14 @@ public class enemyAttack : MonoBehaviour
 
     float attackDistance = 2f;
 
-    void Start()
+    void Awake()
     {
         enemyRef = GetComponentInParent<enemyReferences>();
+        if(enemyRef == null)
+        {
+            Debug.Log("Enemy Reference == null");
+            return;
+        }
     }
     void Update()
     {

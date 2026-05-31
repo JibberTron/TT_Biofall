@@ -66,10 +66,10 @@ public class enemyBrain : MonoBehaviour
         health = GetComponent<enemyHealth>();
         attack = GetComponentInChildren<enemyAttack>();
         noiseSensor = GetComponent<NoiseSensor>();
+        AwakeChecks();
     }
     void Start()
     {
-        StartChecks();
         player = enemyRef.Player;
         if(activeState == EnemyActiveState.ACTIVE)
         {
@@ -78,8 +78,7 @@ public class enemyBrain : MonoBehaviour
         else
         {
             currentState = EnemyState.IDLE;
-        }
-        
+        }    
     }
     void Update()
     {
@@ -91,21 +90,7 @@ public class enemyBrain : MonoBehaviour
     
         HandleUpdates();     
     }
-    public void SetActiveState(EnemyActiveState _state)
-    {
-        activeState = _state;
-        if(_state == EnemyActiveState.ACTIVE)
-        {
-            StartCoroutine(StartAfterIdle());
-            return;
-        }
-        else
-        {
-            currentState = EnemyState.IDLE;
-            return;
-        }
-    }
-    void StartChecks()
+    void AwakeChecks()
     {
         if(movement == null)
         {
@@ -163,6 +148,20 @@ public class enemyBrain : MonoBehaviour
             case EnemyState.CHASING:
                 HandleChase();
                 break;
+        }
+    }
+    public void SetActiveState(EnemyActiveState _state)
+    {
+        activeState = _state;
+        if(_state == EnemyActiveState.ACTIVE)
+        {
+            StartCoroutine(StartAfterIdle());
+            return;
+        }
+        else
+        {
+            currentState = EnemyState.IDLE;
+            return;
         }
     }
     void ChangeState(EnemyState _newState)
@@ -639,6 +638,7 @@ public class enemyBrain : MonoBehaviour
             {
                 movement.Investigate(false);
                 stateRoutine = null;
+                HandleChaseNoise();
                 ChangeState(EnemyState.CHASING);
                 yield break;
             }
@@ -661,6 +661,7 @@ public class enemyBrain : MonoBehaviour
             ChangeState(EnemyState.CHASING);
             yield break;
         }
+        hasPlayedChaseSound = false;
         ChangeState(EnemyState.ROAMING);
     }
     void OnEnable() => noiseSensor.OnNoiseHeard += HearNoise;

@@ -32,9 +32,19 @@ public class enemyReferences : MonoBehaviour
         eAnims = GetComponent<enemyAnims>();
         sounds = GetComponent<enemySounds>();
         player = GameObject.FindGameObjectWithTag("Player");
+        AwakeChecks();
         armCollider.enabled = false;
     }
     void Start()
+    {
+        visibility = player.GetComponent<HidingSystem>();
+        if (visibility == null)
+        {
+            Debug.Log("Player Hiding System == null");
+            return;
+        }
+    }
+    void AwakeChecks()
     {
         if (player == null)
         {
@@ -51,7 +61,7 @@ public class enemyReferences : MonoBehaviour
             Debug.Log("Nav Mesh Agent == null!");
             return;
         }
-        if(roamPos.Count == 0)
+        if (roamPos.Count == 0)
         {
             Debug.Log("Roam Positions array is empty");
             return;
@@ -61,8 +71,11 @@ public class enemyReferences : MonoBehaviour
             Debug.Log("Enemy Sounds == null");
             return;
         }
-        visibility = player.GetComponent<HidingSystem>();
-  
+        if(armCollider == null)
+        {
+            Debug.Log("Enemy Attack Collider == null");
+            return;
+        }
     }
     public void EnableDamage()
     {

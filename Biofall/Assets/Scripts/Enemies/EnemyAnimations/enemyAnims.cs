@@ -8,6 +8,11 @@ public class enemyAnims : MonoBehaviour
     void Awake()
     {
         enemyRef = GetComponent<enemyReferences>();
+        if (enemyRef == null)
+        {
+            Debug.Log("Enemy Reference == null");
+            return;
+        }
     }
     void  Start()
     {

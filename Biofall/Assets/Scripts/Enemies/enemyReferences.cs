@@ -44,6 +44,23 @@ public class enemyReferences : MonoBehaviour
             return;
         }
     }
+    void Update()
+    {
+        float timer = 0;
+        timer += Time.deltaTime;
+        if (timer <= 0.1)
+        {
+            if(armCollider.enabled == true)
+            {
+                Debug.Log("Arm Collider enabled = true");
+            }
+            else
+            {
+                Debug.Log("Arm Collider enabled = false");
+            }
+            timer = 0;
+        }
+    }
     void AwakeChecks()
     {
         if (player == null)

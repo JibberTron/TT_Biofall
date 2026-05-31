@@ -12,7 +12,7 @@ public class enemyBrain : MonoBehaviour
     enemyHealth health;
     enemyAttack attack;
 
-    enum EnemyState
+    public enum EnemyState
     {
         IDLE,
         ROAMING,
@@ -38,10 +38,11 @@ public class enemyBrain : MonoBehaviour
     [Range(0, 120)][SerializeField] float detectionAngle = 120f;
     [Range(5, 500)][SerializeField] float incapacitatedTimer = 5f;
     [Range(6, 500)][SerializeField] float incapacitatedDelay = 6f;
+    [SerializeField] LayerMask ignoreLayer;
 
     EnemyState currentState;
     public EnemyActiveState activeState = EnemyActiveState.ACTIVE;
-
+    
     Coroutine stateRoutine;
     NoiseSensor noiseSensor;
     GameObject player;
@@ -57,6 +58,8 @@ public class enemyBrain : MonoBehaviour
     bool gavUpOnHiding = false;
     bool isInvestigating = false;
     bool hasPlayedChaseSound;
+
+    public EnemyState CurrentState => currentState;
 
     EnemyState lastState;
     void Awake()
@@ -114,6 +117,11 @@ public class enemyBrain : MonoBehaviour
         if (noiseSensor == null)
         {
             Debug.Log("Noise Sensor == null");
+            return;
+        }
+        if(ignoreLayer.value == 0)
+        {
+            Debug.Log("Layer Mask not set");
             return;
         }
     }
@@ -406,7 +414,7 @@ public class enemyBrain : MonoBehaviour
         if (angleToPlayer > detectionAngle)
             return false;
 
-        if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange))
+        if (Physics.Raycast(transform.position, playerDir, out RaycastHit hit, detectionRange, ignoreLayer))
         {
             return hit.collider.CompareTag("Player");
         }

@@ -36,6 +36,7 @@ public class Gamemanager : MonoBehaviour
     private PebbleThrower thrownPebble;
     private HidingSystem hidingSystem;
     private CameraOrbit cameraOrbit;
+    private AimTarget aimTarget;
   
 
     float timeScaleOrig;
@@ -59,6 +60,7 @@ public class Gamemanager : MonoBehaviour
         thrownPebble = player.GetComponent<PebbleThrower>();
         hidingSystem = player.GetComponent<HidingSystem>();
         cameraOrbit = FindFirstObjectByType<CameraOrbit>();
+        aimTarget = GetComponent<AimTarget>();
     }
 
     // Update is called once per frame
@@ -103,6 +105,7 @@ public class Gamemanager : MonoBehaviour
         cameraOrbit.enabled = false;
         AudioListener.pause = true;
         HUD.SetActive(false);
+        aimTarget.enabled = false;
     }
 
     public void StateUnpause()
@@ -122,6 +125,7 @@ public class Gamemanager : MonoBehaviour
         thrownPebble.enabled = true;
         cameraOrbit.enabled = true;
         AudioListener.pause = false;
+        aimTarget.enabled = true;
         HUD.SetActive(true);
     }
 

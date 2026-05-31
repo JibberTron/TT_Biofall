@@ -88,10 +88,6 @@ public class Gamemanager : MonoBehaviour
             {
             StateUnpause();
             }
-            else if(menuActive == controlPanel)
-            {
-                StateControlPanelOff();
-            }
     }
 
 

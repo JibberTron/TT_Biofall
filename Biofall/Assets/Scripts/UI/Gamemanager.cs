@@ -72,9 +72,9 @@ public class Gamemanager : MonoBehaviour
         }
 
         #if UNITY_WEBGL && !UNITY_EDITOR
-            if(Input.GetKeyDown(KeyCode.P));
+            if(Input.GetKeyDown(KeyCode.P))
         #else
-            if (Input.GetButtonDown("Cancel"));
+            if (Input.GetButtonDown("Cancel"))
         #endif
             if(menuActive == null)
             {

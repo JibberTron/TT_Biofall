@@ -770,6 +770,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 52493153255736122, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 52493153255736122, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 52493153255736122, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 52493153255736122, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 52493153255736122, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 52493153255736122, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 125926717239373386, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
       propertyPath: inventory
       value: 
@@ -794,9 +818,21 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2446875394210147662, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 32eddeab69acd904aa895a1c15324f3f, type: 3}
     - target: {fileID: 7447372919860816467, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
       propertyPath: m_Name
       value: UI Main
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752459029905121586, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 32eddeab69acd904aa895a1c15324f3f, type: 3}
+    - target: {fileID: 7752459029905121586, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7963899287333330051, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
       propertyPath: m_AnchorMax.x

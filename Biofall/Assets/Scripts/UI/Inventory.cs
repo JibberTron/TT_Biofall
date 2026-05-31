@@ -31,9 +31,17 @@ public class Inventory : MonoBehaviour
     [SerializeField] private TMP_Text batteryText;
     [SerializeField] private TMP_Text pebbleText;
 
-    private InventoryItems currentSlot = InventoryItems.Gun;
+    private InventoryItems currentSlot = InventoryItems.Batteries;
     private bool hasGun;
     private Gun gun;
+
+    private void Start()
+    {
+        if (!CanUseSlot(currentSlot))
+        {
+            currentSlot = InventoryItems.Batteries;
+        }
+    }
 
     private void Update()
     {

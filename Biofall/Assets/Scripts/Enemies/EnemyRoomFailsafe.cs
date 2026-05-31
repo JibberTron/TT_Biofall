@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 public class EnemyRoomFailsafe : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class EnemyRoomFailsafe : MonoBehaviour
     [SerializeField] private float maxTimeInRoom = 45f;
     [SerializeField] private Transform teleportPoint;
 
-    private EnemyTracker currentEnemy;
+    private List<EnemyTracker> enemiesInRoom = new List<EnemyTracker>();
 
     private void OnTriggerEnter(Collider other)
     {
@@ -26,37 +27,55 @@ public class EnemyRoomFailsafe : MonoBehaviour
             return;
         }
 
-        currentEnemy = new EnemyTracker(other.transform, agent);
+        enemiesInRoom.Add(new EnemyTracker(other.transform, agent));
+
+        foreach (EnemyTracker enemy in enemiesInRoom)
+        {
+            if (enemy.enemyTransform == other.transform)
+            {
+                return;
+            }
+        }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void Update()
     {
-        if (currentEnemy == null || other.transform != currentEnemy.enemyTransform)
+        for (int i = enemiesInRoom.Count - 1; i >= 0; i--)
         {
-            return;
-        }
+            EnemyTracker enemy = enemiesInRoom[i];
 
-        currentEnemy.CheckForStateChange();
+            if (enemy == null || enemy.enemyTransform == null)
+            {
+                enemiesInRoom.RemoveAt(i);
+                continue;
+            }
 
-        if (currentEnemy.ShouldSkipTeleport())
-        {
-            return;
-        }
+            enemy.CheckForStateChange();
 
-        currentEnemy.timer += Time.deltaTime;
+            if (enemy.ShouldSkipTeleport())
+            {
+                continue;
+            }
 
-        if (currentEnemy.timer >= maxTimeInRoom)
-        {
-            TeleportEnemy(currentEnemy);
-            currentEnemy = null;
+            enemy.timer += Time.deltaTime;
+
+            if (enemy.timer >= maxTimeInRoom)
+            {
+                TeleportEnemy(enemy);
+                enemiesInRoom.RemoveAt(i);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (currentEnemy != null && other.transform == currentEnemy.enemyTransform)
+        for (int i = enemiesInRoom.Count - 1; i >= 0; i--)
         {
-            currentEnemy = null;
+            if (enemiesInRoom[i].enemyTransform == other.transform)
+            {
+                enemiesInRoom.RemoveAt(i);
+                return;
+            }
         }
     }
 

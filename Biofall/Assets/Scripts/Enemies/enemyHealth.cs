@@ -17,9 +17,17 @@ public class enemyHealth : MonoBehaviour, iDamage
     public bool IsDead{ get { return isDead; } set { isDead = value; } }
     public bool IncapInvinsibility { get { return incapInvinsibility; } set { incapInvinsibility = value; } }
    
+    void Awake()
+    {
+        enemyRef = GetComponentInParent<enemyReferences>();
+        if (enemyRef == null)
+        {
+            Debug.Log("Enemy Reference == null");
+            return;
+        }
+    }
     void Start()
     {
-        enemyRef = GetComponent<enemyReferences>();
         currentHP = maxHP;
     }
     void Update()

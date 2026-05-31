@@ -16,6 +16,43 @@ public class enemySounds : MonoBehaviour
     public AudioClip EnemyAttack => enemyAttack;
     public AudioClip EnemyChase => enemyChase;
 
+    void Awake()
+    {
+        AwakeChecks();
+    }
+    void AwakeChecks()
+    {
+        if(sfx_Source == null)
+        {
+            Debug.Log("Audio Source == null");
+            return;
+        }
+        if (enemyDeath == null)
+        {
+            Debug.Log("Death audio == null");
+            return;
+        }
+        if (enemyWalk == null)
+        {
+            Debug.Log("Walk audio == null");
+            return;
+        }
+        if (enemyHit == null)
+        {
+            Debug.Log("Hit audio == null");
+            return;
+        }
+        if (enemyAttack == null)
+        {
+            Debug.Log("Attack audio == null");
+            return;
+        }
+        if (enemyChase == null)
+        {
+            Debug.Log("Chase audio == null");
+            return;
+        }
+    }
     public void PlayClip(AudioClip _clip)
     {
         sfx_Source.PlayOneShot(_clip);

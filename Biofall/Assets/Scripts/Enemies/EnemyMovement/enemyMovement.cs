@@ -25,7 +25,12 @@ public class enemyMovement : MonoBehaviour
     public float ChaseSpeed => chaseSpeed;
     void Awake()
     {
-        enemyRef = GetComponent<enemyReferences>();      
+        enemyRef = GetComponent<enemyReferences>();
+        if (enemyRef == null)
+        {
+            Debug.Log("Enemy Reference == null");
+            return;
+        }
     }
     void Start()
     {

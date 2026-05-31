@@ -179,6 +179,9 @@ MonoBehaviour:
   detectionAngle: 90
   incapacitatedTimer: 5
   incapacitatedDelay: 6
+  ignoreLayer:
+    serializedVersion: 2
+    m_Bits: 511
   activeState: 0
 --- !u!114 &2629264132253655610
 MonoBehaviour:

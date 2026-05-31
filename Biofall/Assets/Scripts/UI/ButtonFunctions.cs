@@ -22,8 +22,8 @@ public class ButtonFunctions : MonoBehaviour
 
     public void Quit()
     {
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+        #if UNITY_WEBGL && !UNITY_EDITOR
+            Application.OpenURL("about:blank");
         #else
             Application.Quit();
         #endif
@@ -43,6 +43,7 @@ public class ButtonFunctions : MonoBehaviour
 
     public void Controls()
     {
+        Gamemanager.instance.StatePause();
         Gamemanager.instance.ControlsLegend();
     }
 }

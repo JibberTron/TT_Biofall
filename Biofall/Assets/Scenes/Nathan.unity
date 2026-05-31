@@ -526,10 +526,6 @@ PrefabInstance:
       value: UI Main
       objectReference: {fileID: 0}
     - target: {fileID: 8063476781865415822, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8063476781865415822, guid: f38608ecd7410764dbd81b959118dbce, type: 3}
       propertyPath: playerScript
       value: 
       objectReference: {fileID: 227233214}
